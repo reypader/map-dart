@@ -9,6 +9,7 @@
 
     <modules>
         <module>dart-common-test</module>
+        <module>dart-data</module>
     </modules>
 
     <properties>
