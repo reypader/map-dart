@@ -10,6 +10,7 @@
     <modules>
         <module>dart-common-test</module>
         <module>dart-data</module>
+        <module>dart-data-objectify</module>
     </modules>
 
     <properties>
@@ -33,7 +34,11 @@
 
     <dependencyManagement>
         <dependencies>
-
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>dart-data-objectify</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
