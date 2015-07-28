@@ -36,6 +36,11 @@
         <dependencies>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>dart-data</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>dart-data-objectify</artifactId>
                 <version>${project.version}</version>
             </dependency>
