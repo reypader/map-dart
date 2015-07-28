@@ -46,6 +46,7 @@ public class UserFactoryImplTest {
         User user = factory.createUser("username", "Display Name");
 
         ofy().save().entity(user);
+        Thread.sleep(2000);
         int entityCount = ofy().load().type(UserImpl.class).count();
         assertEquals(1, entityCount);
     }

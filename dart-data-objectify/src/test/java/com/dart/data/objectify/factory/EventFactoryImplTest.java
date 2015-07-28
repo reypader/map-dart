@@ -51,6 +51,7 @@ public class EventFactoryImplTest {
         Event event = factory.createEvent(user,"title",new Date(),new Date());
 
         ofy().save().entity(event);
+        Thread.sleep(2000);
         int entityCount = ofy().load().type(EventImpl.class).count();
         assertEquals(1, entityCount);
     }

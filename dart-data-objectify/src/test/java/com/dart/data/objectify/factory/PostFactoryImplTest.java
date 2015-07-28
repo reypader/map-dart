@@ -58,6 +58,7 @@ public class PostFactoryImplTest {
         Post post = factory.createPost(event, user, "content");
 
         ofy().save().entity(post);
+        Thread.sleep(2000);
         int entityCount = ofy().load().type(PostImpl.class).count();
         assertEquals(1, entityCount);
     }
