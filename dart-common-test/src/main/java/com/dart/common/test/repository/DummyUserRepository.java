@@ -1,8 +1,8 @@
 package com.dart.common.test.repository;
 
+import com.dart.common.test.domain.DummyUser;
 import com.dart.data.domain.User;
 import com.dart.data.repository.UserRepository;
-import com.dart.common.test.domain.DummyUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +13,10 @@ import java.util.Map;
 public class DummyUserRepository implements UserRepository {
 
     private Map<String, User> dummyStore = new HashMap<>();
+
+    public Map<String, User> getStoredData() {
+        return dummyStore;
+    }
 
     @Override
     public User add(User entity) {

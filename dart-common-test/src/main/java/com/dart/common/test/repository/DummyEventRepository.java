@@ -14,6 +14,10 @@ public class DummyEventRepository implements EventRepository {
 
     private Map<String, Event> dummyStore = new HashMap<>();
 
+    public Map<String, Event> getStoredData() {
+        return dummyStore;
+    }
+
     @Override
     public Collection<Event> findEventsByUser(User organizer, int limit) {
         List<Event> events = new ArrayList<>();

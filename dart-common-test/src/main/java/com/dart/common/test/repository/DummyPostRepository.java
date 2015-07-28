@@ -15,6 +15,10 @@ public class DummyPostRepository implements PostRepository {
 
     private Map<String, Post> dummyStore = new HashMap<>();
 
+    public Map<String, Post> getStoredData() {
+        return dummyStore;
+    }
+
     @Override
     public Collection<Post> findPostsByUser(User organizer, int limit) {
         List<Post> posts = new ArrayList<>();
