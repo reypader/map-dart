@@ -20,10 +20,10 @@ public class DummyPostRepository implements PostRepository {
     }
 
     @Override
-    public Collection<Post> findPostsByUser(User organizer, int limit) {
+    public Collection<Post> findPostsByUserBefore(User organizer, Date date, int limit) {
         List<Post> posts = new ArrayList<>();
         for (Post post : dummyStore.values()) {
-            if (post.getUser().getId().equals(organizer.getId())) {
+            if (post.getDateCreated().before(date) && post.getUser().getId().equals(organizer.getId())) {
                 posts.add(post);
             }
         }
@@ -31,32 +31,10 @@ public class DummyPostRepository implements PostRepository {
     }
 
     @Override
-    public Collection<Post> findPostsByUserSince(User organizer, Date date, int limit) {
+    public Collection<Post> findPostsByEventBefore(Event event, Date date, int limit) {
         List<Post> posts = new ArrayList<>();
         for (Post post : dummyStore.values()) {
-            if (post.getDateCreated().after(date) && post.getUser().getId().equals(organizer.getId())) {
-                posts.add(post);
-            }
-        }
-        return posts;
-    }
-
-    @Override
-    public Collection<Post> findPostsByEvent(Event event, int limit) {
-        List<Post> posts = new ArrayList<>();
-        for (Post post : dummyStore.values()) {
-            if (post.getEvent().getId().equals(event.getId())) {
-                posts.add(post);
-            }
-        }
-        return posts;
-    }
-
-    @Override
-    public Collection<Post> findPostsByEventSince(Event event, Date date, int limit) {
-        List<Post> posts = new ArrayList<>();
-        for (Post post : dummyStore.values()) {
-            if (post.getDateCreated().after(date) && post.getEvent().getId().equals(event.getId())) {
+            if (post.getDateCreated().before(date) && post.getEvent().getId().equals(event.getId())) {
                 posts.add(post);
             }
         }

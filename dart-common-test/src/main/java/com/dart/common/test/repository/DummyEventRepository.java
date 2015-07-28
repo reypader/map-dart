@@ -19,10 +19,10 @@ public class DummyEventRepository implements EventRepository {
     }
 
     @Override
-    public Collection<Event> findEventsByUser(User organizer, int limit) {
+    public Collection<Event> findEventsByUserBefore(User organizer, Date date, int limit) {
         List<Event> events = new ArrayList<>();
         for (Event event : dummyStore.values()) {
-            if (event.getOrganizer().getId().equals(organizer.getId())) {
+            if (event.getDateCreated().before(date) && event.getOrganizer().getId().equals(organizer.getId())) {
                 events.add(event);
             }
         }
@@ -30,21 +30,10 @@ public class DummyEventRepository implements EventRepository {
     }
 
     @Override
-    public Collection<Event> findEventsByUserSince(User organizer, Date date, int limit) {
+    public Collection<Event> findEventsCreatedBefore(Date date, int limit) {
         List<Event> events = new ArrayList<>();
         for (Event event : dummyStore.values()) {
-            if (event.getDateCreated().after(date) && event.getOrganizer().getId().equals(organizer.getId())) {
-                events.add(event);
-            }
-        }
-        return events;
-    }
-
-    @Override
-    public Collection<Event> findEventsCreatedSince(Date date, int limit) {
-        List<Event> events = new ArrayList<>();
-        for (Event event : dummyStore.values()) {
-            if (event.getDateCreated().after(date)) {
+            if (event.getDateCreated().before(date)) {
                 events.add(event);
             }
         }
