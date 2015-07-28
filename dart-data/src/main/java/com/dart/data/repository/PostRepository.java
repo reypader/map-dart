@@ -12,12 +12,8 @@ import java.util.Date;
  */
 public interface PostRepository extends CrudRepository<Post> {
 
-    Collection<Post> findPostsByUser(User user, int limit);
+    Collection<Post> findPostsByUserBefore(User user, Date date, int limit);
 
-    Collection<Post> findPostsByUserSince(User user, Date date, int limit);
-
-    Collection<Post> findPostsByEvent(Event event, int limit);
-
-    Collection<Post> findPostsByEventSince(Event event, Date date, int limit);
+    Collection<Post> findPostsByEventBefore(Event event, Date date, int limit);
 
 }

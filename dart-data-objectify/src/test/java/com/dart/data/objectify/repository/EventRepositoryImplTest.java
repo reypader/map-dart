@@ -143,24 +143,8 @@ public class EventRepositoryImplTest {
         assertEquals(0, entityCount);
     }
 
-
     @Test
-    public void testFindEventsByUser() throws Exception {
-        TestUser user2 = new TestUser("username2");
-        Key parent2 = ofy().save().entity(user2).now();
-        Event event1 = new EventImpl(userKey, "Test title 1", new Date(), new Date());
-        Event event2 = new EventImpl(parent2, "Test title 3", new Date(), new Date());
-        testData.add(repo.add(event1));
-        testData.add(repo.add(event2));
-
-        Collection<Event> result = repo.findEventsByUser(user, QUERY_LIMIT);
-
-        assertEquals(1, result.size());
-        assertEverything(event1, result.iterator().next());
-    }
-
-    @Test
-    public void testFindEventsByUserSince() throws Exception {
+    public void testFindEventsByUserBefore() throws Exception {
         TestUser user2 = new TestUser("username2");
         Key parent2 = ofy().save().entity(user2).now();
         Event event1 = new EventImpl(userKey, "Test title 1", new Date(), new Date());
@@ -172,14 +156,14 @@ public class EventRepositoryImplTest {
         testData.add(repo.add(event2));
         testData.add(repo.add(event3));
 
-        Collection<Event> result = repo.findEventsByUserSince(user, time, QUERY_LIMIT);
+        Collection<Event> result = repo.findEventsByUserBefore(user, time, QUERY_LIMIT);
 
         assertEquals(1, result.size());
         assertEverything(event2, result.iterator().next());
     }
 
     @Test
-    public void testFindEventsCreatedSince() throws Exception {
+    public void testFindEventsCreatedBefore() throws Exception {
         Event event1 = new EventImpl(userKey, "Test title 1", new Date(), new Date());
         testData.add(repo.add(event1));
         Thread.sleep(2000);
@@ -187,7 +171,7 @@ public class EventRepositoryImplTest {
         Event event2 = new EventImpl(userKey, "Test title 2", new Date(), new Date());
         testData.add(repo.add(event2));
 
-        Collection<Event> result = repo.findEventsCreatedSince(time, QUERY_LIMIT);
+        Collection<Event> result = repo.findEventsCreatedBefore(time, QUERY_LIMIT);
 
         assertEquals(1, result.size());
         assertEverything(event2, result.iterator().next());

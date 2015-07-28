@@ -1,12 +1,12 @@
 package com.dart.data.objectify.repository;
 
-import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.domain.Event;
+import com.dart.data.domain.Post;
+import com.dart.data.domain.User;
+import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.PostImpl;
-import com.dart.data.domain.Post;
 import com.dart.data.repository.PostRepository;
-import com.dart.data.domain.User;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.Ref;
@@ -67,15 +67,7 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Collection<Post> findPostsByUser(User user, int limit) {
-        List<PostImpl> result = loadPost().filter("userRef", Ref.create(user)).limit(limit).list();
-        List<Post> posts = new ArrayList<>();
-        posts.addAll(result);
-        return posts;
-    }
-
-    @Override
-    public Collection<Post> findPostsByUserSince(User user, Date date, int limit) {
+    public Collection<Post> findPostsByUserBefore(User user, Date date, int limit) {
         List<PostImpl> result = loadPost().filter("userRef", Ref.create(user)).filter("dateCreated >=", date).limit(limit).list();
         List<Post> posts = new ArrayList<>();
         posts.addAll(result);
@@ -83,15 +75,7 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Collection<Post> findPostsByEvent(Event event, int limit) {
-        List<PostImpl> result = loadPost().filter("eventRef", Ref.create(event)).limit(limit).list();
-        List<Post> posts = new ArrayList<>();
-        posts.addAll(result);
-        return posts;
-    }
-
-    @Override
-    public Collection<Post> findPostsByEventSince(Event event, Date date, int limit) {
+    public Collection<Post> findPostsByEventBefore(Event event, Date date, int limit) {
         List<PostImpl> result = loadPost().filter("eventRef", Ref.create(event)).filter("dateCreated >=", date).limit(limit).list();
         List<Post> posts = new ArrayList<>();
         posts.addAll(result);

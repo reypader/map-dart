@@ -11,11 +11,9 @@ import java.util.Date;
  */
 public interface EventRepository extends CrudRepository<Event> {
 
-    Collection<Event> findEventsByUser(User organizer, int limit);
+    Collection<Event> findEventsByUserBefore(User organizer, Date date, int limit);
 
-    Collection<Event> findEventsByUserSince(User organizer, Date date, int limit);
-
-    Collection<Event> findEventsCreatedSince(Date date, int limit);
+    Collection<Event> findEventsCreatedBefore(Date date, int limit);
 
     Collection<Event> findEventsActiveOn(Date date, int limit);
 
