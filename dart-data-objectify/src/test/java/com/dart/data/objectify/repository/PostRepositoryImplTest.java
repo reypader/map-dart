@@ -148,23 +148,7 @@ public class PostRepositoryImplTest {
     }
 
     @Test
-    public void testFindPostsByUser() throws Exception {
-        TestUser user2 = new TestUser("username2");
-        Key userKey2 = ofy().save().entity(user2).now();
-        String content = "This is a test content";
-        Post post1 = new PostImpl(eventKey, userKey, content);
-        Post post2 = new PostImpl(eventKey, userKey2, content);
-        testData.add(repo.add(post1));
-        testData.add(repo.add(post2));
-
-        Collection<Post> result = repo.findPostsByUser(user2, QUERY_LIMIT);
-
-        assertEquals(1, result.size());
-        assertEverything(post2, result.iterator().next());
-    }
-
-    @Test
-    public void findPostsByUserSince() throws Exception {
+    public void findPostsByUserBefore() throws Exception {
         TestUser user2 = new TestUser("username2");
         Key userKey2 = ofy().save().entity(user2).now();
         String content = "This is a test content";
@@ -177,30 +161,14 @@ public class PostRepositoryImplTest {
         testData.add(repo.add(post2));
         testData.add(repo.add(post3));
 
-        Collection<Post> result = repo.findPostsByUserSince(user2, time, QUERY_LIMIT);
+        Collection<Post> result = repo.findPostsByUserBefore(user2, time, QUERY_LIMIT);
 
         assertEquals(1, result.size());
         assertEverything(post2, result.iterator().next());
     }
 
     @Test
-    public void testFindPostsByEvent() throws Exception {
-        Event event2 = new TestEvent(userKey);
-        Key eventKey2 = ofy().save().entity(event2).now();
-        String content = "This is a test content";
-        Post post1 = new PostImpl(eventKey, userKey, content);
-        Post post2 = new PostImpl(eventKey2, userKey, content);
-        testData.add(repo.add(post1));
-        testData.add(repo.add(post2));
-
-        Collection<Post> result = repo.findPostsByEvent(event2, QUERY_LIMIT);
-
-        assertEquals(1, result.size());
-        assertEverything(post2, result.iterator().next());
-    }
-
-    @Test
-    public void findPostsByEventSince() throws Exception {
+    public void findPostsByEventBefore() throws Exception {
         Event event2 = new TestEvent(userKey);
         Key eventKey2 = ofy().save().entity(event2).now();
         String content = "This is a test content";
@@ -213,7 +181,7 @@ public class PostRepositoryImplTest {
         testData.add(repo.add(post2));
         testData.add(repo.add(post3));
 
-        Collection<Post> result = repo.findPostsByEventSince(event2, time, QUERY_LIMIT);
+        Collection<Post> result = repo.findPostsByEventBefore(event2, time, QUERY_LIMIT);
 
         assertEquals(1, result.size());
         assertEverything(post2, result.iterator().next());

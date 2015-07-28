@@ -1,11 +1,11 @@
 package com.dart.data.objectify.repository;
 
-import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.domain.Event;
-import com.dart.data.repository.EventRepository;
+import com.dart.data.domain.User;
+import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.EventImpl;
-import com.dart.data.domain.User;
+import com.dart.data.repository.EventRepository;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.Ref;
@@ -66,15 +66,7 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     @Override
-    public Collection<Event> findEventsByUser(User organizer, int limit) {
-        List<EventImpl> result = loadEvent().filter("userRef", Ref.create(organizer)).limit(limit).list();
-        List<Event> events = new ArrayList<>();
-        events.addAll(result);
-        return events;
-    }
-
-    @Override
-    public Collection<Event> findEventsByUserSince(User organizer, Date date, int limit) {
+    public Collection<Event> findEventsByUserBefore(User organizer, Date date, int limit) {
         List<EventImpl> result = loadEvent().filter("userRef", Ref.create(organizer)).filter("dateCreated >=", date).limit(limit).list();
         List<Event> events = new ArrayList<>();
         events.addAll(result);
@@ -82,7 +74,7 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     @Override
-    public Collection<Event> findEventsCreatedSince(Date date, int limit) {
+    public Collection<Event> findEventsCreatedBefore(Date date, int limit) {
         List<EventImpl> result = loadEvent().filter("dateCreated >=", date).limit(limit).list();
         List<Event> events = new ArrayList<>();
         events.addAll(result);
