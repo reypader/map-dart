@@ -32,11 +32,13 @@ public class DummyUserRepository implements UserRepository {
 
     @Override
     public User update(User entity) {
+        dummyStore.remove(entity.getId());
+        dummyStore.put(entity.getId(), entity);
         return entity;
     }
 
     @Override
     public void delete(User entity) {
-
+        dummyStore.remove(entity.getId());
     }
 }

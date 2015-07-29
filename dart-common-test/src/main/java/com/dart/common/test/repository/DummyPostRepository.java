@@ -26,6 +26,9 @@ public class DummyPostRepository implements PostRepository {
             if (post.getDateCreated().before(date) && post.getUser().getId().equals(organizer.getId())) {
                 posts.add(post);
             }
+            if (posts.size() >= limit) {
+                return posts;
+            }
         }
         return posts;
     }
@@ -36,6 +39,9 @@ public class DummyPostRepository implements PostRepository {
         for (Post post : dummyStore.values()) {
             if (post.getDateCreated().before(date) && post.getEvent().getId().equals(event.getId())) {
                 posts.add(post);
+            }
+            if (posts.size() >= limit) {
+                return posts;
             }
         }
         return posts;
@@ -57,11 +63,13 @@ public class DummyPostRepository implements PostRepository {
 
     @Override
     public Post update(Post entity) {
+        dummyStore.remove(entity.getId());
+        dummyStore.put(entity.getId(), entity);
         return entity;
     }
 
     @Override
     public void delete(Post entity) {
-
+        dummyStore.remove(entity.getId());
     }
 }

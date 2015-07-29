@@ -20,17 +20,13 @@ public class DummyPost implements Post {
     private String id;
     private Date dateCreated;
 
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
     @Override
     public Event getEvent() {
         return event;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     @Override
@@ -38,14 +34,18 @@ public class DummyPost implements Post {
         return user;
     }
 
-    @Override
-    public void setContent(String content) {
-        this.content = content;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public String getContent() {
         return content;
+    }
+
+    @Override
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Override
