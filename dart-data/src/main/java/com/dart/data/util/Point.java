@@ -1,11 +1,13 @@
 package com.dart.data.util;
 
+import java.util.Objects;
+
 /**
  * Convenience class to represent a point.
- * <p>
+ * <p/>
  * Provides alternate methods to access the X and Y fields as
  * Longitude and Latitude respectively
- * <p>
+ * <p/>
  *
  * @author RMPader
  */
@@ -32,5 +34,19 @@ public class Point {
 
     public float getLatitude() {
         return y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Point point = (Point) o;
+        return Objects.equals(getX(), point.getX()) &&
+                Objects.equals(getY(), point.getY());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getX(), getY());
     }
 }

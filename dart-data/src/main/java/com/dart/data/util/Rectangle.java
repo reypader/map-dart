@@ -1,5 +1,7 @@
 package com.dart.data.util;
 
+import java.util.Objects;
+
 /**
  * Convenience class to represent a rectangle using its
  * north-east and south-west corner.
@@ -21,5 +23,19 @@ public class Rectangle {
 
     public Point getSouthWestCorner() {
         return southWestCorner;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rectangle rectangle = (Rectangle) o;
+        return Objects.equals(getNorthEastCorner(), rectangle.getNorthEastCorner()) &&
+                Objects.equals(getSouthWestCorner(), rectangle.getSouthWestCorner());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNorthEastCorner(), getSouthWestCorner());
     }
 }
