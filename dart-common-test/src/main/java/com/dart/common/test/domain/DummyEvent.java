@@ -2,6 +2,7 @@ package com.dart.common.test.domain;
 
 import com.dart.data.domain.Event;
 import com.dart.data.domain.User;
+import com.dart.data.util.Point;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,11 +19,7 @@ public class DummyEvent implements Event {
     private String title;
     private String description;
     private Date dateCreated;
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    private Point location;
     private String id;
     private Date endDate;
     private Date startDate;
@@ -37,23 +34,23 @@ public class DummyEvent implements Event {
     }
 
     @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
     public String getTitle() {
         return title;
     }
 
     @Override
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -67,18 +64,13 @@ public class DummyEvent implements Event {
     }
 
     @Override
-    public void setStartDate(Date date) {
-        this.startDate = date;
-    }
-
-    @Override
     public Date getStartDate() {
         return startDate;
     }
 
     @Override
-    public void setEndDate(Date date) {
-        this.endDate = date;
+    public void setStartDate(Date date) {
+        this.startDate = date;
     }
 
     @Override
@@ -87,8 +79,27 @@ public class DummyEvent implements Event {
     }
 
     @Override
+    public void setEndDate(Date date) {
+        this.endDate = date;
+    }
+
+    @Override
+    public Point getLocation() {
+        return location;
+    }
+
+    @Override
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
+    @Override
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
