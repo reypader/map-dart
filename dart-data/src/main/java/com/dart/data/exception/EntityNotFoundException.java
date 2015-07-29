@@ -1,7 +1,9 @@
 package com.dart.data.exception;
 
 /**
- * Created by RMPader on 7/27/15.
+ * Wrapper exception for exceptions that indicate that an entity being acted upon does not exist.
+ *
+ * @author RMPader
  */
 public class EntityNotFoundException extends RuntimeException {
 

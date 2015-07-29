@@ -7,7 +7,9 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * Created by RMPader on 7/25/15.
+ * Interface for complex data access to stored {@link Event} classes.
+ *
+ * @author RMPader
  */
 public interface EventRepository extends CrudRepository<Event> {
 

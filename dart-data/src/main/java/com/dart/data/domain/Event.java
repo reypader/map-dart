@@ -4,9 +4,12 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * Created by RMPader on 7/25/15.
+ * Event interface that provides necessary methods
+ * for performing business logic.
+ *
+ * @author RMPader
  */
-public interface Event extends Entity{
+public interface Event extends Entity {
 
     User getOrganizer();
 

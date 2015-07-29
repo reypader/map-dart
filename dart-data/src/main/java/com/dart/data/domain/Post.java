@@ -3,7 +3,10 @@ package com.dart.data.domain;
 import java.util.Collection;
 
 /**
- * Created by RMPader on 7/25/15.
+ * Post interface that provides necessary methods
+ * for performing business logic.
+ *
+ * @author RMPader
  */
 public interface Post extends Entity {
 

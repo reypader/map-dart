@@ -1,7 +1,10 @@
 package com.dart.data.domain;
 
 /**
- * Created by RMPader on 7/25/15.
+ * User entity interface that provides necessary methods
+ * for performing business logic.
+ *
+ * @author RMPader
  */
 public interface User extends Entity {
 

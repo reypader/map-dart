@@ -6,7 +6,10 @@ import com.dart.data.domain.User;
 import java.util.Date;
 
 /**
- * Created by RMPader on 7/27/15.
+ * Factory that allows creation of Event classes
+ * in place of concrete constructors.
+ *
+ * @author RMPader
  */
 public interface EventFactory {
 
