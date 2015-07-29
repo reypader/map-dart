@@ -1,5 +1,7 @@
 package com.dart.data.domain;
 
+import com.dart.data.util.Point;
+
 import java.util.Collection;
 import java.util.Date;
 
@@ -32,5 +34,9 @@ public interface Event extends Entity {
     void setEndDate(Date date);
 
     Date getEndDate();
+
+    void setLocation(Point location);
+
+    Point getLocation();
 
 }
