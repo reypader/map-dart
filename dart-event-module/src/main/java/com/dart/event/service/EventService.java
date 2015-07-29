@@ -6,6 +6,7 @@ import com.dart.data.factory.EventFactory;
 import com.dart.data.repository.EventRepository;
 import com.dart.data.repository.UserRepository;
 import com.dart.data.util.Point;
+import com.dart.data.util.Rectangle;
 import com.dart.event.api.*;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class EventService {
 
     public CreateEventResponse createEvent(CreateEventRequest request) {
         User organizer = userRepository.retrieve(request.getOrganizerId());
-        Point location = new Point(request.getLocation().getLongitude(),request.getLocation().getLatitude());
+        Point location = new Point(request.getLocation().getLongitude(), request.getLocation().getLatitude());
         Event event = eventFactory.createEvent(organizer, request.getTitle(), request.getStartDate(), request.getEndDate(), location);
         event.setDescription(request.getDescription());
         for (String url : request.getImageURLs()) {
@@ -49,7 +50,33 @@ public class EventService {
         return createFindEventResponse(event);
     }
 
-    private FindEventResponse createFindEventResponse(Event event) {
+    public List<FindEventResponse> findEvents(Rectangle area) {
+        Collection<Event> result= eventRepository.findUnfinishedEventsInArea(area);
+        List<FindEventResponse> responses = new ArrayList<>(result.size());
+        for(Event event : result){
+            responses.add(createFindEventResponse(event));
+        }
+        return responses;
+    }
+
+    public List<FindEventResponse> findEvents(Point center, double radius) {
+        Collection<Event> result= eventRepository.findUnfinishedEventsInArea(center,radius);
+        List<FindEventResponse> responses = new ArrayList<>(result.size());
+        for(Event event : result){
+            responses.add(createFindEventResponse(event));
+        }
+        return responses;
+    }
+
+    public List<FindEventResponse> findEventsOfUser(String organizerId, int maxFinishedEvents) {
+        return null;
+    }
+
+    public List<FindEventResponse> findEventsOfUserAfter(String organizerId, Date date, int maxFinishedEvents) {
+        return null;
+    }
+
+    protected FindEventResponse createFindEventResponse(Event event) {
         Identity organizer = new Identity();
         organizer.setId(event.getOrganizer().getId());
         organizer.setName(event.getOrganizer().getDisplayName());

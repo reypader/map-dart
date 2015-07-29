@@ -10,6 +10,7 @@ import com.dart.data.factory.EventFactory;
 import com.dart.data.repository.EventRepository;
 import com.dart.data.repository.UserRepository;
 import com.dart.data.util.Point;
+import com.dart.data.util.Rectangle;
 import com.dart.event.api.CreateEventRequest;
 import com.dart.event.api.CreateEventResponse;
 import com.dart.event.api.FindEventResponse;
@@ -18,7 +19,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import java.util.Date;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -123,6 +124,103 @@ public class EventServiceTest {
 
         verify(eventRepoSpy, times(1)).retrieve(event.getId());
         assertFields(event, actualResponse);
+    }
+
+    @Test
+    public void testFindEventsRectangle() throws Exception {
+        User organizer = dummyUserFactory.createUser("username", "display name");
+        dummyUserRepo.add(organizer);
+
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DATE, 1);
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+
+        Event event1 = dummyEventFactory.createEvent(organizer, "This is a title", yesterday.getTime(), yesterday.getTime(), new Point(121.040777f, 14.360065f));
+        Event event2 = dummyEventFactory.createEvent(organizer, "This is a title", yesterday.getTime(), tomorrow.getTime(), new Point(121.048857f, 14.361015f));
+        Event event3 = dummyEventFactory.createEvent(organizer, "This is a title", yesterday.getTime(), tomorrow.getTime(), new Point(121.817784f, 14.520892f));
+        Event event4 = dummyEventFactory.createEvent(organizer, "This is a title", yesterday.getTime(), tomorrow.getTime(), new Point(121.040777f, 14.360065f));
+        dummyEventRepo.add(event1);
+        dummyEventRepo.add(event2);
+        dummyEventRepo.add(event3);
+        dummyEventRepo.add(event4);
+
+        Point ne = new Point(121.050403f, 14.368595f);
+        Point sw = new Point(121.034380f, 14.357199f);
+        Rectangle area = new Rectangle(ne, sw);
+
+        UserRepository userRepoSpy = spy(dummyUserRepo);
+        EventRepository eventRepoSpy = spy(dummyEventRepo);
+        EventFactory factorySpy = spy(dummyEventFactory);
+
+        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+
+        Collection<FindEventResponse> actualResponse = service.findEvents(area);
+
+        verify(eventRepoSpy, times(1)).findUnfinishedEventsInArea(area);
+        assertEquals(2, actualResponse.size());
+
+        List<Event> actual = new ArrayList<>();
+        for (FindEventResponse response : actualResponse) {
+            Event a = dummyEventRepo.getStoredData().get(response.getId());
+            assertFields(a, response);
+            actual.add(a);
+        }
+        assertTrue(actual.contains(event2));
+        assertTrue(actual.contains(event4));
+    }
+
+    @Test
+    public void testFindEventsCircle() throws Exception {
+
+        User organizer = dummyUserFactory.createUser("username", "display name");
+        dummyUserRepo.add(organizer);
+
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DATE, 1);
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+
+        Event event1 = dummyEventFactory.createEvent(organizer, "This is a title", yesterday.getTime(), yesterday.getTime(), new Point(121.040777f, 14.360065f));
+        Event event2 = dummyEventFactory.createEvent(organizer, "This is a title", yesterday.getTime(), tomorrow.getTime(), new Point(121.048857f, 14.361015f));
+        Event event3 = dummyEventFactory.createEvent(organizer, "This is a title", yesterday.getTime(), tomorrow.getTime(), new Point(121.817784f, 14.520892f));
+        Event event4 = dummyEventFactory.createEvent(organizer, "This is a title", yesterday.getTime(), tomorrow.getTime(), new Point(121.040777f, 14.360065f));
+        dummyEventRepo.add(event1);
+        dummyEventRepo.add(event2);
+        dummyEventRepo.add(event3);
+        dummyEventRepo.add(event4);
+
+        Point center = new Point(121.043041f, 14.359820f);
+
+        UserRepository userRepoSpy = spy(dummyUserRepo);
+        EventRepository eventRepoSpy = spy(dummyEventRepo);
+        EventFactory factorySpy = spy(dummyEventFactory);
+
+        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+
+        Collection<FindEventResponse> actualResponse = service.findEvents(center, 6000);
+
+        verify(eventRepoSpy, times(1)).findUnfinishedEventsInArea(center, 6000);
+        assertEquals(2, actualResponse.size());
+
+        List<Event> actual = new ArrayList<>();
+        for (FindEventResponse response : actualResponse) {
+            Event a = dummyEventRepo.getStoredData().get(response.getId());
+            assertFields(a, response);
+            actual.add(a);
+        }
+        assertTrue(actual.contains(event2));
+        assertTrue(actual.contains(event4));
+    }
+
+    @Test
+    public void testFindEventsOfUser() throws Exception {
+
+    }
+
+    @Test
+    public void testFindEventsOfUserAfter() throws Exception {
+
     }
 
 //    @Test
