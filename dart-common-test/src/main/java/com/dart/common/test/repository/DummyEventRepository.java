@@ -7,9 +7,6 @@ import com.dart.data.repository.EventRepository;
 import com.dart.data.util.Point;
 import com.dart.data.util.Rectangle;
 
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.*;
 
 /**
@@ -52,30 +49,51 @@ public class DummyEventRepository implements EventRepository {
 
     @Override
     public Collection<Event> findUnfinishedEventsInArea(Rectangle area) {
-        float width = Math.abs(area.getNorthEastCorner().getX() - area.getSouthWestCorner().getX());
-        float height = Math.abs(area.getNorthEastCorner().getY() - area.getSouthWestCorner().getY());
-        Rectangle2D rect = new Rectangle2D.Float(area.getSouthWestCorner().getX(), area.getNorthEastCorner().getY(), width, height);
+
         List<Event> result = new ArrayList<>();
         for (Event event : dummyStore.values()) {
-            Point2D.Float p = new Point2D.Float(event.getLocation().getX(), event.getLocation().getY());
-            if (event.getEndDate().after(new Date()) && rect.contains(p)) {
+            Point p = new Point(event.getLocation().getX(), event.getLocation().getY());
+            if (event.getEndDate().after(new Date()) && contains(area, p)) {
                 result.add(event);
             }
         }
         return result;
     }
 
+    private boolean contains(Rectangle area, Point p) {
+        boolean x = (Float.compare(p.getX(), area.getSouthWestCorner().getX()) > 0) && (Float.compare(p.getX(), area.getNorthEastCorner().getX()) < 0);
+        boolean y = (Float.compare(p.getY(), area.getSouthWestCorner().getY()) > 0) && (Float.compare(p.getY(), area.getNorthEastCorner().getY()) < 0);
+        return x && y;
+    }
+
     @Override
     public Collection<Event> findUnfinishedEventsInArea(Point center, double radius) {
-        Ellipse2D.Float circle = new Ellipse2D.Float(center.getX(), center.getY(), (float) radius, (float) radius);
         List<Event> result = new ArrayList<>();
         for (Event event : dummyStore.values()) {
-            Point2D.Float p = new Point2D.Float(event.getLocation().getX(), event.getLocation().getY());
-            if (event.getEndDate().after(new Date()) && circle.contains(p)) {
+            Point p = new Point(event.getLocation().getX(), event.getLocation().getY());
+            if (event.getEndDate().after(new Date()) && contains(p, center, radius)) {
                 result.add(event);
             }
         }
         return result;
+    }
+
+    private boolean contains(Point p, Point center, double radius) {
+        float dist = distFrom(p.getLatitude(), p.getLongitude(), center.getLatitude(), center.getLongitude());
+        return dist < radius;
+    }
+
+    public static float distFrom(float lat1, float lng1, float lat2, float lng2) {
+        double earthRadius = 6371000; //meters
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lng2 - lng1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        float dist = (float) (earthRadius * c);
+
+        return dist;
     }
 
     @Override
