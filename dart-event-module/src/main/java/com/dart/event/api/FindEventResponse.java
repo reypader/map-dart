@@ -25,60 +25,60 @@ public class FindEventResponse {
         this.id = id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getTitle() {
         return title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getStartDate() {
         return startDate;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     public Date getEndDate() {
         return endDate;
     }
 
-    public void setImageURLs(String[] imageURLs) {
-        this.imageURLs = imageURLs;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public String[] getImageURLs() {
         return imageURLs;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setImageURLs(String[] imageURLs) {
+        this.imageURLs = imageURLs;
     }
 
     public Location getLocation() {
         return location;
     }
 
-    public void setOrganizer(Identity organizer) {
-        this.organizer = organizer;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public Identity getOrganizer() {
         return organizer;
+    }
+
+    public void setOrganizer(Identity organizer) {
+        this.organizer = organizer;
     }
 
     @Override

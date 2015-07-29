@@ -32,8 +32,8 @@ public class Location {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Location location = (Location) o;
-        return (Float.compare(getLongitude(), location.getLongitude())==0) &&
-                (Float.compare(getLatitude(), location.getLatitude())==0);
+        return (Float.compare(getLongitude(), location.getLongitude()) == 0) &&
+                (Float.compare(getLatitude(), location.getLatitude()) == 0);
     }
 
     @Override

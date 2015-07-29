@@ -51,18 +51,18 @@ public class EventService {
     }
 
     public List<FindEventResponse> findEvents(Rectangle area) {
-        Collection<Event> result= eventRepository.findUnfinishedEventsInArea(area);
+        Collection<Event> result = eventRepository.findUnfinishedEventsInArea(area);
         List<FindEventResponse> responses = new ArrayList<>(result.size());
-        for(Event event : result){
+        for (Event event : result) {
             responses.add(createFindEventResponse(event));
         }
         return responses;
     }
 
     public List<FindEventResponse> findEvents(Point center, double radius) {
-        Collection<Event> result= eventRepository.findUnfinishedEventsInArea(center,radius);
+        Collection<Event> result = eventRepository.findUnfinishedEventsInArea(center, radius);
         List<FindEventResponse> responses = new ArrayList<>(result.size());
-        for(Event event : result){
+        for (Event event : result) {
             responses.add(createFindEventResponse(event));
         }
         return responses;
