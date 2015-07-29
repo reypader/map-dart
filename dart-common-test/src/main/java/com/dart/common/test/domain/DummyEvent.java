@@ -4,10 +4,7 @@ import com.dart.data.domain.Event;
 import com.dart.data.domain.User;
 import com.dart.data.util.Point;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Dummy implementation of {@link Event} class for unit testing. Use Mockito.spy() to verify invocations.
@@ -109,5 +106,18 @@ public class DummyEvent implements Event {
 
     public void setDateCreated(Date date) {
         this.dateCreated = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DummyEvent that = (DummyEvent) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

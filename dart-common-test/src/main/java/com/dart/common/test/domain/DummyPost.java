@@ -4,10 +4,7 @@ import com.dart.data.domain.Event;
 import com.dart.data.domain.Post;
 import com.dart.data.domain.User;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Dummy implementation of {@link Post} class for unit testing. Use Mockito.spy() to verify invocations.
@@ -75,5 +72,18 @@ public class DummyPost implements Post {
 
     public void setDateCreated(Date date) {
         this.dateCreated = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DummyEvent that = (DummyEvent) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
