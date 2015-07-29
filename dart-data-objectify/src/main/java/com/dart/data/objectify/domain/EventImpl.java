@@ -2,14 +2,13 @@ package com.dart.data.objectify.domain;
 
 import com.dart.data.domain.Event;
 import com.dart.data.domain.User;
+import com.dart.data.util.Point;
+import com.google.appengine.api.datastore.GeoPt;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * {@inheritDoc}
@@ -29,7 +28,6 @@ public class EventImpl implements Event {
 
     private List<String> imageURLs = new ArrayList<>();
 
-    @Index
     private Date dateCreated;
 
     @Index
@@ -38,15 +36,19 @@ public class EventImpl implements Event {
     @Index
     private Date endDate;
 
+    @Index
+    private GeoPt location;
+
     private String title;
 
     private String description;
 
-    public EventImpl(Key<User> organizerKey, String title, Date startDate, Date endDate) {
+    public EventImpl(Key<User> organizerKey, String title, Date startDate, Date endDate, Point location) {
         this.userRef = Ref.create(organizerKey);
         this.setTitle(title);
         this.setStartDate(startDate);
         this.setEndDate(endDate);
+        this.setLocation(location);
     }
 
     @OnSave
@@ -125,6 +127,15 @@ public class EventImpl implements Event {
         return endDate;
     }
 
+    @Override
+    public void setLocation(Point location) {
+        this.location = new GeoPt(location.getLatitude(), location.getLongitude());
+    }
+
+    @Override
+    public Point getLocation() {
+        return new Point(location.getLongitude(), location.getLatitude());
+    }
 
     @Override
     public boolean equals(Object o) {

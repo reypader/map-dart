@@ -2,6 +2,7 @@ package com.dart.data.objectify.domain;
 
 import com.dart.data.domain.Event;
 import com.dart.data.domain.User;
+import com.dart.data.util.Point;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
@@ -84,6 +85,16 @@ public class TestEvent implements Event {
 
     @Override
     public Date getEndDate() {
+        return null;
+    }
+
+    @Override
+    public void setLocation(Point location) {
+
+    }
+
+    @Override
+    public Point getLocation() {
         return null;
     }
 

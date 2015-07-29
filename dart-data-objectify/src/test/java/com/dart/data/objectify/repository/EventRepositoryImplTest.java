@@ -1,11 +1,13 @@
 package com.dart.data.objectify.repository;
 
 import com.dart.common.test.TestDatastore;
-import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.domain.Event;
-import com.dart.data.repository.EventRepository;
+import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.domain.EventImpl;
 import com.dart.data.objectify.domain.TestUser;
+import com.dart.data.repository.EventRepository;
+import com.dart.data.util.Point;
+import com.dart.data.util.Rectangle;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
@@ -29,7 +31,7 @@ public class EventRepositoryImplTest {
     private EventRepository repo;
 
     private Closeable work;
-    private List<Event> testData = new ArrayList<>();
+    private Map<String, Event> testData = new HashMap<>();
     private TestUser user;
     private Key userKey;
 
@@ -72,7 +74,7 @@ public class EventRepositoryImplTest {
         Calendar today = Calendar.getInstance();
         Calendar tomorrow = Calendar.getInstance();
         tomorrow.add(Calendar.DATE, 1);
-        EventImpl event = new EventImpl(userKey, "TEST title", today.getTime(), tomorrow.getTime());
+        EventImpl event = new EventImpl(userKey, "TEST title", today.getTime(), tomorrow.getTime(), new Point(1, 1));
         event.setDescription("describe");
         event.addImageURL("URL1");
         event.addImageURL("URL2");
@@ -98,7 +100,7 @@ public class EventRepositoryImplTest {
         Calendar today = Calendar.getInstance();
         Calendar tomorrow = Calendar.getInstance();
         tomorrow.add(Calendar.DATE, 1);
-        EventImpl event = new EventImpl(userKey, "TEST title", today.getTime(), tomorrow.getTime());
+        EventImpl event = new EventImpl(userKey, "TEST title", today.getTime(), tomorrow.getTime(), new Point(1, 1));
         Event savedEvent = repo.add(event);
         savedEvent.setTitle("UPDATED TEST TITLE");
         savedEvent.setDescription("description");
@@ -117,14 +119,14 @@ public class EventRepositoryImplTest {
         Calendar today = Calendar.getInstance();
         Calendar tomorrow = Calendar.getInstance();
         tomorrow.add(Calendar.DATE, 1);
-        EventImpl event = new EventImpl(userKey, "TEST title", today.getTime(), tomorrow.getTime());
+        EventImpl event = new EventImpl(userKey, "TEST title", today.getTime(), tomorrow.getTime(), new Point(1, 1));
 
         repo.update(event);
     }
 
     @Test
     public void testRetrieve() throws Exception {
-        EventImpl event = new EventImpl(userKey, "TEST title", new Date(), new Date());
+        EventImpl event = new EventImpl(userKey, "TEST title", new Date(), new Date(), new Point(1, 1));
         Event savedEvent = repo.add(event);
 
         Event foundEvent = repo.retrieve(Key.create(savedEvent).toWebSafeString());
@@ -133,8 +135,8 @@ public class EventRepositoryImplTest {
     }
 
     @Test
-    public void testDeleteEvent() throws Exception {
-        EventImpl event = new EventImpl(userKey, "TEST title", new Date(), new Date());
+    public void testDelete() throws Exception {
+        EventImpl event = new EventImpl(userKey, "TEST title", new Date(), new Date(), new Point(1, 1));
         Event savedEvent = repo.add(event);
 
         repo.delete(savedEvent);
@@ -144,76 +146,116 @@ public class EventRepositoryImplTest {
     }
 
     @Test
-    public void testFindEventsByUserBefore() throws Exception {
-        TestUser user2 = new TestUser("username2");
-        Key parent2 = ofy().save().entity(user2).now();
-        Event event1 = new EventImpl(userKey, "Test title 1", new Date(), new Date());
-        testData.add(repo.add(event1));
-        Thread.sleep(2000);
-        Date time = new Date();
-        Event event2 = new EventImpl(userKey, "Test title 2", new Date(), new Date());
-        Event event3 = new EventImpl(parent2, "Test title 3", new Date(), new Date());
-        testData.add(repo.add(event2));
-        testData.add(repo.add(event3));
-
-        Collection<Event> result = repo.findEventsByUserBefore(user, time, QUERY_LIMIT);
-
-        assertEquals(1, result.size());
-        assertEverything(event2, result.iterator().next());
-    }
-
-    @Test
-    public void testFindEventsCreatedBefore() throws Exception {
-        Event event1 = new EventImpl(userKey, "Test title 1", new Date(), new Date());
-        testData.add(repo.add(event1));
-        Thread.sleep(2000);
-        Date time = new Date();
-        Event event2 = new EventImpl(userKey, "Test title 2", new Date(), new Date());
-        testData.add(repo.add(event2));
-
-        Collection<Event> result = repo.findEventsCreatedBefore(time, QUERY_LIMIT);
-
-        assertEquals(1, result.size());
-        assertEverything(event2, result.iterator().next());
-    }
-
-    @Test
-    public void testFindEventsActiveOnBeforeTime() throws Exception {
-        Calendar today = Calendar.getInstance();
-        Calendar later = Calendar.getInstance();
-        later.add(Calendar.HOUR, 1);
+    public void testFindUnfinishedEventsInAreaRectangle() throws Exception {
         Calendar tomorrow = Calendar.getInstance();
         tomorrow.add(Calendar.DATE, 1);
-        Calendar nextWeek = Calendar.getInstance();
-        nextWeek.add(Calendar.WEEK_OF_YEAR, 1);
-        EventImpl event1 = new EventImpl(userKey, "TEST title 1", today.getTime(), tomorrow.getTime());
-        EventImpl event2 = new EventImpl(userKey, "TEST title 2", tomorrow.getTime(), nextWeek.getTime());
-        testData.add(repo.add(event1));
-        testData.add(repo.add(event2));
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
 
-        Collection<Event> result = repo.findEventsActiveOn(later.getTime(), QUERY_LIMIT);
+        Event event1 = new EventImpl(userKey, "Test title 1", yesterday.getTime(), yesterday.getTime(), new Point(121.040777f, 14.360065f));
+        Event event2 = new EventImpl(userKey, "Test title 2", yesterday.getTime(), tomorrow.getTime(), new Point(121.048857f, 14.361015f));
+        Event event3 = new EventImpl(userKey, "Test title 3", yesterday.getTime(), tomorrow.getTime(), new Point(121.817784f, 14.520892f));
+        Event event4 = new EventImpl(userKey, "Test title 2", yesterday.getTime(), tomorrow.getTime(), new Point(121.040777f, 14.360065f));
+        event1 = repo.add(event1);
+        event2 = repo.add(event2);
+        event3 = repo.add(event3);
+        event4 = repo.add(event4);
+        testData.put(event1.getId(), event1);
+        testData.put(event2.getId(), event2);
+        testData.put(event3.getId(), event3);
+        testData.put(event4.getId(), event4);
+
+        Point ne = new Point(121.050403f, 14.368595f);
+        Point sw = new Point(121.034380f, 14.357199f);
+        Rectangle area = new Rectangle(ne, sw);
+        Collection<Event> result = repo.findUnfinishedEventsInArea(area);
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(event2));
+        assertTrue(result.contains(event4));
+        for (Event e : result) {
+            assertEverything(testData.get(e.getId()), e);
+        }
+    }
+
+    @Test
+    public void testFindUnfinishedEventsInAreaCircle() throws Exception {
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DATE, 1);
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+
+        Event event1 = new EventImpl(userKey, "Test title 1", yesterday.getTime(), yesterday.getTime(), new Point(121.040777f, 14.360065f));
+        Event event2 = new EventImpl(userKey, "Test title 2", yesterday.getTime(), tomorrow.getTime(), new Point(121.048857f, 14.361015f));
+        Event event3 = new EventImpl(userKey, "Test title 3", yesterday.getTime(), tomorrow.getTime(), new Point(121.817784f, 14.520892f));
+        Event event4 = new EventImpl(userKey, "Test title 2", yesterday.getTime(), tomorrow.getTime(), new Point(121.040777f, 14.360065f));
+        event1 = repo.add(event1);
+        event2 = repo.add(event2);
+        event3 = repo.add(event3);
+        event4 = repo.add(event4);
+        testData.put(event1.getId(), event1);
+        testData.put(event2.getId(), event2);
+        testData.put(event3.getId(), event3);
+        testData.put(event4.getId(), event4);
+
+        Point center = new Point(121.043041f, 14.359820f);
+        Collection<Event> result = repo.findUnfinishedEventsInArea(center, 6000);
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(event2));
+        assertTrue(result.contains(event4));
+        for (Event e : result) {
+            assertEverything(testData.get(e.getId()), e);
+        }
+    }
+
+    @Test
+    public void testFindUnfinishedEventsByUser() throws Exception {
+        TestUser user2 = new TestUser("username2");
+        Key parent2 = ofy().save().entity(user2).now();
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DATE, 1);
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+
+        Event event1 = new EventImpl(userKey, "Test title 1", yesterday.getTime(), yesterday.getTime(), new Point(1, 1));
+        Event event2 = new EventImpl(userKey, "Test title 2", yesterday.getTime(), tomorrow.getTime(), new Point(1, 1));
+        Event event3 = new EventImpl(parent2, "Test title 3", yesterday.getTime(), yesterday.getTime(), new Point(1, 1));
+        event1 = repo.add(event1);
+        event2 = repo.add(event2);
+        event3 = repo.add(event3);
+        testData.put(event1.getId(), event1);
+        testData.put(event2.getId(), event2);
+        testData.put(event3.getId(), event3);
+
+        Collection<Event> result = repo.findUnfinishedEventsByUser(user);
+
+        assertEquals(1, result.size());
+        assertEverything(event2, result.iterator().next());
+    }
+
+    @Test
+    public void testFindFinishedEventsByUser() throws Exception {
+        TestUser user2 = new TestUser("username2");
+        Key parent2 = ofy().save().entity(user2).now();
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DATE, 1);
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+
+        Event event1 = new EventImpl(userKey, "Test title 1", yesterday.getTime(), yesterday.getTime(), new Point(1, 1));
+        Event event2 = new EventImpl(userKey, "Test title 2", yesterday.getTime(), tomorrow.getTime(), new Point(1, 1));
+        Event event3 = new EventImpl(parent2, "Test title 3", yesterday.getTime(), yesterday.getTime(), new Point(1, 1));
+        event1 = repo.add(event1);
+        event2 = repo.add(event2);
+        event3 = repo.add(event3);
+        testData.put(event1.getId(), event1);
+        testData.put(event2.getId(), event2);
+        testData.put(event3.getId(), event3);
+        Collection<Event> result = repo.findFinishedEventsByUser(user, new Date(), QUERY_LIMIT);
 
         assertEquals(1, result.size());
         assertEverything(event1, result.iterator().next());
-    }
-
-
-    @Test
-    public void testFindEventsActiveOnAfterTime() throws Exception {
-        Calendar today = Calendar.getInstance();
-        Calendar tomorrow = Calendar.getInstance();
-        tomorrow.add(Calendar.DATE, 1);
-        Calendar nextWeek = Calendar.getInstance();
-        nextWeek.add(Calendar.WEEK_OF_YEAR, 1);
-        EventImpl event1 = new EventImpl(userKey, "TEST title 1", today.getTime(), tomorrow.getTime());
-        EventImpl event2 = new EventImpl(userKey, "TEST title 2", today.getTime(), nextWeek.getTime());
-        testData.add(repo.add(event1));
-        testData.add(repo.add(event2));
-
-        Collection<Event> result = repo.findEventsActiveOn(tomorrow.getTime(), QUERY_LIMIT);
-
-        assertEquals(1, result.size());
-        assertEverything(event2, result.iterator().next());
     }
 
 }

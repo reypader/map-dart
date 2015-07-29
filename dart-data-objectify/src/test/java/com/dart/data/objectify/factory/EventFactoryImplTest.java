@@ -6,6 +6,7 @@ import com.dart.data.domain.User;
 import com.dart.data.factory.EventFactory;
 import com.dart.data.objectify.domain.EventImpl;
 import com.dart.data.objectify.domain.TestUser;
+import com.dart.data.util.Point;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.Closeable;
@@ -46,9 +47,10 @@ public class EventFactoryImplTest {
 
     @Test
     public void testPersistableEvent() throws Exception {
+        Point location = new Point(1, 1);
         EventFactory factory = new EventFactoryImpl();
         User user = new TestUser("username");
-        Event event = factory.createEvent(user,"title",new Date(),new Date());
+        Event event = factory.createEvent(user, "title", new Date(), new Date(), location);
 
         ofy().save().entity(event);
         Thread.sleep(2000);

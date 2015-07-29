@@ -6,6 +6,10 @@ import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.EventImpl;
 import com.dart.data.repository.EventRepository;
+import com.dart.data.util.Point;
+import com.dart.data.util.Rectangle;
+import com.google.appengine.api.datastore.GeoPt;
+import com.google.appengine.api.datastore.Query;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.Ref;
@@ -65,37 +69,55 @@ public class EventRepositoryImpl implements EventRepository {
         objectify().delete().entity(entity);
     }
 
+
+    private LoadType<EventImpl> loadEvent() {
+        return objectify().load().type(EventImpl.class);
+    }
+
     @Override
-    public Collection<Event> findEventsByUserBefore(User organizer, Date date, int limit) {
-        List<EventImpl> result = loadEvent().filter("userRef", Ref.create(organizer)).filter("dateCreated >=", date).limit(limit).list();
-        List<Event> events = new ArrayList<>();
-        events.addAll(result);
+    public Collection<Event> findUnfinishedEventsInArea(Rectangle area) {
+        GeoPt southwest = new GeoPt(area.getSouthWestCorner().getLatitude(), area.getSouthWestCorner().getLongitude());
+        GeoPt northeast = new GeoPt(area.getNorthEastCorner().getLatitude(), area.getNorthEastCorner().getLongitude());
+        Query.Filter searchArea = new Query.StContainsFilter("location", new Query.GeoRegion.Rectangle(southwest, northeast));
+
+        Collection<EventImpl> result = loadEvent().filter(searchArea).list();
+        List<Event> events = getUnfinishedEvents(result);
         return events;
     }
 
     @Override
-    public Collection<Event> findEventsCreatedBefore(Date date, int limit) {
-        List<EventImpl> result = loadEvent().filter("dateCreated >=", date).limit(limit).list();
-        List<Event> events = new ArrayList<>();
-        events.addAll(result);
+    public Collection<Event> findUnfinishedEventsInArea(Point center, double radius) {
+        GeoPt gptCenter = new GeoPt(center.getLatitude(), center.getLongitude());
+        Query.Filter searchArea = new Query.StContainsFilter("location", new Query.GeoRegion.Circle(gptCenter, radius));
+        Collection<EventImpl> result = loadEvent().filter(searchArea).list();
+        List<Event> events = getUnfinishedEvents(result);
         return events;
     }
 
-    @Override
-    public Collection<Event> findEventsActiveOn(Date date, int limit) {
-        List<EventImpl> result = loadEvent().filter("startDate <=", date).limit(limit).list();
+    private List<Event> getUnfinishedEvents(Collection<EventImpl> result) {
         List<Event> events = new ArrayList<>();
-        // Datastore does not support multiple inequality as of July 2015.
-        // We are essentially doing: filter("endDate >", date).
+        Date now = new Date();
         for (Event event : result) {
-            if (event.getEndDate().after(date)) {
+            if (event.getEndDate().after(now)) {
                 events.add(event);
             }
         }
         return events;
     }
 
-    private LoadType<EventImpl> loadEvent() {
-        return objectify().load().type(EventImpl.class);
+    @Override
+    public Collection<Event> findUnfinishedEventsByUser(User organizer) {
+        Collection<EventImpl> result = loadEvent().filter("userRef", Ref.create(organizer)).filter("endDate >", new Date()).list();
+        List<Event> events = new ArrayList<>(result.size());
+        events.addAll(result);
+        return events;
+    }
+
+    @Override
+    public Collection<Event> findFinishedEventsByUser(User organizer, Date date, int limit) {
+        Collection<EventImpl> result = loadEvent().filter("userRef", Ref.create(organizer)).filter("endDate <=", date).limit(limit).list();
+        List<Event> events = new ArrayList<>(result.size());
+        events.addAll(result);
+        return events;
     }
 }
