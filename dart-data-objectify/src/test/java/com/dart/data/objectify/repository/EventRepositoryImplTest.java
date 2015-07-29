@@ -93,6 +93,7 @@ public class EventRepositoryImplTest {
         assertEquals(Key.create(savedEvent).toWebSafeString(), savedEvent.getId());
         assertNotNull(savedEvent.getDateCreated());
         assertEquals(userKey, Key.create(savedEvent.getOrganizer()));
+        assertFalse(savedEvent.isFinished());
     }
 
     @Test
@@ -106,12 +107,14 @@ public class EventRepositoryImplTest {
         savedEvent.setDescription("description");
         savedEvent.setStartDate(new Date());
         savedEvent.addImageURL("http://www.image.com/image.jpg");
-
+        savedEvent.setEndDate(today.getTime());
         EventImpl updatedEvent = (EventImpl) repo.update(savedEvent);
 
         int entityCount = ofy().load().type(EventImpl.class).count();
         assertEquals(1, entityCount);
         assertEverything(savedEvent, updatedEvent);
+        EventImpl doubleCheck = (EventImpl) ofy().load().key(Key.create(savedEvent)).now();
+        assertTrue(doubleCheck.isFinished());
     }
 
     @Test(expected = EntityNotFoundException.class)
@@ -132,6 +135,21 @@ public class EventRepositoryImplTest {
         Event foundEvent = repo.retrieve(Key.create(savedEvent).toWebSafeString());
 
         assertEverything(savedEvent, foundEvent);
+    }
+
+    @Test
+    public void testDelayedRetrieve() throws Exception {
+        Calendar later = Calendar.getInstance();
+        later.add(Calendar.SECOND, 3);
+        EventImpl event = new EventImpl(userKey, "TEST title", new Date(), later.getTime(), new Point(1, 1));
+        Event savedEvent = repo.add(event);
+
+        Thread.sleep(5000);
+        Event foundEvent = repo.retrieve(Key.create(savedEvent).toWebSafeString());
+
+        assertEverything(savedEvent, foundEvent);
+        EventImpl doubleCheck = (EventImpl) ofy().load().key(Key.create(savedEvent)).now();
+        assertTrue(doubleCheck.isFinished());
     }
 
     @Test

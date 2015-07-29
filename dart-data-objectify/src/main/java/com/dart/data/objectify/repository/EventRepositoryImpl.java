@@ -56,11 +56,20 @@ public class EventRepositoryImpl implements EventRepository {
     @Override
     public Event retrieve(String id) {
         Key<Event> key = Key.create(id);
-        return getEventByKey(key);
+        EventImpl event = getEventByKey(key);
+        correctFinishedIndicator(event);
+        return event;
     }
 
-    private Event getEventByKey(Key<Event> key) {
-        Event foundEvent = objectify().load().key(key).safe();
+    private void correctFinishedIndicator(EventImpl event) {
+        Date now = new Date();
+        if (!event.isFinished() && now.after(event.getEndDate())) {
+            update(event);
+        }
+    }
+
+    private EventImpl getEventByKey(Key<Event> key) {
+        EventImpl foundEvent = (EventImpl) objectify().load().key(key).safe();
         return foundEvent;
     }
 
@@ -80,7 +89,7 @@ public class EventRepositoryImpl implements EventRepository {
         GeoPt northeast = new GeoPt(area.getNorthEastCorner().getLatitude(), area.getNorthEastCorner().getLongitude());
         Query.Filter searchArea = new Query.StContainsFilter("location", new Query.GeoRegion.Rectangle(southwest, northeast));
 
-        Collection<EventImpl> result = loadEvent().filter(searchArea).list();
+        Collection<EventImpl> result = loadEvent().filter(searchArea).filter("isFinished", false).list();
         List<Event> events = getUnfinishedEvents(result);
         return events;
     }
@@ -97,9 +106,11 @@ public class EventRepositoryImpl implements EventRepository {
     private List<Event> getUnfinishedEvents(Collection<EventImpl> result) {
         List<Event> events = new ArrayList<>();
         Date now = new Date();
-        for (Event event : result) {
+        for (EventImpl event : result) {
             if (event.getEndDate().after(now)) {
                 events.add(event);
+            } else {
+                correctFinishedIndicator(event);
             }
         }
         return events;
@@ -117,7 +128,10 @@ public class EventRepositoryImpl implements EventRepository {
     public Collection<Event> findFinishedEventsByUser(User organizer, Date date, int limit) {
         Collection<EventImpl> result = loadEvent().filter("userRef", Ref.create(organizer)).filter("endDate <=", date).limit(limit).list();
         List<Event> events = new ArrayList<>(result.size());
-        events.addAll(result);
+        for (EventImpl event : result) {
+            events.add(event);
+            correctFinishedIndicator(event);
+        }
         return events;
     }
 }

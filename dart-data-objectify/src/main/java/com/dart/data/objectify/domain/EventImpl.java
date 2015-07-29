@@ -43,6 +43,16 @@ public class EventImpl implements Event {
 
     private String description;
 
+    /*
+     * (non-javadoc)
+     *
+     * placed to to help geo-spatial queries. This is meant to be updated the next time this event is
+     * retrieved and is identified as finished. Upon identification, a finished event will have its "isFinished" field
+     * set to true and persisted.
+     */
+    @Index
+    private boolean isFinished;
+
     public EventImpl(Key<User> organizerKey, String title, Date startDate, Date endDate, Point location) {
         this.userRef = Ref.create(organizerKey);
         this.setTitle(title);
@@ -53,12 +63,16 @@ public class EventImpl implements Event {
 
     @OnSave
     public void onSave() {
-        this.dateCreated = new Date();
+        Date now = new Date();
+        if (dateCreated == null) {
+            this.dateCreated = now;
+        }
+        isFinished = endDate.before(now);
     }
 
     /**
-     * The real ID cannot be used to query since this entity is being saved with a parent.
-     * Hence, we instead return a representation of the Key containing the full ancestral path of this entity.
+     * The real ID cannot be used to query since this entity is being saved with a parent. Hence, we instead return a
+     * representation of the Key containing the full ancestral path of this entity.
      *
      * @return a web-safe representation of the Datastore Key for this entity.
      */
@@ -135,6 +149,10 @@ public class EventImpl implements Event {
     @Override
     public Point getLocation() {
         return new Point(location.getLongitude(), location.getLatitude());
+    }
+
+    public boolean isFinished() {
+        return isFinished;
     }
 
     @Override
