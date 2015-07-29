@@ -23,7 +23,7 @@ public interface EventRepository extends CrudRepository<Event> {
      * @param area the rectangular area - defined by its NE and SW corner points to search in.
      * @return the collection of unfinished events.
      */
-    Collection<Event> findUnfinishedEventsArea(Rectangle area);
+    Collection<Event> findUnfinishedEventsInArea(Rectangle area);
 
     /**
      * Retrieves the {@link Event} entities that are located within the given circle.
@@ -34,7 +34,7 @@ public interface EventRepository extends CrudRepository<Event> {
      * @param radius the radius of the circle.
      * @return the collection of unfinished events.
      */
-    Collection<Event> findUnfinishedEventsArea(Point center, double radius);
+    Collection<Event> findUnfinishedEventsInArea(Point center, double radius);
 
     /**
      * Retrieves the {@link Event} entities that have their end dates before the time of the query
