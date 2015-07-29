@@ -69,7 +69,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Collection<Post> findPostsByUserBefore(User user, Date date, int limit) {
         List<PostImpl> result = loadPost().filter("userRef", Ref.create(user)).filter("dateCreated >=", date).limit(limit).list();
-        List<Post> posts = new ArrayList<>();
+        List<Post> posts = new ArrayList<>(result.size());
         posts.addAll(result);
         return posts;
     }
@@ -77,7 +77,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Collection<Post> findPostsByEventBefore(Event event, Date date, int limit) {
         List<PostImpl> result = loadPost().filter("eventRef", Ref.create(event)).filter("dateCreated >=", date).limit(limit).list();
-        List<Post> posts = new ArrayList<>();
+        List<Post> posts = new ArrayList<>(result.size());
         posts.addAll(result);
         return posts;
     }
