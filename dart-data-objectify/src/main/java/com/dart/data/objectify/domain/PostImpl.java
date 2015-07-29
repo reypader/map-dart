@@ -7,10 +7,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by RMPader on 7/25/15.
@@ -85,5 +82,13 @@ public class PostImpl implements Post {
     @Override
     public String getId() {
         return Key.create(this).toWebSafeString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PostImpl post = (PostImpl) o;
+        return Objects.equals(getId(), post.getId());
     }
 }

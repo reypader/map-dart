@@ -126,4 +126,13 @@ public class EventImpl implements Event {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EventImpl event = (EventImpl) o;
+        return Objects.equals(getId(), event.getId());
+    }
+
+
 }

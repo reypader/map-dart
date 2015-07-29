@@ -7,6 +7,7 @@ import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.OnSave;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by RMPader on 7/25/15.
@@ -78,4 +79,13 @@ public class UserImpl implements User {
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserImpl user = (UserImpl) o;
+        return Objects.equals(getId(), user.getId());
+    }
+
 }
