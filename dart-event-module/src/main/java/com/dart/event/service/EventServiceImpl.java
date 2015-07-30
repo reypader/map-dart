@@ -20,7 +20,7 @@ import java.util.List;
  * Created by RMPader on 7/28/15.
  */
 @Singleton
-public class EventServiceImpl {
+public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
@@ -33,6 +33,7 @@ public class EventServiceImpl {
         this.eventFactory = eventFactory;
     }
 
+    @Override
     public CreateEventResponse createEvent(CreateEventRequest request) {
         User organizer = userRepository.retrieve(request.getOrganizerId());
         Point location = new Point(request.getLocation().getLongitude(), request.getLocation().getLatitude());
@@ -49,11 +50,13 @@ public class EventServiceImpl {
         return response;
     }
 
+    @Override
     public FindEventResponse findEvent(String eventId) {
         Event event = eventRepository.retrieve(eventId);
         return createFindEventResponse(event);
     }
 
+    @Override
     public List<FindEventResponse> findEvents(Rectangle area) {
         Collection<Event> result = eventRepository.findUnfinishedEventsInArea(area);
         List<FindEventResponse> responses = new ArrayList<>(result.size());
@@ -63,6 +66,7 @@ public class EventServiceImpl {
         return responses;
     }
 
+    @Override
     public List<FindEventResponse> findEvents(Point center, double radius) {
         Collection<Event> result = eventRepository.findUnfinishedEventsInArea(center, radius);
         List<FindEventResponse> responses = new ArrayList<>(result.size());
@@ -72,6 +76,7 @@ public class EventServiceImpl {
         return responses;
     }
 
+    @Override
     public List<FindEventResponse> findEventsOfUser(String organizerId, int maxFinishedEvents) {
         int limit = maxFinishedEvents;
         if (limit <= 0) {
@@ -91,6 +96,7 @@ public class EventServiceImpl {
         return responses;
     }
 
+    @Override
     public List<FindEventResponse> findFinishedEventsOfUserBefore(String organizerId, Date date, int maxFinishedEvents) {
         int limit = maxFinishedEvents;
         if (limit <= 0) {

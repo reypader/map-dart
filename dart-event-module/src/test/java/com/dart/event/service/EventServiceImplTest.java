@@ -81,7 +81,7 @@ public class EventServiceImplTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
+        EventService service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
         CreateEventResponse actualResponse = service.createEvent(request);
 
@@ -119,7 +119,7 @@ public class EventServiceImplTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
+        EventService service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
         FindEventResponse actualResponse = service.findEvent(event.getId());
 
@@ -154,7 +154,7 @@ public class EventServiceImplTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
+        EventService service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
         Collection<FindEventResponse> actualResponse = service.findEvents(area);
 
@@ -197,7 +197,7 @@ public class EventServiceImplTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
+        EventService service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
         Collection<FindEventResponse> actualResponse = service.findEvents(center, 6000);
 
@@ -246,7 +246,7 @@ public class EventServiceImplTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
+        EventService service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
         List<FindEventResponse> actualResponse = service.findFinishedEventsOfUserBefore(organizer1.getId(), now.getTime(), 10);
 
@@ -298,7 +298,7 @@ public class EventServiceImplTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
+        EventService service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
 
         List<FindEventResponse> actualResponse = service.findEventsOfUser(organizer1.getId(), 10);
