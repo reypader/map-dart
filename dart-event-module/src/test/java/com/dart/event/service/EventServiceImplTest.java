@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by RMPader on 7/28/15.
  */
-public class EventServiceTest {
+public class EventServiceImplTest {
 
     private DummyUserRepository dummyUserRepo = new DummyUserRepository();
     private DummyEventRepository dummyEventRepo = new DummyEventRepository();
@@ -81,7 +81,7 @@ public class EventServiceTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
         CreateEventResponse actualResponse = service.createEvent(request);
 
@@ -119,7 +119,7 @@ public class EventServiceTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
         FindEventResponse actualResponse = service.findEvent(event.getId());
 
@@ -154,7 +154,7 @@ public class EventServiceTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
         Collection<FindEventResponse> actualResponse = service.findEvents(area);
 
@@ -197,7 +197,7 @@ public class EventServiceTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
         Collection<FindEventResponse> actualResponse = service.findEvents(center, 6000);
 
@@ -246,7 +246,7 @@ public class EventServiceTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
         List<FindEventResponse> actualResponse = service.findFinishedEventsOfUserBefore(organizer1.getId(), now.getTime(), 10);
 
@@ -298,7 +298,7 @@ public class EventServiceTest {
         EventRepository eventRepoSpy = spy(dummyEventRepo);
         EventFactory factorySpy = spy(dummyEventFactory);
 
-        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 
 
         List<FindEventResponse> actualResponse = service.findEventsOfUser(organizer1.getId(), 10);
@@ -357,7 +357,7 @@ public class EventServiceTest {
 //        EventRepository eventRepoSpy = spy(dummyEventRepo);
 //        EventFactory factorySpy = spy(dummyEventFactory);
 //
-//        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+//        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 //
 //        Calendar yesterday = Calendar.getInstance();
 //        yesterday.add(Calendar.DAY_OF_YEAR, -1);
@@ -411,7 +411,7 @@ public class EventServiceTest {
 //        EventRepository eventRepoSpy = spy(dummyEventRepo);
 //        EventFactory factorySpy = spy(dummyEventFactory);
 //
-//        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+//        EventServiceImpl service = new EventServiceImpl(factorySpy, eventRepoSpy, userRepoSpy);
 //
 //        Calendar yesterday = Calendar.getInstance();
 //        yesterday.add(Calendar.DAY_OF_YEAR, -1);

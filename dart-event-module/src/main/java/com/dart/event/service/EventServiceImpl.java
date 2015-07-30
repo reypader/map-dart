@@ -8,7 +8,9 @@ import com.dart.data.repository.UserRepository;
 import com.dart.data.util.Point;
 import com.dart.data.util.Rectangle;
 import com.dart.event.api.*;
+import com.google.inject.Inject;
 
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -17,13 +19,15 @@ import java.util.List;
 /**
  * Created by RMPader on 7/28/15.
  */
-public class EventService {
+@Singleton
+public class EventServiceImpl {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final EventFactory eventFactory;
 
-    public EventService(EventFactory eventFactory, EventRepository eventRepository, UserRepository userRepository) {
+    @Inject
+    public EventServiceImpl(EventFactory eventFactory, EventRepository eventRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.eventFactory = eventFactory;
