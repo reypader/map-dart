@@ -12,6 +12,7 @@
         <module>dart-data</module>
         <module>dart-data-objectify</module>
         <module>dart-event-module</module>
+        <module>dart-user-module</module>
     </modules>
 
     <properties>
