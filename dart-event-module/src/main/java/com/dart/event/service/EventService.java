@@ -69,11 +69,36 @@ public class EventService {
     }
 
     public List<FindEventResponse> findEventsOfUser(String organizerId, int maxFinishedEvents) {
-        return null;
+        int limit = maxFinishedEvents;
+        if (limit <= 0) {
+            limit = 10;
+        }
+        Date now = new Date();
+        User organizer = userRepository.retrieve(organizerId);
+        Collection<Event> resultFinished = eventRepository.findFinishedEventsByUser(organizer, now, limit);
+        Collection<Event> resultUnfinished = eventRepository.findUnfinishedEventsByUser(organizer);
+        List<FindEventResponse> responses = new ArrayList<>(resultFinished.size() + resultUnfinished.size());
+        for (Event event : resultUnfinished) {
+            responses.add(createFindEventResponse(event));
+        }
+        for (Event event : resultFinished) {
+            responses.add(createFindEventResponse(event));
+        }
+        return responses;
     }
 
-    public List<FindEventResponse> findEventsOfUserAfter(String organizerId, Date date, int maxFinishedEvents) {
-        return null;
+    public List<FindEventResponse> findFinishedEventsOfUserBefore(String organizerId, Date date, int maxFinishedEvents) {
+        int limit = maxFinishedEvents;
+        if (limit <= 0) {
+            limit = 10;
+        }
+        User organizer = userRepository.retrieve(organizerId);
+        Collection<Event> result = eventRepository.findFinishedEventsByUser(organizer, date, limit);
+        List<FindEventResponse> responses = new ArrayList<>(result.size());
+        for (Event event : result) {
+            responses.add(createFindEventResponse(event));
+        }
+        return responses;
     }
 
     protected FindEventResponse createFindEventResponse(Event event) {

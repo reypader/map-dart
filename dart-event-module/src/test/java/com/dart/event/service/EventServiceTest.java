@@ -1,5 +1,6 @@
 package com.dart.event.service;
 
+import com.dart.common.test.domain.DummyEvent;
 import com.dart.common.test.factory.DummyEventFactory;
 import com.dart.common.test.factory.DummyUserFactory;
 import com.dart.common.test.repository.DummyEventRepository;
@@ -215,12 +216,109 @@ public class EventServiceTest {
 
     @Test
     public void testFindEventsOfUser() throws Exception {
+        User organizer1 = dummyUserFactory.createUser("username1", "display name");
+        dummyUserRepo.add(organizer1);
+        User organizer2 = dummyUserFactory.createUser("username2", "display name too");
+        dummyUserRepo.add(organizer2);
 
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DATE, 1);
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+        Calendar lastMonth = Calendar.getInstance();
+        lastMonth.add(Calendar.MONTH, -1);
+        Calendar now = Calendar.getInstance();
+
+        float lon = 121.032990f;
+        float lat = 14.557514f;
+        Point point = new Point(lon, lat);
+
+        DummyEvent event1 = (DummyEvent) dummyEventFactory.createEvent(organizer1, "This is a title", yesterday.getTime(), yesterday.getTime(), point);
+        dummyEventRepo.add(event1);
+        DummyEvent event2 = (DummyEvent) dummyEventFactory.createEvent(organizer2, "This is a title too", tomorrow.getTime(), tomorrow.getTime(), point);
+        dummyEventRepo.add(event2);
+        DummyEvent event3 = (DummyEvent) dummyEventFactory.createEvent(organizer1, "This is a title, promise", lastMonth.getTime(), yesterday.getTime(), point);
+        dummyEventRepo.add(event3);
+        DummyEvent event4 = (DummyEvent) dummyEventFactory.createEvent(organizer1, "This is a nevermind", now.getTime(), tomorrow.getTime(), point);
+        dummyEventRepo.add(event4);
+
+        UserRepository userRepoSpy = spy(dummyUserRepo);
+        EventRepository eventRepoSpy = spy(dummyEventRepo);
+        EventFactory factorySpy = spy(dummyEventFactory);
+
+        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+
+        List<FindEventResponse> actualResponse = service.findFinishedEventsOfUserBefore(organizer1.getId(), now.getTime(), 10);
+
+        verify(userRepoSpy, times(1)).retrieve(organizer1.getId());
+        verify(eventRepoSpy, times(1)).findFinishedEventsByUser(organizer1, now.getTime(), 10);
+        assertEquals(2, actualResponse.size());
+        List<String> expectedIds = new ArrayList<>();
+        expectedIds.add(event3.getId());
+        expectedIds.add(event1.getId());
+        for (FindEventResponse response : actualResponse) {
+            assertTrue(expectedIds.contains(response.getId()));
+            expectedIds.remove(response.getId());
+        }
+        for (FindEventResponse response : actualResponse) {
+            Event event = dummyEventRepo.getStoredData().get(response.getId());
+            assertFields(event, response);
+        }
     }
 
     @Test
-    public void testFindEventsOfUserAfter() throws Exception {
+    public void testFindEventsOfUserBefore() throws Exception {
+        User organizer1 = dummyUserFactory.createUser("username1", "display name");
+        dummyUserRepo.add(organizer1);
+        User organizer2 = dummyUserFactory.createUser("username2", "display name too");
+        dummyUserRepo.add(organizer2);
 
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DATE, 1);
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+        Calendar lastMonth = Calendar.getInstance();
+        lastMonth.add(Calendar.MONTH, -1);
+
+
+        float lon = 121.032990f;
+        float lat = 14.557514f;
+        Point point = new Point(lon, lat);
+
+        DummyEvent event1 = (DummyEvent) dummyEventFactory.createEvent(organizer1, "This is a title", yesterday.getTime(), yesterday.getTime(), point);
+        dummyEventRepo.add(event1);
+        DummyEvent event2 = (DummyEvent) dummyEventFactory.createEvent(organizer2, "This is a title too", tomorrow.getTime(), tomorrow.getTime(), point);
+        dummyEventRepo.add(event2);
+        DummyEvent event3 = (DummyEvent) dummyEventFactory.createEvent(organizer1, "This is a title, promise", lastMonth.getTime(), yesterday.getTime(), point);
+        dummyEventRepo.add(event3);
+        DummyEvent event4 = (DummyEvent) dummyEventFactory.createEvent(organizer1, "This is a nevermind", new Date(), tomorrow.getTime(), point);
+        dummyEventRepo.add(event4);
+
+        UserRepository userRepoSpy = spy(dummyUserRepo);
+        EventRepository eventRepoSpy = spy(dummyEventRepo);
+        EventFactory factorySpy = spy(dummyEventFactory);
+
+        EventService service = new EventService(factorySpy, eventRepoSpy, userRepoSpy);
+
+
+        List<FindEventResponse> actualResponse = service.findEventsOfUser(organizer1.getId(), 10);
+
+        verify(userRepoSpy, times(1)).retrieve(organizer1.getId());
+        verify(eventRepoSpy, times(1)).findFinishedEventsByUser(eq(organizer1), isA(Date.class), eq(10));
+        verify(eventRepoSpy, times(1)).findUnfinishedEventsByUser(organizer1);
+        assertEquals(3, actualResponse.size());
+        List<String> expectedIds = new ArrayList<>();
+        expectedIds.add(event3.getId());
+        expectedIds.add(event4.getId());
+        expectedIds.add(event1.getId());
+        for (FindEventResponse response : actualResponse) {
+            assertTrue(expectedIds.contains(response.getId()));
+            expectedIds.remove(response.getId());
+        }
+        for (FindEventResponse response : actualResponse) {
+            Event event = dummyEventRepo.getStoredData().get(response.getId());
+            assertFields(event, response);
+        }
     }
 
 //    @Test
