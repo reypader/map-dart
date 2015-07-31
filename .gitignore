@@ -2,3 +2,5 @@
 */target/
 *.idea/
 *.properties
+*/bower_components/
+*/node_modules/

@@ -1,0 +1,25 @@
+{
+  "name": "project-base",
+  "version": "0.0.0",
+  "authors": [
+    "Reynald Pader <reynald.pader@cloudsherpas.com>"
+  ],
+  "license": "MIT",
+  "homepage": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularjs": "~1.4.3",
+    "angular-ui": "~0.4.0",
+    "angular-ui-select": "~0.12.1",
+    "bootstrap": "~3.3.5",
+    "bootstrap-calendar": "~0.2.4",
+    "requirejs": "~2.1.20",
+    "angular-route": "~1.4.3"
+  }
+}
