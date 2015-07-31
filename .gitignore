@@ -1,6 +1,6 @@
 *.iml
-*/target/
 *.idea/
 *.properties
-*/bower_components/
-*/node_modules/
+**/target/
+**/bower_components/
+**/node_modules/
