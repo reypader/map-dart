@@ -4,7 +4,7 @@ define([], function() {
       templateUrl : 'home.html'
     }).when('/basic/:name', {
       templateUrl : 'js/basic/basic.html',
-      controller : 'BasicController'
+      controller : 'BasicCtrl'
     }).otherwise({
       redirectTo : '/'
     });

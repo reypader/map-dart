@@ -4,7 +4,7 @@ define([], function() {
     _this.ideaName = $routeParams.name;
   }
 
-  basicController.$inject = ['$routeParams' ];
+  basicController.$inject = ['$routeParams'];
 
   return basicController;
 });
