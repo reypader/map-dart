@@ -25,6 +25,8 @@
     "karma-jasmine": "~0.3.6",
     "phantomjs": "~1.9.17",
     "karma-phantomjs-launcher": "~0.2.0",
-    "grunt-karma": "~0.12.0"
+    "grunt-karma": "~0.12.0",
+    "karma-chrome-launcher": "~0.2.0",
+    "angular-mocks": "~1.4.3"
   }
 }
