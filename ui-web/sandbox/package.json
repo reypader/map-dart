@@ -17,6 +17,14 @@
     "grunt-contrib-requirejs": "~0.4.4",
     "bower": "~1.4.1",
     "grunt-bower-requirejs": "~2.0.0",
-    "grunt-contrib-copy": "~0.8.0"
+    "grunt-contrib-copy": "~0.8.0",
+    "karma": "~0.13.3",
+    "requirejs": "~2.1.20",
+    "karma-requirejs": "~0.2.2",
+    "jasmine-core": "~2.3.4",
+    "karma-jasmine": "~0.3.6",
+    "phantomjs": "~1.9.17",
+    "karma-phantomjs-launcher": "~0.2.0",
+    "grunt-karma": "~0.12.0"
   }
 }

@@ -76,14 +76,16 @@ module.exports = function (grunt) {
                     baseUrl: 'app/modules',
                     mainConfigFile: 'app/modules/main.js',
                     name: 'main',
-                    out: 'dist/modules/main.js',
-                    optimize: 'none'
+                    out: 'dist/modules/main.js'
                 }
             }
         },
         bowerRequirejs: {
             target: {
-                rjsConfig: 'app/modules/main.js'
+                rjsConfig: 'app/modules/main.js',
+                options: {
+                    transitive: true
+                }
             }
         },
         copy: {
@@ -119,7 +121,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['bower_components/**/require.js'],
+                        src: ['node_modules/**/require.js'],
                         dest: 'app/modules/',
                         filter: 'isFile'
                     },
@@ -131,6 +133,12 @@ module.exports = function (grunt) {
                         filter: 'isFile'
                     }
                 ]
+            }
+        },
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js',
+                singleRun: true
             }
         }
     });
@@ -146,8 +154,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-bower-requirejs');
     grunt.loadNpmTasks('grunt-customize-bootstrap');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-karma');
 
-    // Default task.
+
+    grunt.registerTask('test', ['karma']);
     grunt.registerTask('release', ['build', 'clean', 'requirejs', 'copy:release']);
     grunt.registerTask('compile-style', ['customize_bootstrap', 'less']);
     grunt.registerTask('build', ['copy:init', 'bowerRequirejs', 'compile-style']);

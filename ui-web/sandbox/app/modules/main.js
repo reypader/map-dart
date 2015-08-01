@@ -3,7 +3,6 @@ require.config({
         angular: '../../bower_components/angular/angular',
         'angular-route': '../../bower_components/angular-route/angular-route',
         bootstrap: '../../bower_components/bootstrap/dist/js/bootstrap',
-        requirejs: '../../bower_components/requirejs/require',
         jquery: '../../bower_components/jquery/dist/jquery'
     },
     shim: {
