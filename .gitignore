@@ -6,3 +6,7 @@
 **/node_modules/
 ui-web/**/dist/
 *.*~
+/ui-web/sandbox/app/modules/require.js
+/ui-web/sandbox/app/styles/bootstrap.css
+/ui-web/sandbox/app/styles/bootstrap.less
+/ui-web/sandbox/app/styles/bootstrap-theme.min.css
