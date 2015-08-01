@@ -55,7 +55,7 @@ module.exports = function (grunt) {
             }
         },
         customize_bootstrap: {
-            yourTarget: {
+            task: {
                 options: {
                     bootstrapPath: 'bower_components/bootstrap',
                     src: 'app/styles/customized-bootstrap-less',
@@ -64,8 +64,8 @@ module.exports = function (grunt) {
             }
         },
         less: {
-            compileCore: {
-                src: 'app/styles/bootstrap.less',
+            task: {
+                src: '<%= customize_bootstrap.task.options.dest %>/bootstrap.less',
                 dest: 'app/styles/bootstrap.css'
             }
         },
@@ -137,8 +137,7 @@ module.exports = function (grunt) {
         },
         karma: {
             unit: {
-                configFile: 'karma.conf.js',
-                singleRun: true
+                configFile: 'karma.conf.js'
             }
         }
     });
