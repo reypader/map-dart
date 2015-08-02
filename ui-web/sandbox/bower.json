@@ -16,6 +16,8 @@
   "dependencies": {
     "angular-route": "~1.4.3",
     "angular": "~1.4.3",
-    "bootstrap": "~3.3.5"
+    "bootstrap": "~3.3.5",
+    "angular-bootstrap": "~0.13.1",
+    "bootstrap-social": "~4.9.1"
   }
 }
