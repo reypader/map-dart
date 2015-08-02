@@ -1,15 +1,15 @@
 define([], function () {
-    'use strict';
+  'use strict';
 
-    function config($routeProvider) {
-        $routeProvider.when('/home', {
-            templateUrl: 'modules/home/home.html',
-            controller: 'HomeCtrl',
-            controllerAs: 'homeCtrl'
-        });
-    }
+  function config($routeProvider) {
+    $routeProvider.when('/home', {
+      templateUrl: 'modules/home/home.html',
+      controller: 'HomeCtrl',
+      controllerAs: 'homeCtrl'
+    });
+  }
 
-    config.$inject = ['$routeProvider'];
+  config.$inject = ['$routeProvider'];
 
-    return config;
+  return config;
 });

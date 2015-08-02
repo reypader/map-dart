@@ -1,12 +1,12 @@
 define([], function () {
-    'use strict';
+  'use strict';
 
-    function controller() {
-        var _this = this;
-        _this.text = 'DERP';
-    }
+  function controller() {
+    var _this = this;
+    _this.text = 'DERP';
+  }
 
-    controller.$inject = [];
+  controller.$inject = [];
 
-    return controller;
+  return controller;
 });

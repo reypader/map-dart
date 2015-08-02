@@ -1,13 +1,13 @@
 define([], function () {
-    'use strict';
+  'use strict';
 
-    function config($routeProvider) {
-        $routeProvider.otherwise({
-            redirectTo: '/'
-        });
-    }
+  function config($routeProvider) {
+    $routeProvider.otherwise({
+      redirectTo: '/'
+    });
+  }
 
-    config.$inject = ['$routeProvider'];
+  config.$inject = ['$routeProvider'];
 
-    return config;
+  return config;
 });
