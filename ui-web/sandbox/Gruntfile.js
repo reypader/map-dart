@@ -10,6 +10,7 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
       globalConfig: globalConfig,
+      clean: ['dist', 'app/fonts/*.*', 'app/require.js', 'app/styles/compiled-bootstrap','app/styles/*.*'],
       jshint: {
         options: {
           curly: true,
@@ -40,19 +41,16 @@ module.exports = function (grunt) {
           options: {
             bootstrapPath: 'bower_components/bootstrap',
             src: '<%= globalConfig.css %>/customized-bootstrap-less',
-            dest: '<%= globalConfig.css %>/raw',
+            dest: '<%= globalConfig.css %>/compiled-bootstrap',
           }
         }
-      }
-      ,
+      },
       less: {
         task: {
           src: '<%= customize_bootstrap.task.options.dest %>/bootstrap.less',
-          dest: '<%= globalConfig.css %>/raw/bootstrap.css'
+          dest: '<%= customize_bootstrap.task.options.dest %>/bootstrap.css'
         }
-      }
-      ,
-      clean: ['dist'],
+      },
       requirejs: {
         compile: {
           options: {
@@ -76,7 +74,13 @@ module.exports = function (grunt) {
       copy: {
         release: {
           files: [
-            // includes files within path
+            {
+              expand: true,
+              cwd: 'app',
+              src: ['require.js'],
+              dest: 'dist/',
+              filter: 'isFile'
+            },
             {
               expand: true,
               cwd: 'app',
@@ -101,7 +105,7 @@ module.exports = function (grunt) {
             {
               expand: true,
               flatten: true,
-              cwd: '<%= globalConfig.scripts %>',
+              cwd: 'app',
               src: ['require.js'],
               dest: 'dist/modules/',
               filter: 'isFile'
@@ -115,16 +119,16 @@ module.exports = function (grunt) {
               expand: true,
               flatten: true,
               src: ['node_modules/requirejs/require.js'],
-              dest: '<%= globalConfig.scripts %>/',
+              dest: 'app/',
               filter: 'isFile'
             },
-            {
-              expand: true,
-              flatten: true,
-              src: ['bower_components/bootstrap/dist/css/bootstrap-theme.min.css'],
-              dest: '<%= globalConfig.css %>/raw',
-              filter: 'isFile'
-            },
+            //{
+            //  expand: true,
+            //  flatten: true,
+            //  src: ['bower_components/bootstrap/dist/css/bootstrap-theme.min.css'],
+            //  dest: '<%= globalConfig.css %>/raw',
+            //  filter: 'isFile'
+            //},
             {
               expand: true,
               flatten: true,
@@ -175,7 +179,6 @@ module.exports = function (grunt) {
           files: ['<%= globalConfig.css %>/{,*/}*.{scss,sass}'],
           tasks: ['cssmin']
         },
-
         livereload: {
           options: {
             livereload: '<%= connect.options.livereload %>'
@@ -190,7 +193,7 @@ module.exports = function (grunt) {
         },
         signin: {
           src: [
-            '<%= globalConfig.css %>/raw/bootstrap.css',
+            '<%= less.task.dest %>',
             'bower_components/font-awesome/css/font-awesome.min.css',
             'bower_components/bootstrap-social/bootstrap-social.css',
             '<%= globalConfig.css %>/raw/signin.css'
@@ -199,14 +202,14 @@ module.exports = function (grunt) {
         },
         welcome: {
           src: [
-            '<%= globalConfig.css %>/raw/bootstrap.css',
+            '<%= less.task.dest %>',
             '<%= globalConfig.css %>/raw/main.css'
           ],
           dest: '<%= globalConfig.css %>/welcome.css',
         },
         app: {
           src: [
-            '<%= globalConfig.css %>/raw/bootstrap.css',
+            '<%= less.task.dest %>',
             '<%= globalConfig.css %>/raw/main.css'
           ],
           dest: '<%= globalConfig.css %>/app.css',
@@ -222,7 +225,6 @@ module.exports = function (grunt) {
   )
   ;
 
-// These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
@@ -238,8 +240,8 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('test', ['karma']);
-  grunt.registerTask('release', ['test', 'build', 'clean', 'requirejs', 'copy:release']);
-  grunt.registerTask('compile-style', ['customize_bootstrap', 'less']);
-  grunt.registerTask('build', ['copy:init', 'bowerRequirejs', 'compile-style', 'concat', 'cssmin']);
+  grunt.registerTask('release', ['test', 'build', 'requirejs', 'copy:release']);
+  grunt.registerTask('compile-style', ['customize_bootstrap', 'less', 'concat', 'cssmin']);
+  grunt.registerTask('build', ['clean', 'copy:init', 'bowerRequirejs', 'compile-style']);
 
 };
