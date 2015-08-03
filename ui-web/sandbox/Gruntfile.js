@@ -1,6 +1,5 @@
 /*global module:false*/
 module.exports = function (grunt) {
-  var connect = require('connect');
   var globalConfig = {
     images: 'app/images',
     css: 'app/styles',
@@ -190,7 +189,7 @@ module.exports = function (grunt) {
             livereload: '<%= connect.options.livereload %>'
           },
           files: [
-            'app/styles/modules/**/*.js',
+            'app/modules/**/*.js',
             'app/styles/raw/*.css',
             'app/styles/customized-bootstrap-less/*.less',
             'bower.json'
@@ -220,11 +219,11 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', ['connect', 'watch']);
   grunt.registerTask('test', ['init', 'karma']);
-  grunt.registerTask('release', ['test', 'requirejs', 'copy:pages', 'copy:require', 'copy:statics', 'build']);
+  grunt.registerTask('release', ['test', 'requirejs', 'copy:pages', 'copy:require', 'copy:statics', 'build-pages']);
   grunt.registerTask('compile-style', ['customize_bootstrap', 'less']);
   grunt.registerTask('init', ['clean', 'copy:init', 'bowerRequirejs', 'compile-style']);
 
-  grunt.registerTask('build', [
+  grunt.registerTask('build-pages', [
     'useminPrepare',
     'concat:generated',
     'cssmin:generated',
