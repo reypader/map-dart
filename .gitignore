@@ -4,9 +4,9 @@
 **/target/
 **/bower_components/
 **/node_modules/
-ui-web/**/dist/
 *.*~
-/ui-web/sandbox/app/modules/require.js
-/ui-web/sandbox/app/styles/bootstrap.css
-/ui-web/sandbox/app/styles/bootstrap.less
-/ui-web/sandbox/app/styles/bootstrap-theme.min.css
+/ui-web/sandbox/dist/
+/ui-web/sandbox/app/require.js
+/ui-web/sandbox/app/styles/compiled-bootstrap/
+/ui-web/sandbox/app/fonts/*.*
+/ui-web/sandbox/app/styles/*.*
