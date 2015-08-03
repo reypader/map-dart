@@ -10,7 +10,7 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
       globalConfig: globalConfig,
-      clean: ['dist', 'app/fonts/*.*', 'app/require.js', 'app/styles/compiled-bootstrap','app/styles/*.*'],
+      clean: ['dist', '<%= globalConfig.fonts %>/*.*', 'app/require.js', '<%= globalConfig.css %>/compiled-bootstrap','<%= globalConfig.css %>/*.*'],
       jshint: {
         options: {
           curly: true,
@@ -39,7 +39,7 @@ module.exports = function (grunt) {
       customize_bootstrap: {
         task: {
           options: {
-            bootstrapPath: 'bower_components/bootstrap',
+            bootstrapPath: '<%= globalConfig.bower_path %>/bootstrap',
             src: '<%= globalConfig.css %>/customized-bootstrap-less',
             dest: '<%= globalConfig.css %>/compiled-bootstrap',
           }
@@ -132,14 +132,14 @@ module.exports = function (grunt) {
             {
               expand: true,
               flatten: true,
-              src: ['bower_components/bootstrap/dist/fonts/*'],
+              src: ['<%= globalConfig.bower_path %>/bootstrap/dist/fonts/*'],
               dest: '<%= globalConfig.fonts %>/',
               filter: 'isFile'
             },
             {
               expand: true,
               flatten: true,
-              src: ['bower_components/font-awesome/fonts/*'],
+              src: ['<%= globalConfig.bower_path %>/font-awesome/fonts/*'],
               dest: '<%= globalConfig.fonts %>/',
               filter: 'isFile'
             }
@@ -194,8 +194,8 @@ module.exports = function (grunt) {
         signin: {
           src: [
             '<%= less.task.dest %>',
-            'bower_components/font-awesome/css/font-awesome.min.css',
-            'bower_components/bootstrap-social/bootstrap-social.css',
+            '<%= globalConfig.bower_path %>/font-awesome/css/font-awesome.min.css',
+            '<%= globalConfig.bower_path %>/bootstrap-social/bootstrap-social.css',
             '<%= globalConfig.css %>/raw/signin.css'
           ],
           dest: '<%= globalConfig.css %>/signin.css',
@@ -240,8 +240,8 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('test', ['karma']);
-  grunt.registerTask('release', ['test', 'build', 'requirejs', 'copy:release']);
+  grunt.registerTask('release', ['test', 'init', 'requirejs', 'copy:release']);
   grunt.registerTask('compile-style', ['customize_bootstrap', 'less', 'concat', 'cssmin']);
-  grunt.registerTask('build', ['clean', 'copy:init', 'bowerRequirejs', 'compile-style']);
+  grunt.registerTask('init', ['clean', 'copy:init', 'bowerRequirejs', 'compile-style']);
 
 };
