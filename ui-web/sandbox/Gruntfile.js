@@ -57,7 +57,8 @@ module.exports = function (grunt) {
             baseUrl: '<%= globalConfig.scripts %>',
             mainConfigFile: '<%= globalConfig.scripts %>/main.js',
             name: 'main',
-            out: 'dist/modules/main.js'
+            out: 'dist/modules/main.js',
+            preserveLicenseComments: false
           }
         }
       }
