@@ -1,5 +1,6 @@
 /*global module:false*/
 module.exports = function (grunt) {
+  var connect = require('connect');
   var globalConfig = {
     images: 'app/images',
     css: 'app/styles',
@@ -10,7 +11,7 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
       globalConfig: globalConfig,
-      clean: ['dist', '<%= globalConfig.fonts %>/*.*', 'app/require.js', '<%= globalConfig.css %>/compiled-bootstrap','<%= globalConfig.css %>/*.*'],
+      clean: ['dist', '.tmp', '<%= globalConfig.fonts %>/*.*', 'app/require.js', '<%= globalConfig.css %>/compiled-bootstrap', '<%= globalConfig.css %>/*.*'],
       jshint: {
         options: {
           curly: true,
@@ -58,11 +59,11 @@ module.exports = function (grunt) {
             mainConfigFile: '<%= globalConfig.scripts %>/main.js',
             name: 'main',
             out: 'dist/modules/main.js',
+            optimize: "uglify",
             preserveLicenseComments: false
           }
         }
-      }
-      ,
+      },
       bowerRequirejs: {
         target: {
           rjsConfig: '<%= globalConfig.scripts %>/main.js',
@@ -70,10 +71,31 @@ module.exports = function (grunt) {
             transitive: true
           }
         }
-      }
-      ,
+      },
       copy: {
-        release: {
+        pages: {
+          files: [
+            {
+              expand: true,
+              cwd: 'app',
+              src: ['**/*.html'],
+              dest: 'dist/',
+              filter: 'isFile'
+            }
+          ]
+        },
+        statics: {
+          files: [
+            {
+              expand: true,
+              cwd: 'app',
+              src: ['fonts/**', 'images/**'],
+              dest: 'dist/',
+              filter: 'isFile'
+            }
+          ]
+        },
+        require: {
           files: [
             {
               expand: true,
@@ -81,39 +103,9 @@ module.exports = function (grunt) {
               src: ['require.js'],
               dest: 'dist/',
               filter: 'isFile'
-            },
-            {
-              expand: true,
-              cwd: 'app',
-              src: ['**/*.html'],
-              dest: 'dist/',
-              filter: 'isFile'
-            },
-            {
-              expand: true,
-              cwd: 'app',
-              src: ['fonts/**', 'images/**'],
-              dest: 'dist/',
-              filter: 'isFile'
-            },
-            {
-              expand: true,
-              cwd: '<%= globalConfig.css %>',
-              src: ['**/*.min.css'],
-              dest: 'dist/styles',
-              filter: 'isFile'
-            },
-            {
-              expand: true,
-              flatten: true,
-              cwd: 'app',
-              src: ['require.js'],
-              dest: 'dist/modules/',
-              filter: 'isFile'
             }
           ]
-        }
-        ,
+        },
         init: {
           files: [
             {
@@ -146,74 +138,21 @@ module.exports = function (grunt) {
             }
           ]
         }
-      }
-      ,
-      connect: {
+      },
+      useminPrepare: {
+        html: ['app/**/*.html'],
         options: {
-          port: 9000,
-          livereload: 35729,
-          hostname: '*' // * = accessible from anywhere ; default: localhost
-        }
-        ,
-        livereload: {
-          options: {
-            open: true,
-            base: [''] // '.tmp',
-          }
-        }
-      }
-      ,
-      cssmin: {
-        development: {
-          expand: true,
-          cwd: '<%= globalConfig.css %>/',
-          src: ['*.css', '!*.min.css', '!raw/*'],
-          dest: '<%= globalConfig.css %>/',
-          ext: '.min.css'
+          dest: 'dist'
         }
       },
-      watch: {
-        options: {
-          livereload: true
-        },
-        styles: {
-          files: ['<%= globalConfig.css %>/{,*/}*.{scss,sass}'],
-          tasks: ['cssmin']
-        },
-        livereload: {
-          options: {
-            livereload: '<%= connect.options.livereload %>'
-          },
-          files: ['*.html']
-        }
+      usemin: {
+        html: ['dist/**/*.html']
       },
-      //For CSS only. JS files are handled by RequireJS.
-      concat: {
-        options: {
-          separator: '\n',
-        },
-        signin: {
+      filerev: {
+        dist: {
           src: [
-            '<%= less.task.dest %>',
-            '<%= globalConfig.bower_path %>/font-awesome/css/font-awesome.min.css',
-            '<%= globalConfig.bower_path %>/bootstrap-social/bootstrap-social.css',
-            '<%= globalConfig.css %>/raw/signin.css'
-          ],
-          dest: '<%= globalConfig.css %>/signin.css',
-        },
-        welcome: {
-          src: [
-            '<%= less.task.dest %>',
-            '<%= globalConfig.css %>/raw/main.css'
-          ],
-          dest: '<%= globalConfig.css %>/welcome.css',
-        },
-        app: {
-          src: [
-            '<%= less.task.dest %>',
-            '<%= globalConfig.css %>/raw/main.css'
-          ],
-          dest: '<%= globalConfig.css %>/app.css',
+            'dist/styles/**/*.css',
+          ]
         }
       },
       karma: {
@@ -221,10 +160,46 @@ module.exports = function (grunt) {
           configFile: 'karma.conf.js',
           singleRun: true
         }
+      },
+      connect: {
+        options: {
+          port: 9000,
+          livereload: 35729,
+          hostname: 'localhost' // * = accessible from anywhere ; default: localhost
+        },
+        livereload: {
+          options: {
+            open: true,
+            keepAlive: true,
+            base: 'dist',
+            middleware: function (connect) {
+              return [
+                connect().use(
+                  '/bower_components',
+                  connect.static('./bower_components')
+                ),
+                connect.static('./app')
+              ];
+            }
+          }
+        }
+      },
+      watch: {
+        livereload: {
+          options: {
+            livereload: '<%= connect.options.livereload %>'
+          },
+          files: [
+            'app/styles/modules/**/*.js',
+            'app/styles/raw/*.css',
+            'app/styles/customized-bootstrap-less/*.less',
+            'bower.json'
+          ],
+          tasks: ['bowerRequirejs', 'test', 'compile-style']
+        }
       }
     }
-  )
-  ;
+  );
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -235,14 +210,26 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-filerev');
   grunt.loadNpmTasks('grunt-bower-requirejs');
   grunt.loadNpmTasks('grunt-customize-bootstrap');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-usemin');
 
 
-  grunt.registerTask('test', ['karma']);
-  grunt.registerTask('release', ['test', 'init', 'requirejs', 'copy:release']);
-  grunt.registerTask('compile-style', ['customize_bootstrap', 'less', 'concat', 'cssmin']);
+  grunt.registerTask('serve', ['connect', 'watch']);
+  grunt.registerTask('test', ['init', 'karma']);
+  grunt.registerTask('release', ['test', 'requirejs', 'copy:pages', 'copy:require', 'copy:statics', 'build']);
+  grunt.registerTask('compile-style', ['customize_bootstrap', 'less']);
   grunt.registerTask('init', ['clean', 'copy:init', 'bowerRequirejs', 'compile-style']);
+
+  grunt.registerTask('build', [
+    'useminPrepare',
+    'concat:generated',
+    'cssmin:generated',
+    'filerev',
+    'usemin'
+  ]);
 
 };

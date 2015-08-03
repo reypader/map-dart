@@ -3,7 +3,7 @@ define([], function () {
 
   function controller() {
     var _this = this;
-    _this.text = 'DERP';
+    _this.text = 'DERPERERERwawawa';
   }
 
   controller.$inject = [];
