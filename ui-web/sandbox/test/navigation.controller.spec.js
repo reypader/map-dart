@@ -1,4 +1,4 @@
-define(['angular', 'angular-mocks', 'navigation/navigation_module'], function () {
+define(['angular', 'angular-mocks', '../app/modules/navigation/navigation.module'], function () {
   describe('Navigation Controller', function () {
     'use strict';
     beforeEach(module('navigationModule'));
