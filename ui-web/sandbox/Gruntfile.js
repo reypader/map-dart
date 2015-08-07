@@ -1,5 +1,6 @@
 /*global module:false*/
 module.exports = function (grunt) {
+  
   var globalConfig = {
     images: 'app/images',
     css: 'app/styles',
@@ -171,6 +172,10 @@ module.exports = function (grunt) {
             open: true,
             keepAlive: true,
             base: 'dist',
+            protocol: 'https',
+            key: grunt.file.read('dev_keys/server.key').toString(),
+            cert: grunt.file.read('dev_keys/server.crt').toString(),
+            ca: grunt.file.read('dev_keys/ca.crt').toString(),
             middleware: function (connect) {
               return [
                 connect().use(
@@ -186,7 +191,12 @@ module.exports = function (grunt) {
       watch: {
         livereload: {
           options: {
-            livereload: '<%= connect.options.livereload %>'
+            livereload: {
+              port: '<%= connect.options.livereload %>',
+              key: grunt.file.read('dev_keys/server.key').toString(),
+              cert: grunt.file.read('dev_keys/server.crt').toString(),
+              ca: grunt.file.read('dev_keys/ca.crt').toString(),
+            }
           },
           files: [
             'app/modules/**/*.js',

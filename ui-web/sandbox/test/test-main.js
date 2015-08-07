@@ -19,7 +19,9 @@ require.config({
   paths: {
     angular: '../../bower_components/angular/angular',
     'angular-route': '../../bower_components/angular-route/angular-route',
-    'angular-mocks': '../../node_modules/angular-mocks/angular-mocks'
+    'angular-mocks': '../../node_modules/angular-mocks/angular-mocks',
+    'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls',
+    'angular-animate': '../../bower_components/angular-animate/angular-animate'
   },
   shim: {
     angular: {
@@ -34,7 +36,13 @@ require.config({
       deps: [
         'angular'
       ]
-    }
+    },
+    'angular-bootstrap': {
+      deps: [
+        'angular',
+        'angular-animate'
+      ]
+    },
   },
 
   baseUrl: '/base/app/modules',

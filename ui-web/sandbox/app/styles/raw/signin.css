@@ -1,17 +1,26 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], .ng-cloak, .data-ng-cloak {
+  display: none !important;
+}
+
 body {
   padding-top: 40px;
   padding-bottom: 40px;
   background-color: #eee;
+  overflow-y: scroll;
 }
 
-.form-signin {
+.form-signin, .signin-options {
   max-width: 330px;
   padding: 15px;
   margin: 0 auto;
 }
 
+.signin-options {
+  padding-top: 0;
+}
+
 .form-signin .form-signin-heading,
-.form-signin .checkbox {
+.form-signin .checkbox, .form-register input {
   margin-bottom: 10px;
 }
 
@@ -33,13 +42,18 @@ body {
   z-index: 2;
 }
 
-.form-signin input[type="email"] {
+.form-signin input[position="top"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.form-signin input[type="password"] {
+.form-signin input[position="mid"] {
+  margin-bottom: -1px;
+  border-radius: 0 0 0 0;
+}
+
+.form-signin input[position="bottom"] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -52,4 +66,12 @@ hr {
   border-top: 1px solid #ccc;
   margin: 1em 0;
   padding: 0;
+}
+
+input.ng-invalid-used-email, input.ng-invalid-validator {
+  background-color: #ffe2d9;
+}
+
+input.ng-valid-used-email, input.ng-valid {
+  background-color: #78FA89;
 }

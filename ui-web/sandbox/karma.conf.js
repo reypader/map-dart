@@ -25,6 +25,10 @@ module.exports = function (config) {
 
     // list of files to exclude
     exclude: [
+      'bower_components/**/*Spec.js',
+      'bower_components/**/*spec.js',
+      'node_modules/**/*Spec.js',
+      'node_modules/**/*spec.js',
       'app/modules/*-main.js',
       'app/modules/main.js',
       'app/modules/require.js'

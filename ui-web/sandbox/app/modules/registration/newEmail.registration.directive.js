@@ -1,25 +1,30 @@
 define([], function () {
   function directive(restClientService, $q) {
+    var EMAIL_REGEXP = /[A-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     return {
       restrict: 'A',
       require: 'ngModel',
       link: function (scope, element, attr, ctrl) {
-        var re = /[A-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+        if (ctrl && ctrl.$validators.email) {
+          ctrl.$asyncValidators.usedEmail = function (modelValue, viewValue) {
 
-        ctrl.$asyncValidators.usedEmail = function (modelValue, viewValue) {
-          var def = $q.defer();
-          var val = modelValue || viewValue;
-          if (re.test(val)) {
-            if (restClientService.checkEmail(val)) {
-              def.resolve();
+            var val = modelValue || viewValue;
+            if (EMAIL_REGEXP.test(val) && ctrl.$validators.email) {
+              var def = $q.defer();
+              restClientService.checkEmail(val).then(function (response) {
+                if (response.emailUsed) {
+                  def.reject();
+                } else {
+                  def.resolve();
+                }
+              });
+              return def.promise;
             } else {
-              def.reject();
+              return $q.when({});
             }
-          } else {
-            def.reject()
-          }
-          return def.promise;
-        };
+
+          };
+        }
       }
     };
   }

@@ -1,4 +1,4 @@
-define(['home.config', 'home.controller','angular','angular-route'], function (config, controller) {
+define(['home/home.config', 'home/home.controller', 'angular', 'angular-route'], function (config, controller) {
   'use strict';
 
   var app = angular.module('homeModule', ['ngRoute']);
