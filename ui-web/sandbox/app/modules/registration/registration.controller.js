@@ -1,17 +1,19 @@
 define([], function () {
   'use strict';
 
-  function controller(registrationService, $location) {
-    this.newUser = {};
+  function controller(restClientService) {
+    var _this = this;
+    _this.newUser = {};
+    _this.registrationDone = false;
 
     this.registerUser = function registerUser() {
-      registrationService.registerUser(this.newUser).then(function () {
-        $location.path('/success');
+      restClientService.registerUser(_this.newUser).then(function () {
+        _this.registrationDone = true;
       });
     }
   }
 
-  controller.$inject = ['registrationService', '$location'];
+  controller.$inject = ['restClientService'];
 
   return controller;
 });
