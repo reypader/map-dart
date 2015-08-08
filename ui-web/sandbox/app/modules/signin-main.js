@@ -7,6 +7,7 @@ require.config({
     'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls',
     'angular-animate': '../../bower_components/angular-animate/angular-animate',
     'angular-ui-validate': '../../bower_components/angular-ui-validate/dist/validate',
+    'angular-route': '../../bower_components/angular-route/angular-route',
     'ng-password-strength': '../../bower_components/ng-password-strength/app/scripts/scripts/ng-password-strength',
     lodash: '../../bower_components/lodash/lodash'
   },
