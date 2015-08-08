@@ -28,21 +28,14 @@ require.config({
       exports: 'angular'
     },
     'angular-mocks': {
-      deps: [
-        'angular'
-      ]
+      deps: ['angular']
     },
     'angular-route': {
-      deps: [
-        'angular'
-      ]
+      deps: ['angular']
     },
     'angular-bootstrap': {
-      deps: [
-        'angular',
-        'angular-animate'
-      ]
-    },
+      deps: ['angular', 'angular-animate']
+    }
   },
 
   baseUrl: '/base/app/modules',

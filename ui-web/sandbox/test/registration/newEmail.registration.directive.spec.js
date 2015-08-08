@@ -1,4 +1,4 @@
-define(['angular', 'registration/registration.module', 'rest-client/rest-client.module'], function () {
+define(['angular', 'angular-mocks', 'registration/registration.module', 'rest-client/rest-client.module'], function () {
   'use strict';
 
   describe('newEmail Directive', function () {

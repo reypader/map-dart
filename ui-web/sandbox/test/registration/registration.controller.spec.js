@@ -1,4 +1,4 @@
-define(['angular', 'registration/registration.module'], function () {
+define(['angular', 'angular-mocks', 'registration/registration.module'], function () {
   'use strict';
 
   describe("Registration Controller", function () {
