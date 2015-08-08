@@ -1,13 +1,11 @@
 define([], function () {
-  function config($tooltipProvider) {
-    $tooltipProvider.setTriggers({
-      'mouseenter': 'mouseleave',
-      'click': 'click',
-      'focus': 'blur',
-    });
+  'use strict';
+
+  function config() {
+
   }
 
-  config.$inject = ['$tooltipProvider'];
+  config.$inject = [];
 
   return config;
 });

@@ -5,6 +5,7 @@ define([
   'registration/strictEmail.registration.directive',
   'angular',
   'angular-bootstrap'], function (config, controller, newEmailDirective, strictEmailDirective) {
+  'use strict';
 
   var registration = angular.module('registrationModule', ['restClient', 'ui.bootstrap']);
   registration.config(config);

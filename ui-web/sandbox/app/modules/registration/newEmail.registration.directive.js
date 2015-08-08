@@ -1,4 +1,6 @@
 define([], function () {
+  'use strict';
+
   function directive(restClientService, $q) {
     var EMAIL_REGEXP = /[A-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     return {
