@@ -1,12 +1,12 @@
-<div ng-switch="vm.registrationDone">
-  <div ng-switch-default>
-    <accordion close-others="true">
-      <accordion-group is-open="status.open">
-        <accordion-heading>
-          <small><a href="#">Not yet a member? Create an account. <i class="pull-right glyphicon"
-                                                                     ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i></a>
-          </small>
-        </accordion-heading>
+<accordion close-others="true" id="create" anchor-smooth-scroll="create">
+  <accordion-group is-open="vm.registrationOpened">
+    <accordion-heading>
+      <small><a href="#">Not yet a member? Create an account. <i class="pull-right glyphicon"
+                                                                 ng-class="{'glyphicon-chevron-down': vm.registrationOpened, 'glyphicon-chevron-right': !vm.registrationOpened}"></i></a>
+      </small>
+    </accordion-heading>
+    <div ng-switch="vm.registrationDone">
+      <div ng-switch-default>
         <span class="help-block">Fill out the form below. We'll send a verification link to your email. Click on it and you're good to go!</span>
 
         <form name="createUser" class="form-register" ng-submit="vm.registerUser()">
@@ -58,26 +58,14 @@
             Create account
           </button>
         </form>
+      </div>
+      <div ng-switch-when="true" style="text-align: center">
+        <h4>A confirmation email has been sent. Please check your email and click on the verification link.</h4>
+        <br/>
 
+        <h4>Happy browsing!</h4>
+      </div>
+    </div>
+  </accordion-group>
+</accordion>
 
-      </accordion-group>
-    </accordion>
-    <p><span> Or you could:</span></p>
-    <a class="btn btn-block btn-social btn-facebook">
-      <i class="fa fa-facebook"></i> Sign in with Facebook
-    </a>
-    <a class="btn btn-block btn-social btn-google">
-      <i class="fa fa-google"></i> Sign in with Google
-    </a>
-    <a class="btn btn-block btn-social btn-twitter">
-      <i class="fa fa-twitter"></i> Sign in with Twitter
-    </a>
-  </div>
-
-  <div ng-switch-when="true" style="text-align: center">
-    <h4>A confirmation email has been sent. Please check your mail and click on the verification link.</h4>
-    <br/>
-
-    <h4>Happy browsing!</h4>
-  </div>
-</div>

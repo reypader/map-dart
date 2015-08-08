@@ -39,7 +39,21 @@
     </div>
     <button class="btn btn-primary btn-block" type="submit">Sign in</button>
   </form>
-  <div ng-view class="signin-options"></div>
+  <div class="signin-options">
+    <p><span> Or you could:</span></p>
+    <a class="btn btn-block btn-social btn-facebook">
+      <i class="fa fa-facebook"></i> Sign in with Facebook
+    </a>
+    <a class="btn btn-block btn-social btn-google">
+      <i class="fa fa-google"></i> Sign in with Google
+    </a>
+    <a class="btn btn-block btn-social btn-twitter">
+      <i class="fa fa-twitter"></i> Sign in with Twitter
+    </a>
+    <br/>
+    <ng-view></ng-view>
+  </div>
+
 </div>
 </body>
 </html>

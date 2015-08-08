@@ -44,13 +44,17 @@ require([
   'angular-bootstrap',
   'angular-ui-validate',
   'password-strength.module',
+  'anchor-smooth-scroll.module',
+  'authentication/facebook/facebook.module',
   'rest-client/rest-client.module',
   'registration/registration.module'
 ], function () {
   'use strict';
   angular.bootstrap(document, [
     'ngAnimate',
-    'passwordModule',
+    'passwordStrengthModule',
+    'anchorSmoothScrollModule',
+    'facebookModule',
     'ui.bootstrap',
     'ui.validate', 'restClient',
     'registrationModule'

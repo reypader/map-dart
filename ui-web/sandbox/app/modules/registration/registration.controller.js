@@ -5,6 +5,7 @@ define([], function () {
     var _this = this;
     _this.newUser = {};
     _this.registrationDone = false;
+    _this.registrationOpened = false;
 
     this.registerUser = function registerUser() {
       restClientService.registerUser(_this.newUser).then(function () {
