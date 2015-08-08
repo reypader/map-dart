@@ -1,3 +1,8 @@
+/*
+ Based on Dejan Vasic's work.
+ https://dejanvasic.wordpress.com/2015/02/07/angularjs-password-strength-indicator/
+ */
+
 define(['angular', 'bootstrap', 'jquery'], function () {
   angular.module('passwordModule', [])
     .controller('credentialsController', ['$scope',
