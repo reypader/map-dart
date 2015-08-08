@@ -72,6 +72,6 @@ input.ng-invalid-used-email, input.ng-invalid-validator {
   background-color: #ffe2d9;
 }
 
-input.ng-valid-used-email, input.ng-valid {
+input.ng-valid-used-email, .signin-options input.ng-valid {
   background-color: #78FA89;
 }

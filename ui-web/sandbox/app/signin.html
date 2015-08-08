@@ -33,23 +33,21 @@
 </head>
 <body ng-cloak>
 <div id=“fb-root”></div>
-<div class="container">
-  <form class="form-signin">
+<div class="container" ng-controller="LoginController as vm">
+  <form class="form-signin" ng-submit="vm.basicLogin()">
     <h2 class="form-signin-heading">Sign in to Pings</h2>
+    <span ng-show="vm.loginFailed" style="color:red">Invalid username or password.</span>&nbsp;
     <label for="inputEmail" class="sr-only">Email address</label>
-    <input position="top" type="email" id="inputEmail" class="form-control" placeholder="Email address" required
+    <input position="top" type="email" id="inputEmail" ng-model="vm.email" class="form-control"
+           placeholder="Email address" required
            autofocus>
     <label for="inputPassword" class="sr-only">Password</label>
-    <input position="bottom" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+    <input position="bottom" type="password" id="inputPassword" ng-model="vm.password" class="form-control"
+           placeholder="Password" required>
 
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
     <button class="btn btn-primary btn-block" type="submit">Sign in</button>
   </form>
-  <div class="signin-options" ng-controller="OauthController as vm">
+  <div class="signin-options">
     <p><span> Or you could:</span></p>
     <a class="btn btn-block btn-social btn-facebook" ng-click="vm.fbLogin()">
       <i class="fa fa-facebook"></i> Sign in with Facebook

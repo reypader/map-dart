@@ -28,7 +28,7 @@ define([], function () {
     this.authenticate = function (request) {
       var p = $q.defer();
       setTimeout(function () {
-        if (request.email === 'bad@email.com') {
+        if (request.email == 'bad@email.com') {
           alert("authentication for: '" + JSON.stringify(request) + "' failed");
           p.resolve({});
         } else {
