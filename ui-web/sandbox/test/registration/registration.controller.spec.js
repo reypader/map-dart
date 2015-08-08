@@ -1,21 +1,22 @@
 define(['angular', 'registration/registration.module'], function () {
   'use strict';
+
   describe("Registration Controller", function () {
-    var registrationService;
+    var restClientService;
     var $q;
     var $rootScope;
 
     beforeEach(module('registrationModule'));
 
-    beforeEach(inject(function (_$rootScope_, _registrationService_, _$q_) {
+    beforeEach(inject(function (_$rootScope_, _restClientService_, _$q_) {
       $rootScope = _$rootScope_;
-      registrationService = _registrationService_;
+      restClientService = _restClientService_;
       $q = _$q_;
     }));
 
     it("should call RegistrationService.registerUser(newUserObject) when registerUser is invoked",
       inject(function ($controller) {
-        spyOn(registrationService, 'registerUser').and.returnValue($q.when({}));
+        spyOn(restClientService, 'registerUser').and.returnValue($q.when({}));
         var controller = $controller('RegistrationController');
         controller.newUser.email = 'test@email.com';
         controller.newUser.name = 'John Doe';
@@ -23,7 +24,7 @@ define(['angular', 'registration/registration.module'], function () {
 
         controller.registerUser();
 
-        expect(registrationService.registerUser).toHaveBeenCalledWith(
+        expect(restClientService.registerUser).toHaveBeenCalledWith(
           {
             email: 'test@email.com',
             name: 'John Doe',
@@ -34,16 +35,15 @@ define(['angular', 'registration/registration.module'], function () {
     );
 
     it("should change to /success after a successful registration",
-      inject(function ($controller, $location, $rootScope) {
-        spyOn(registrationService, 'registerUser').and.returnValue($q.when({}));
-        spyOn($location, 'path');
+      inject(function ($controller) {
+        spyOn(restClientService, 'registerUser').and.returnValue($q.when({}));
 
         var controller = $controller('RegistrationController');
-
+        expect(controller.registrationDone).toBe(false);
         controller.registerUser();
 
         $rootScope.$digest();
-        expect($location.path).toHaveBeenCalledWith('/success');
+        expect(controller.registrationDone).toBe(true);
       })
     );
   });
