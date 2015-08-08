@@ -10,7 +10,8 @@ require.config({
     'angular-animate': '../../bower_components/angular-animate/angular-animate',
     'angular-ui-validate': '../../bower_components/angular-ui-validate/dist/validate',
     'ng-password-strength': '../../bower_components/ng-password-strength/dist/scripts/ng-password-strength',
-    lodash: '../../bower_components/lodash/lodash'
+    lodash: '../../bower_components/lodash/lodash',
+    'angular-cookies': '../../bower_components/angular-cookies/angular-cookies'
   },
   shim: {
     bootstrap: {
@@ -37,6 +38,11 @@ require.config({
         'angular-animate'
       ]
     },
+    'angular-cookies': {
+      deps: [
+        'angular'
+      ]
+    },
     facebook: {
       exports: 'FB'
     }
@@ -45,7 +51,10 @@ require.config({
 
   ]
 });
-require(['navigation/navigation.module', 'home/home.module'], function () {
+require([
+  'angular',
+  'angular-cookies',
+  'navigation/navigation.module', 'home/home.module'], function () {
   'use strict';
 
   angular.bootstrap(document, ['navigationModule', 'homeModule']);

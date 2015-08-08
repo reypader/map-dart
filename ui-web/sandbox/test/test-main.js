@@ -21,7 +21,8 @@ require.config({
     'angular-route': '../../bower_components/angular-route/angular-route',
     'angular-mocks': '../../node_modules/angular-mocks/angular-mocks',
     'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls',
-    'angular-animate': '../../bower_components/angular-animate/angular-animate'
+    'angular-animate': '../../bower_components/angular-animate/angular-animate',
+    'angular-cookies': '../../bower_components/angular-cookies/angular-cookies'
   },
   shim: {
     angular: {
@@ -31,6 +32,9 @@ require.config({
       deps: ['angular']
     },
     'angular-route': {
+      deps: ['angular']
+    },
+    'angular-cookies': {
       deps: ['angular']
     },
     'angular-bootstrap': {

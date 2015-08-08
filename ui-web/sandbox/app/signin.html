@@ -4,6 +4,15 @@
   <meta charset="utf-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript" ng-if="false">
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') c = c.substring(1);
+      if (c.indexOf("sessionToken=") == 0)  window.location.href = "https://" + window.location.host;
+    }
+  </script>
+
   <title>Pings</title>
 
   <!--<link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.min.css"/>-->
@@ -23,6 +32,7 @@
   <script data-main="modules/signin-main" src="require.js"></script>
 </head>
 <body ng-cloak>
+<div id=“fb-root”></div>
 <div class="container">
   <form class="form-signin">
     <h2 class="form-signin-heading">Sign in to Pings</h2>
@@ -39,9 +49,9 @@
     </div>
     <button class="btn btn-primary btn-block" type="submit">Sign in</button>
   </form>
-  <div class="signin-options">
+  <div class="signin-options" ng-controller="OauthController as vm">
     <p><span> Or you could:</span></p>
-    <a class="btn btn-block btn-social btn-facebook">
+    <a class="btn btn-block btn-social btn-facebook" ng-click="vm.fbLogin()">
       <i class="fa fa-facebook"></i> Sign in with Facebook
     </a>
     <a class="btn btn-block btn-social btn-google">
@@ -55,5 +65,33 @@
   </div>
 
 </div>
+<script type="text/javascript">
+  /*!
+   * IE10 viewport hack for Surface/desktop Windows 8 bug
+   * Copyright 2014-2015 Twitter, Inc.
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   */
+
+  //DEV NOTES: copied here to save on GETs (GAE has a cap on GETs incoming)
+
+  // See the Getting Started docs for more information:
+  // http://getbootstrap.com/getting-started/#support-ie10-width
+
+  (function () {
+    'use strict';
+
+    if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+      var msViewportStyle = document.createElement('style')
+      msViewportStyle.appendChild(
+              document.createTextNode(
+                      '@-ms-viewport{width:auto!important}'
+              )
+      )
+      document.querySelector('head').appendChild(msViewportStyle)
+    }
+
+  })();
+
+</script>
 </body>
 </html>

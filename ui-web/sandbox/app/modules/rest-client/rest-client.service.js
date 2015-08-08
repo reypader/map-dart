@@ -24,6 +24,20 @@ define([], function () {
       }, 1000);
       return p.promise;
     };
+
+    this.authenticate = function (request) {
+      var p = $q.defer();
+      setTimeout(function () {
+        if (request.email === 'bad@email.com') {
+          alert("authentication for: '" + JSON.stringify(request) + "' failed");
+          p.resolve({});
+        } else {
+          alert("authentication for: '" + JSON.stringify(request) + "' successful");
+          p.resolve({token: "token"});
+        }
+      }, 1000);
+      return p.promise;
+    };
   }
 
   service.$inject = ['$q'];
