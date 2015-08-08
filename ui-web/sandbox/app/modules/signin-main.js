@@ -52,7 +52,7 @@ require([
   'password-strength.directive',
   'anchor-smooth-scroll.directive',
   'facebook',
-  'oauth.controller',
+  'login.controller',
   'authentication/authentication.module',
   'authentication/facebook/facebook.module',
   'rest-client/rest-client.module',
@@ -66,7 +66,7 @@ require([
     'anchorSmoothScrollModule',
     'authenticationModule',
     'facebookModule',
-    'oauthModule',
+    'loginModule',
     'ui.bootstrap',
     'ui.validate', 'restClient',
     'registrationModule'
