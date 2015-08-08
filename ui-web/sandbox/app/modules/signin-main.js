@@ -1,6 +1,8 @@
 require.config({
   paths: {
     facebook: '//connect.facebook.net/en_US/sdk',
+    cryptojs: '//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256',
+
     angular: '../../bower_components/angular/angular',
     bootstrap: '../../bower_components/bootstrap/dist/js/bootstrap',
     jquery: '../../bower_components/jquery/dist/jquery',
@@ -10,7 +12,7 @@ require.config({
     'angular-route': '../../bower_components/angular-route/angular-route',
     'angular-cookies': '../../bower_components/angular-cookies/angular-cookies',
     'ng-password-strength': '../../bower_components/ng-password-strength/app/scripts/scripts/ng-password-strength',
-    lodash: '../../bower_components/lodash/lodash'
+    lodash: '../../bower_components/lodash/lodash',
   },
   shim: {
     bootstrap: {

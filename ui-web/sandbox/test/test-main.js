@@ -17,6 +17,7 @@ Object.keys(window.__karma__.files).forEach(function (file) {
 require.config({
 
   paths: {
+    cryptojs: '//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256',
     angular: '../../bower_components/angular/angular',
     'angular-route': '../../bower_components/angular-route/angular-route',
     'angular-mocks': '../../node_modules/angular-mocks/angular-mocks',

@@ -5,7 +5,8 @@ define([
   'registration/strictEmail.registration.directive',
   'angular',
   'angular-bootstrap',
-  'angular-route'], function (config, controller, newEmailDirective, strictEmailDirective) {
+  'angular-route',
+  'cryptojs'], function (config, controller, newEmailDirective, strictEmailDirective) {
   'use strict';
 
   var registration = angular.module('registrationModule', ['restClient', 'ui.bootstrap', 'ngRoute']);

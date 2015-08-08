@@ -1,4 +1,4 @@
-define(['authentication/authentication.service', 'angular', 'angular-cookies'], function (service) {
+define(['authentication/authentication.service', 'angular', 'angular-cookies', 'cryptojs'], function (service) {
   'use strict';
 
   var authentication = angular.module('authenticationModule', ['restClient', 'ngCookies']);

@@ -8,6 +8,8 @@ define([], function () {
     _this.registrationOpened = false;
 
     this.registerUser = function registerUser() {
+      var hash = CryptoJS.SHA256(_this.newUser.password);
+      _this.newUser.password = hash.toString(CryptoJS.enc.Base64);
       restClientService.registerUser(_this.newUser).then(function () {
         _this.registrationDone = true;
       });

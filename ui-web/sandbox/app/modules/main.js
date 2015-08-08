@@ -1,6 +1,7 @@
 require.config({
   paths: {
     facebook: '//connect.facebook.net/en_US/sdk',
+    cryptojs: '//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256',
     angular: '../../bower_components/angular/angular',
     'angular-route': '../../bower_components/angular-route/angular-route',
     bootstrap: '../../bower_components/bootstrap/dist/js/bootstrap',
