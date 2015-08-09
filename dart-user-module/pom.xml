@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>dart-data-objectify</artifactId>
+            <artifactId>dart-data</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.appengine</groupId>
@@ -37,6 +37,14 @@
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-servlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dart-data-objectify</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dart-common-test</artifactId>
         </dependency>
     </dependencies>
     <build>
