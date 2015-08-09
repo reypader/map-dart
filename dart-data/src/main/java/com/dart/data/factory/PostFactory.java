@@ -5,7 +5,7 @@ import com.dart.data.domain.Post;
 import com.dart.data.domain.User;
 
 /**
- * Factory that allows creation of Post classes
+ * Factory that allows creation of Post instances
  * in place of concrete constructors.
  *
  * @author RMPader

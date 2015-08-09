@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * Interface for complex data access to stored {@link Event} classes.
+ * Interface for complex data access to stored {@link Event} entities.
  *
  * @author RMPader
  */

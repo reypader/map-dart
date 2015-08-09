@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * Interface for complex data access to stored {@link Post} classes.
+ * Interface for complex data access to stored {@link Post} entities.
  *
  * @author RMPader
  */

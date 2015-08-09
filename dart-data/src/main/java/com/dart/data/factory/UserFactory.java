@@ -4,7 +4,7 @@ import com.dart.data.domain.Event;
 import com.dart.data.domain.User;
 
 /**
- * Factory that allows creation of User classes
+ * Factory that allows creation of User instances
  * in place of concrete constructors.
  *
  * @author RMPader

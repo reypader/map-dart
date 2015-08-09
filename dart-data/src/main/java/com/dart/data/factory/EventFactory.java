@@ -7,7 +7,7 @@ import com.dart.data.util.Point;
 import java.util.Date;
 
 /**
- * Factory that allows creation of Event classes
+ * Factory that allows creation of Event instances
  * in place of concrete constructors.
  *
  * @author RMPader
