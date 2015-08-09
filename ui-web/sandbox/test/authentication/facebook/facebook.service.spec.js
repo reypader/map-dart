@@ -25,10 +25,11 @@ define(['angular', 'angular-mocks', 'authentication/facebook/facebook.module', '
         facebookService.loginCallback({});
         expect(authenticationService.authenticate).not.toHaveBeenCalled();
 
-        facebookService.loginCallback({authResponse: {access_token: 'token'}});
+        facebookService.loginCallback({authResponse: {access_token: 'token', userID: 'user_id'}});
         expect(authenticationService.authenticate).toHaveBeenCalledWith('test@email', {
           provider: 'facebook',
-          token: 'token'
+          token: 'token',
+          data: 'id=user_id'
         }, undefined);
       }
     );
