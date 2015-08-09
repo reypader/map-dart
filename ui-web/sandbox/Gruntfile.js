@@ -1,6 +1,6 @@
 /*global module:false*/
 module.exports = function (grunt) {
-  
+
   var globalConfig = {
     images: 'app/images',
     css: 'app/styles',
@@ -68,7 +68,10 @@ module.exports = function (grunt) {
         target: {
           rjsConfig: '<%= globalConfig.scripts %>/main.js',
           options: {
-            transitive: true
+            transitive: true,
+            exclude: [
+              'requirejs-plugins'
+            ]
           }
         }
       },
@@ -169,7 +172,7 @@ module.exports = function (grunt) {
         },
         livereload: {
           options: {
-            open: true,
+            //open: true,
             keepAlive: true,
             base: 'dist',
             protocol: 'https',

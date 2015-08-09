@@ -2,7 +2,7 @@ require.config({
   paths: {
     facebook: '//connect.facebook.net/en_US/sdk',
     cryptojs: '//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256',
-
+    async: '../../bower_components/requirejs-plugins/src/async',
     angular: '../../bower_components/angular/angular',
     bootstrap: '../../bower_components/bootstrap/dist/js/bootstrap',
     jquery: '../../bower_components/jquery/dist/jquery',
@@ -55,6 +55,7 @@ require([
   'login.controller',
   'authentication/authentication.module',
   'authentication/facebook/facebook.module',
+  'authentication/google/google.module',
   'rest-client/rest-client.module',
   'registration/registration.module'
 ], function () {
@@ -65,6 +66,7 @@ require([
     'passwordStrengthModule',
     'anchorSmoothScrollModule',
     'authenticationModule',
+    'googleModule',
     'facebookModule',
     'loginModule',
     'ui.bootstrap',

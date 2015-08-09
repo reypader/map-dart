@@ -12,7 +12,6 @@
       if (c.indexOf("sessionToken=") == 0)  window.location.href = "https://" + window.location.host;
     }
   </script>
-
   <title>Pings</title>
 
   <!--<link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.min.css"/>-->
@@ -48,12 +47,13 @@
     <button class="btn btn-primary btn-block" type="submit">Sign in</button>
   </form>
   <div class="signin-options">
+    <div id="signin-button"></div>
     <p><span> Or you could:</span></p>
     <a class="btn btn-block btn-social btn-facebook" ng-click="vm.fbLogin()">
       <i class="fa fa-facebook"></i> Sign in with Facebook
     </a>
-    <a class="btn btn-block btn-social btn-google">
-      <i class="fa fa-google"></i> Sign in with Google
+    <a class="btn btn-block btn-social btn-google" ng-click="vm.gpLogin()">
+      <i class="fa fa-google-plus"></i> Sign in with Google
     </a>
     <a class="btn btn-block btn-social btn-twitter">
       <i class="fa fa-twitter"></i> Sign in with Twitter

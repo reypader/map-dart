@@ -1,9 +1,9 @@
-define(['angular', 'cryptojs', 'authentication/facebook/facebook.module', 'authentication/authentication.module'], function () {
+define(['angular', 'cryptojs', 'authentication/facebook/facebook.module', 'authentication/google/google.module', 'authentication/authentication.module'], function () {
   'use strict';
 
-  var oauth = angular.module('loginModule', ['facebookModule', 'authenticationModule']);
+  var oauth = angular.module('loginModule', ['facebookModule', 'googleModule', 'authenticationModule']);
 
-  oauth.controller('LoginController', ['facebookService', 'authenticationService', '$window', '$location', function (facebookService, authenticationService, $window, $location) {
+  oauth.controller('LoginController', ['facebookService', 'googleService', 'authenticationService', '$window', '$location', function (facebookService, googleService, authenticationService, $window, $location) {
     var _this = this;
 
     _this.loginFailed = false;
@@ -13,6 +13,10 @@ define(['angular', 'cryptojs', 'authentication/facebook/facebook.module', 'authe
 
     _this.fbLogin = function () {
       facebookService.fbLogin(_this.redirectToHome);
+    }
+
+    _this.gpLogin = function () {
+      googleService.gpLogin(_this.redirectToHome);
     }
 
     _this.basicLogin = function () {
