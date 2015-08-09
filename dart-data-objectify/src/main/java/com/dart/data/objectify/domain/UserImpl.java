@@ -36,7 +36,10 @@ public class UserImpl implements User {
 
     @OnSave
     public void onSave() {
-        this.dateCreated = new Date();
+        if (dateCreated == null) {
+            Date now = new Date();
+            this.dateCreated = now;
+        }
     }
 
     @Override

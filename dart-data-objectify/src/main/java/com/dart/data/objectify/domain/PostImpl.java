@@ -41,7 +41,10 @@ public class PostImpl implements Post {
 
     @OnSave
     public void onSave() {
-        this.dateCreated = new Date();
+        if (dateCreated == null) {
+            Date now = new Date();
+            this.dateCreated = now;
+        }
     }
 
     @Override
