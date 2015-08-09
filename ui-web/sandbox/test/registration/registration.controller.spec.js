@@ -3,27 +3,33 @@ define(['angular', 'angular-mocks', 'registration/registration.module'], functio
 
   describe("Registration Controller", function () {
     var restClientService;
+    var vcRecaptchaService;
     var $q;
     var $rootScope;
 
     beforeEach(module('registrationModule'));
 
-    beforeEach(inject(function (_$rootScope_, _restClientService_, _$q_) {
+    beforeEach(inject(function (_$rootScope_, _vcRecaptchaService_, _restClientService_, _$q_) {
       $rootScope = _$rootScope_;
       restClientService = _restClientService_;
+      vcRecaptchaService = _vcRecaptchaService_;
       $q = _$q_;
     }));
 
     it("should call RegistrationService.registerUser(newUserObject) when registerUser is invoked",
       inject(function ($controller) {
         spyOn(restClientService, 'registerUser').and.returnValue($q.when({}));
+        spyOn(restClientService, 'validateRecaptcha').and.returnValue($q.when({userIsHuman: true}));
+
         var controller = $controller('RegistrationController');
         controller.newUser.email = 'test@email.com';
         controller.newUser.name = 'John Doe';
-        controller.newUser.password = 'unencrypted';
+        controller.npassword = 'unencrypted';
 
         controller.registerUser();
 
+        $rootScope.$digest();
+        expect(restClientService.validateRecaptcha).toHaveBeenCalled();
         expect(restClientService.registerUser).toHaveBeenCalledWith(
           {
             email: 'test@email.com',
@@ -37,6 +43,7 @@ define(['angular', 'angular-mocks', 'registration/registration.module'], functio
     it("should change to /success after a successful registration",
       inject(function ($controller) {
         spyOn(restClientService, 'registerUser').and.returnValue($q.when({}));
+        spyOn(restClientService, 'validateRecaptcha').and.returnValue($q.when({userIsHuman: true}));
 
         var controller = $controller('RegistrationController');
         expect(controller.registrationDone).toBe(false);
@@ -44,6 +51,24 @@ define(['angular', 'angular-mocks', 'registration/registration.module'], functio
 
         $rootScope.$digest();
         expect(controller.registrationDone).toBe(true);
+      })
+    );
+
+    it("should reload recaptcha if user is not human",
+      inject(function ($controller) {
+        spyOn(restClientService, 'registerUser');
+        spyOn(restClientService, 'validateRecaptcha').and.returnValue($q.when({userIsHuman: false}));
+        spyOn(vcRecaptchaService, 'reload');
+
+        var controller = $controller('RegistrationController');
+        expect(controller.registrationDone).toBe(false);
+        controller.registerUser();
+
+        $rootScope.$digest();
+        expect(controller.registrationDone).toBe(false);
+        expect(restClientService.registerUser).not.toHaveBeenCalled();
+        expect(restClientService.validateRecaptcha).toHaveBeenCalled();
+        expect(vcRecaptchaService.reload).toHaveBeenCalled();
       })
     );
   });

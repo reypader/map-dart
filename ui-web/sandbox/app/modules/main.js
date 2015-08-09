@@ -13,6 +13,7 @@ require.config({
     'angular-cookies': '../../bower_components/angular-cookies/angular-cookies',
     'ng-password-strength': '../../bower_components/ng-password-strength/dist/scripts/ng-password-strength',
     lodash: '../../bower_components/lodash/lodash',
+    'angular-recaptcha': '../../bower_components/angular-recaptcha/release/angular-recaptcha',
     'font-awesome': '../../bower_components/font-awesome/fonts/*'
   },
   shim: {
@@ -43,6 +44,12 @@ require.config({
     'angular-cookies': {
       deps: [
         'angular'
+      ]
+    },
+    'angular-recaptcha': {
+      deps: [
+        'angular',
+        'recaptcha.loader'
       ]
     },
     facebook: {

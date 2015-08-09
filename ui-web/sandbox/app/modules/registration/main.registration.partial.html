@@ -35,24 +35,29 @@
           </div>
 
           <label for="newPassword">Password</label>
-          <input type="password" id="newPassword" name="newPassword" ng-model="vm.newUser.password" class="form-control"
-                 placeholder="Password" ng-model="regPassword"
+          <input type="password" id="newPassword" name="newPassword" ng-model="vm.npassword" class="form-control"
+                 placeholder="Password"
                  required>
           <span class="help-block">Password strength</span>
-          <password-strength ng-model="vm.newUser.password" val="strength"></password-strength>
+          <password-strength ng-model="vm.npassword" val="strength"></password-strength>
           <div class="form-group has-feedback" ng-class="createUser.repeatNewPassword.$error.validator && 'has-error'">
             <label for="repeatNewPassword" class="control-label">Repeat password<span
                     ng-show="createUser.repeatNewPassword.$error.validator"> didn't match</span></label>
             <input type="password" id="repeatNewPassword" name="repeatNewPassword" ng-model="repeatNewPassword"
                    class="form-control" placeholder="Re-type your password"
-                   ui-validate=" '$value==vm.newUser.password' "
-                   ui-validate-watch=" 'vm.newUser.password' "
+                   ui-validate=" '$value==vm.npassword' "
+                   ui-validate-watch=" 'vm.npassword' "
                    aria-describedby="passwordMatch"
                    required>
             <i ng-show="createUser.repeatNewPassword.$error.validator"
                class="form-control-feedback fa fa-times"></i>
             <span id="passwordMatch" class="sr-only"></span>
           </div>
+          <div class="g-recaptcha" vc-recaptcha
+               key="'6Ld18c0SAAAAAFvAhvj200jLd6GDqIj2RgFvtOJM'"
+               on-create="vm.setWidgetId(widgetId)"
+               on-success="vm.setResponse(response)"
+               on-expire="vm.cbExpiration()"></div>
           <button class="btn btn-primary btn-block" type="submit"
                   ng-disabled="strength < 2 || !createUser.$valid||createUser.$error.usedEmail || createUser.$error.email || createUser.$pending.usedEmail">
             Create account

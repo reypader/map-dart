@@ -1,8 +1,8 @@
 define([], function () {
   var service = function service($q) {
+    var _this = this;
 
-
-    this.checkEmail = function (email) {
+    _this.checkEmail = function (email) {
       var bool = email === "used@email.com"
 
       var dummyResponse = {
@@ -16,7 +16,7 @@ define([], function () {
       return p.promise;
     };
 
-    this.registerUser = function (newUser) {
+    _this.registerUser = function (newUser) {
       var p = $q.defer();
       setTimeout(function () {
         alert("registerUser for: '" + JSON.stringify(newUser) + "' successful");
@@ -25,7 +25,7 @@ define([], function () {
       return p.promise;
     };
 
-    this.authenticate = function (request) {
+    _this.authenticate = function (request) {
       var p = $q.defer();
       setTimeout(function () {
         if (request.email == 'bad@email.com') {
@@ -38,6 +38,20 @@ define([], function () {
       }, 1000);
       return p.promise;
     };
+
+    _this.validateRecaptcha = function (recaptchaResult) {
+      var p = $q.defer();
+      setTimeout(function () {
+        if (Math.random() > 0.2) {
+          alert("captcha for: '" + JSON.stringify(recaptchaResult) + "' failed");
+          p.resolve({userIsHuman: false});
+        } else {
+          alert("captcha for: '" + JSON.stringify(recaptchaResult) + "' successful");
+          p.resolve({userIsHuman: true});
+        }
+      }, 1000);
+      return p.promise;
+    }
   }
 
   service.$inject = ['$q'];

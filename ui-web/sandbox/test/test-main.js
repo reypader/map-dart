@@ -24,7 +24,8 @@ require.config({
     'angular-mocks': '../../node_modules/angular-mocks/angular-mocks',
     'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls',
     'angular-animate': '../../bower_components/angular-animate/angular-animate',
-    'angular-cookies': '../../bower_components/angular-cookies/angular-cookies'
+    'angular-cookies': '../../bower_components/angular-cookies/angular-cookies',
+    'angular-recaptcha': '../../bower_components/angular-recaptcha/release/angular-recaptcha'
   },
   shim: {
     angular: {
@@ -41,6 +42,12 @@ require.config({
     },
     'angular-bootstrap': {
       deps: ['angular', 'angular-animate']
+    },
+    'angular-recaptcha': {
+      deps: [
+        'angular',
+        'recaptcha.loader'
+      ]
     }
   },
 

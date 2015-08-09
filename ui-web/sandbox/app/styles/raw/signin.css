@@ -3,6 +3,9 @@
 }
 
 body {
+  min-width: 370px;
+  width: auto !important;
+  width: 370px;
   padding-top: 40px;
   padding-bottom: 40px;
   background-color: #eee;
@@ -13,6 +16,24 @@ body {
   max-width: 330px;
   padding: 15px;
   margin: 0 auto;
+}
+
+#rc-imageselect {
+  transform: scale(0.25);
+  transform-origin: 0;
+  -webkit-transform: scale(0.25);
+  transform: scale(0.25);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+
+.g-recaptcha {
+  transform: scale(0.885);
+  transform-origin: 0;
+  -webkit-transform: scale(0.885);
+  transform: scale(0.885);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
 }
 
 .signin-options {
