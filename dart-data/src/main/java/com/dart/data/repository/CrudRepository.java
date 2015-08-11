@@ -1,6 +1,7 @@
 package com.dart.data.repository;
 
 import com.dart.data.domain.Entity;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 
 /**
@@ -10,7 +11,7 @@ import com.dart.data.exception.EntityNotFoundException;
  */
 public interface CrudRepository<T extends Entity> {
 
-    T add(T entity);
+    T add(T entity) throws EntityCollisionException;
 
     /**
      * @param id the string representation of the entity's ID.
