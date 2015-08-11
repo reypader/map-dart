@@ -2,6 +2,7 @@ package com.dart.data.objectify.repository;
 
 import com.dart.common.test.TestDatastore;
 import com.dart.data.domain.Session;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.domain.SessionImpl;
 import com.dart.data.objectify.domain.TestUser;
@@ -85,6 +86,14 @@ public class SessionRepositoryImplTest {
         assertEquals(now, savedSession.getExpiry());
         assertEquals(userKey, Key.create(savedSession.getUser()));
         assertNotNull(savedSession.getDateCreated());
+    }
+
+    @Test(expected = EntityCollisionException.class)
+    public void testEntityCollision() throws Exception {
+        Session session = new SessionImpl("generated-token", userKey, new Date(), "device", "browser", "location");
+
+        Session savedSession = repo.add(session);
+        repo.add(savedSession);
     }
 
     @Test

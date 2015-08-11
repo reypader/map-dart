@@ -1,6 +1,7 @@
 package com.dart.data.repository;
 
 import com.dart.data.domain.Entity;
+import com.dart.data.exception.EntityNotFoundException;
 
 /**
  * Base interface for entity repositories. Provides basic CRUD methods.
@@ -17,7 +18,7 @@ public interface CrudRepository<T extends Entity> {
      */
     T retrieve(String id);
 
-    T update(T entity);
+    T update(T entity) throws EntityNotFoundException;
 
     void delete(T entity);
 }

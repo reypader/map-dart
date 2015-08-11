@@ -3,6 +3,7 @@ package com.dart.data.objectify.repository;
 import com.dart.data.domain.Event;
 import com.dart.data.domain.Post;
 import com.dart.data.domain.User;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.PostImpl;
@@ -30,8 +31,12 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post add(Post entity) {
-        Key<Post> key = objectify().save().entity(entity).now();
-        return getPostByKey(key);
+        if (((PostImpl) entity).getRawId() == null) {
+            Key<Post> key = objectify().save().entity(entity).now();
+            return getPostByKey(key);
+        } else {
+            throw new EntityCollisionException("The entity being added already has an ID. Did you mean to do an update?");
+        }
     }
 
     @Override
@@ -46,20 +51,18 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Post update(Post entity) {
-        ensureExistingPost(entity);
-        return add(entity);
-    }
-
-    private void ensureExistingPost(Post post) {
+    public Post update(Post entity) throws EntityNotFoundException {
         try {
-            objectify().load().entity(post).safe();
+            objectify().load().entity(entity).safe();
+            Key<Post> key = objectify().save().entity(entity).now();
+            return getPostByKey(key);
         } catch (IllegalArgumentException e) {
             throw new EntityNotFoundException("Tried to load an entity without a value in the field annotated with @Id.", e);
         } catch (NotFoundException e) {
             throw new EntityNotFoundException("No entity with an id matching the value in the field annotated with @Id.", e);
         }
     }
+
 
     @Override
     public void delete(Post entity) {

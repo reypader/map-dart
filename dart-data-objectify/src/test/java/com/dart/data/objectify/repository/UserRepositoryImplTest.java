@@ -1,9 +1,10 @@
 package com.dart.data.objectify.repository;
 
 import com.dart.common.test.TestDatastore;
+import com.dart.data.domain.User;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.domain.UserImpl;
-import com.dart.data.domain.User;
 import com.dart.data.repository.UserRepository;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
@@ -71,6 +72,13 @@ public class UserRepositoryImplTest {
         assertEquals("I like derping", savedUser.getDescription());
         assertEquals("URL", savedUser.getPhotoURL());
         assertNotNull(savedUser.getDateCreated());
+    }
+
+    @Test(expected = EntityCollisionException.class)
+    public void testEntityCollision() throws Exception {
+        User user = new UserImpl("username", "display name");
+        User savedUser = repo.add(user);
+        repo.add(savedUser);
     }
 
     @Test

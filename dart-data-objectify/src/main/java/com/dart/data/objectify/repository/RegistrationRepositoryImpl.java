@@ -1,7 +1,7 @@
 package com.dart.data.objectify.repository;
 
-import com.dart.data.domain.Entity;
 import com.dart.data.domain.Registration;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.RegistrationImpl;
@@ -21,8 +21,12 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 
     @Override
     public Registration add(Registration entity) {
-        Key<Registration> key = objectify().save().entity(entity).now();
-        return getRegistrationByKey(key);
+        if (objectify().load().entity(entity).now() == null) {
+            Key<Registration> key = objectify().save().entity(entity).now();
+            return getRegistrationByKey(key);
+        } else {
+            throw new EntityCollisionException("The entity being added already exists");
+        }
     }
 
     @Override
@@ -37,14 +41,11 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
     }
 
     @Override
-    public Registration update(Registration entity) {
-        ensureExistingRegistration(entity);
-        return add(entity);
-    }
-
-    private void ensureExistingRegistration(Entity post) {
+    public Registration update(Registration entity) throws EntityNotFoundException {
         try {
-            objectify().load().entity(post).safe();
+            objectify().load().entity(entity).safe();
+            Key<Registration> key = objectify().save().entity(entity).now();
+            return getRegistrationByKey(key);
         } catch (IllegalArgumentException e) {
             throw new EntityNotFoundException("Tried to load an entity without a value in the field annotated with @Id.", e);
         } catch (NotFoundException e) {

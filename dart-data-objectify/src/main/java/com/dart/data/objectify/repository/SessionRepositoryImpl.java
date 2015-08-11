@@ -1,8 +1,8 @@
 package com.dart.data.objectify.repository;
 
-import com.dart.data.domain.Entity;
 import com.dart.data.domain.Session;
 import com.dart.data.domain.User;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.SessionImpl;
@@ -27,8 +27,12 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override
     public Session add(Session entity) {
-        Key<Session> key = objectify().save().entity(entity).now();
-        return getSessionByKey(key);
+        if (objectify().load().entity(entity).now() == null) {
+            Key<Session> key = objectify().save().entity(entity).now();
+            return getSessionByKey(key);
+        } else {
+            throw new EntityCollisionException("The entity being added already exists");
+        }
     }
 
     @Override
@@ -43,14 +47,11 @@ public class SessionRepositoryImpl implements SessionRepository {
     }
 
     @Override
-    public Session update(Session entity) {
-        ensureExistingSession(entity);
-        return add(entity);
-    }
-
-    private void ensureExistingSession(Entity post) {
+    public Session update(Session entity) throws EntityNotFoundException {
         try {
-            objectify().load().entity(post).safe();
+            objectify().load().entity(entity).safe();
+            Key<Session> key = objectify().save().entity(entity).now();
+            return getSessionByKey(key);
         } catch (IllegalArgumentException e) {
             throw new EntityNotFoundException("Tried to load an entity without a value in the field annotated with @Id.", e);
         } catch (NotFoundException e) {

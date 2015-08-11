@@ -1,7 +1,7 @@
 package com.dart.data.objectify.repository;
 
-import com.dart.data.domain.Entity;
 import com.dart.data.domain.Identity;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.IdentityImpl;
@@ -21,8 +21,12 @@ public class IdentityRepositoryImpl implements IdentityRepository {
 
     @Override
     public Identity add(Identity entity) {
-        Key<Identity> key = objectify().save().entity(entity).now();
-        return getIdentityByKey(key);
+        if (objectify().load().entity(entity).now() == null) {
+            Key<Identity> key = objectify().save().entity(entity).now();
+            return getIdentityByKey(key);
+        } else {
+            throw new EntityCollisionException("The entity being added already exists");
+        }
     }
 
     @Override
@@ -37,20 +41,18 @@ public class IdentityRepositoryImpl implements IdentityRepository {
     }
 
     @Override
-    public Identity update(Identity entity) {
-        ensureExistingIdentity(entity);
-        return add(entity);
-    }
-
-    private void ensureExistingIdentity(Entity post) {
+    public Identity update(Identity entity) throws EntityNotFoundException {
         try {
-            objectify().load().entity(post).safe();
+            objectify().load().entity(entity).safe();
+            Key<Identity> key = objectify().save().entity(entity).now();
+            return getIdentityByKey(key);
         } catch (IllegalArgumentException e) {
             throw new EntityNotFoundException("Tried to load an entity without a value in the field annotated with @Id.", e);
         } catch (NotFoundException e) {
             throw new EntityNotFoundException("No entity with an id matching the value in the field annotated with @Id.", e);
         }
     }
+
 
     @Override
     public void delete(Identity entity) {

@@ -2,6 +2,7 @@ package com.dart.data.objectify.repository;
 
 import com.dart.data.domain.Event;
 import com.dart.data.domain.User;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.EventImpl;
@@ -33,19 +34,20 @@ public class EventRepositoryImpl implements EventRepository {
 
     @Override
     public Event add(Event entity) {
-        Key<Event> key = objectify().save().entity(entity).now();
-        return getEventByKey(key);
+        if (((EventImpl) entity).getRawId() == null) {
+            Key<Event> key = objectify().save().entity(entity).now();
+            return getEventByKey(key);
+        } else {
+            throw new EntityCollisionException("The entity being added already has an ID. Did you mean to do an update?");
+        }
     }
 
     @Override
-    public Event update(Event entity) {
-        ensureExistingEvent(entity);
-        return add(entity);
-    }
-
-    private void ensureExistingEvent(Event event) {
+    public Event update(Event entity) throws EntityNotFoundException {
         try {
-            objectify().load().entity(event).safe();
+            objectify().load().entity(entity).safe();
+            Key<Event> key = objectify().save().entity(entity).now();
+            return getEventByKey(key);
         } catch (IllegalArgumentException e) {
             throw new EntityNotFoundException("Tried to load an entity without a value in the field annotated with @Id.", e);
         } catch (NotFoundException e) {
@@ -62,9 +64,13 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     private void correctFinishedIndicator(EventImpl event) {
-        Date now = new Date();
-        if (!event.isFinished() && now.after(event.getEndDate())) {
-            update(event);
+        try {
+            Date now = new Date();
+            if (!event.isFinished() && now.after(event.getEndDate())) {
+                update(event);
+            }
+        } catch (EntityNotFoundException e) {
+            throw new IllegalStateException("The Event being corrected seems to have vanished", e);
         }
     }
 

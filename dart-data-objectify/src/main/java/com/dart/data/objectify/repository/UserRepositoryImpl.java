@@ -1,10 +1,10 @@
 package com.dart.data.objectify.repository;
 
-import com.dart.data.domain.Entity;
+import com.dart.data.domain.User;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.UserImpl;
-import com.dart.data.domain.User;
 import com.dart.data.repository.UserRepository;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
@@ -21,8 +21,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User add(User entity) {
-        Key<User> key = objectify().save().entity(entity).now();
-        return getUserByKey(key);
+        if (objectify().load().entity(entity).now() == null) {
+            Key<User> key = objectify().save().entity(entity).now();
+            return getUserByKey(key);
+        } else {
+            throw new EntityCollisionException("The entity being added already exists");
+        }
     }
 
     @Override
@@ -37,14 +41,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User update(User entity) {
-        ensureExistingUser(entity);
-        return add(entity);
-    }
-
-    private void ensureExistingUser(Entity post) {
+    public User update(User entity) throws EntityNotFoundException {
         try {
-            objectify().load().entity(post).safe();
+            objectify().load().entity(entity).safe();
+            Key<User> key = objectify().save().entity(entity).now();
+            return getUserByKey(key);
         } catch (IllegalArgumentException e) {
             throw new EntityNotFoundException("Tried to load an entity without a value in the field annotated with @Id.", e);
         } catch (NotFoundException e) {

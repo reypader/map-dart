@@ -1,6 +1,7 @@
 package com.dart.data.objectify.repository;
 
 import com.dart.common.test.TestDatastore;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.domain.Event;
 import com.dart.data.objectify.domain.TestEvent;
@@ -96,6 +97,14 @@ public class PostRepositoryImplTest {
         assertEquals(userKey, Key.create(savedPost.getUser()));
         assertEquals(eventKey, Key.create(savedPost.getEvent()));
         assertNotNull(savedPost.getDateCreated());
+    }
+
+    @Test(expected = EntityCollisionException.class)
+    public void testEntityCollision() throws Exception {
+        String content = "This is a test content";
+        Post post = new PostImpl(eventKey, userKey, content);
+        Post savedPost = repo.add(post);
+        repo.add(savedPost);
     }
 
     @Test

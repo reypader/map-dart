@@ -2,6 +2,7 @@ package com.dart.data.objectify.repository;
 
 import com.dart.common.test.TestDatastore;
 import com.dart.data.domain.Identity;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.domain.IdentityImpl;
 import com.dart.data.objectify.domain.TestUser;
@@ -78,6 +79,13 @@ public class IdentityRepositoryImplTest {
         assertEquals("id", savedIdentity.getProvidedIdentity());
         assertEquals(userKey, Key.create(savedIdentity.getUser()));
         assertNotNull(savedIdentity.getDateCreated());
+    }
+
+    @Test(expected = EntityCollisionException.class)
+    public void testEntityCollision() throws Exception {
+        Identity identity = new IdentityImpl(userKey, "self", "id");
+        Identity savedEvent = repo.add(identity);
+        repo.add(savedEvent);
     }
 
     @Test

@@ -17,7 +17,7 @@ import java.util.*;
 public class EventImpl implements Event {
 
     /**
-     * DataStore ID automatically populated by Objectify.
+     * DataStore ID automatically populated by Objectify if the type is {@link Long}.
      */
     @Id
     private Long id;
@@ -153,6 +153,16 @@ public class EventImpl implements Event {
 
     public boolean isFinished() {
         return isFinished;
+    }
+
+    /**
+     * for checking since getId() will throw an error if the entity is new (i.e. not yet persisted and thus, no ID
+     * assigned yet)
+     *
+     * @return
+     */
+    public Long getRawId() {
+        return id;
     }
 
     @Override

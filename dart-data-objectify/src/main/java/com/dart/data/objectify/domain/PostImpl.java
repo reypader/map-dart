@@ -15,6 +15,9 @@ import java.util.*;
 @Entity(name = "Post")
 public class PostImpl implements Post {
 
+    /**
+     * DataStore ID automatically populated by Objectify if the type is {@link Long}.
+     */
     @Id
     private Long id;
 
@@ -85,6 +88,16 @@ public class PostImpl implements Post {
     @Override
     public String getId() {
         return Key.create(this).toWebSafeString();
+    }
+
+    /**
+     * for checking since getId() will throw an error if the entity is new (i.e. not yet persisted and thus, no ID
+     * assigned yet)
+     *
+     * @return
+     */
+    public Long getRawId() {
+        return id;
     }
 
     @Override

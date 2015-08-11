@@ -2,6 +2,7 @@ package com.dart.data.objectify.repository;
 
 import com.dart.common.test.TestDatastore;
 import com.dart.data.domain.Event;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.domain.EventImpl;
 import com.dart.data.objectify.domain.TestUser;
@@ -94,6 +95,13 @@ public class EventRepositoryImplTest {
         assertNotNull(savedEvent.getDateCreated());
         assertEquals(userKey, Key.create(savedEvent.getOrganizer()));
         assertFalse(savedEvent.isFinished());
+    }
+
+    @Test(expected = EntityCollisionException.class)
+    public void testEntityCollision() throws Exception {
+        EventImpl event = new EventImpl(userKey, "TEST title", new Date(), new Date(), new Point(1, 1));
+        Event savedEvent = repo.add(event);
+        repo.add(savedEvent);
     }
 
     @Test

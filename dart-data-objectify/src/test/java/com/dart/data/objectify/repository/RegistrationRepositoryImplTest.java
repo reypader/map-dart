@@ -2,6 +2,7 @@ package com.dart.data.objectify.repository;
 
 import com.dart.common.test.TestDatastore;
 import com.dart.data.domain.Registration;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.domain.RegistrationImpl;
 import com.dart.data.repository.RegistrationRepository;
@@ -69,6 +70,15 @@ public class RegistrationRepositoryImplTest {
         assertEquals("email", savedRegistration.getEmail());
         assertEquals("pass", savedRegistration.getPassword());
         assertNotNull(savedRegistration.getDateCreated());
+    }
+
+
+    @Test(expected = EntityCollisionException.class)
+    public void testEntityCollision() throws Exception {
+        Registration registration = new RegistrationImpl("regCode", "email", "display name", "pass");
+
+        Registration savedRegistration = repo.add(registration);
+        repo.add(savedRegistration);
     }
 
     @Test
