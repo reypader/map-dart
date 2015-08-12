@@ -22,4 +22,8 @@ public interface User extends Entity {
 
     void setPhotoURL(String photoURL);
 
+    String getSecret();
+
+    void setSecret(String secret);
+
 }

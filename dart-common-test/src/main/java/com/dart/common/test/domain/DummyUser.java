@@ -15,6 +15,7 @@ public class DummyUser implements User {
     private String description;
     private String photoURL;
     private Date dateCreated;
+    private String secret;
 
     @Override
     public String getEmail() {
@@ -53,6 +54,16 @@ public class DummyUser implements User {
     @Override
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
+    }
+
+    @Override
+    public String getSecret() {
+        return secret;
+    }
+
+    @Override
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 
     @Override

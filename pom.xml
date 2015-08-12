@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>dart-common-service</module>
         <module>dart-common-test</module>
         <module>dart-data</module>
         <module>dart-data-objectify</module>
@@ -49,6 +50,11 @@
                 <artifactId>dart-common-test</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>dart-common-service</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.appengine</groupId>

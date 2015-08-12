@@ -48,7 +48,7 @@ public class SessionFactoryImplTest {
     public void testPersistableSession() throws Exception {
         SessionFactory factory = new SessionFactoryImpl();
         User user = new TestUser("username");
-        Session session = factory.createSession("generated-token", user, new Date(), "device", "browser", "location");
+        Session session = factory.createSession("generated-token", user, "127.0.0.1", new Date(), "device", "browser", "location");
 
         ofy().save().entity(session);
         Thread.sleep(2000);

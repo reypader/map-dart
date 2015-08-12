@@ -64,11 +64,13 @@ public class IdentityRepositoryImplTest {
         assertEquals(e1.getUser(), e2.getUser());
         assertEquals(e1.getProvidedIdentity(), e2.getProvidedIdentity());
         assertEquals(e1.getProvider(), e2.getProvider());
+        assertEquals(e1.getData(),e2.getData());
     }
 
     @Test
     public void testAdd() throws Exception {
         Identity identity = new IdentityImpl(userKey, "self", "id");
+        identity.addData("test", "DATA");
 
         Identity savedIdentity = repo.add(identity);
 
@@ -78,6 +80,7 @@ public class IdentityRepositoryImplTest {
         assertEquals("self", savedIdentity.getProvider());
         assertEquals("id", savedIdentity.getProvidedIdentity());
         assertEquals(userKey, Key.create(savedIdentity.getUser()));
+        assertEquals(identity.getData(), savedIdentity.getData());
         assertNotNull(savedIdentity.getDateCreated());
     }
 
@@ -137,7 +140,7 @@ public class IdentityRepositoryImplTest {
     @Test
     public void findIdentityFromProvider() throws Exception {
         Identity identity = new IdentityImpl(userKey, "self", "id");
-
+        identity.addData("test","DATA");
         Identity savedIdentity = repo.add(identity);
 
         Identity foundIdentity = repo.findIdentityFromProvider("id", "self");

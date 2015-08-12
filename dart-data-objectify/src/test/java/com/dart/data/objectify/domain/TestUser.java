@@ -63,4 +63,14 @@ public class TestUser implements User {
     public void setPhotoURL(String photoURL) {
 
     }
+
+    @Override
+    public String getSecret() {
+        return null;
+    }
+
+    @Override
+    public void setSecret(String secret) {
+
+    }
 }

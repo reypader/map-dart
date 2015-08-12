@@ -13,8 +13,8 @@ import java.util.Date;
  */
 public class SessionFactoryImpl implements SessionFactory {
     @Override
-    public Session createSession(String token, User user, Date expiry, String device, String browser, String location) {
-        Session instance = new SessionImpl(token, Key.create(user), expiry, device, browser, location);
+    public Session createSession(String token, User user, String ipAddress, Date expiry, String device, String browser, String location) {
+        Session instance = new SessionImpl(token, Key.create(user), ipAddress, expiry, device, browser, location);
         return instance;
     }
 }

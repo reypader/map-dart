@@ -28,6 +28,7 @@ public class UserImpl implements User {
 
     private String description;
 
+    private String secret;
     public UserImpl(String email, String displayName) {
         this.id = DigestUtils.sha256Hex(email);
         this.email = email;
@@ -85,6 +86,16 @@ public class UserImpl implements User {
     @Override
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
+    }
+
+    @Override
+    public String getSecret() {
+        return secret;
+    }
+
+    @Override
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 
     @Override

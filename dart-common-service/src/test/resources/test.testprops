@@ -1,0 +1,11 @@
+google.app.id=gaeid
+google.app.secret=gaesecret
+gplus.app.id=gplusid
+gplus.app.secret=gplusecret
+gplus.endpoint=gplusendpoint
+facebook.app.id=fbid
+facebook.app.secret=fbsecret
+facebook.endpoint=fbendpoint
+sys.secret=secret
+sys.signup.email=email
+sys.ui.web=web
