@@ -39,11 +39,12 @@ public class UserServiceImpl implements UserService {
     private final IdentityRepository identityRepository;
     private final IdentityFactory identityFactory;
     private final PropertiesProvider propertiesProvider;
+    private final TokenVerificationService facebookTokenVerificationService;
     private MailSenderService mailSender;
     private String emailTemplate;
 
 
-    public UserServiceImpl(SessionService SessionService, UserRepository userRepository, UserFactory userFactory, IdentityRepository identityRepository, IdentityFactory identityFactory, RegistrationRepository registrationRepository, RegistrationFactory registrationFactory, PropertiesProvider propertiesProvider) {
+    public UserServiceImpl(TokenVerificationService facebookTokenVerificationService, SessionService SessionService, UserRepository userRepository, UserFactory userFactory, IdentityRepository identityRepository, IdentityFactory identityFactory, RegistrationRepository registrationRepository, RegistrationFactory registrationFactory, PropertiesProvider propertiesProvider) {
         this.userRepository = userRepository;
         this.userFactory = userFactory;
         this.registrationRepository = registrationRepository;
@@ -52,6 +53,7 @@ public class UserServiceImpl implements UserService {
         this.identityFactory = identityFactory;
         this.sessionService = SessionService;
         this.propertiesProvider = propertiesProvider;
+        this.facebookTokenVerificationService = facebookTokenVerificationService;
     }
 
     @Override
@@ -103,7 +105,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthenticationResponse authenticateFacebookUser(AuthenticationRequest request, HttpServletRequest httpRequest) {
-    return null;
+        AuthenticationResponse response = new AuthenticationResponse();
+        response.setIdentityProvider("facebook");
+        //TODO verify token
+        if (facebookTokenVerificationService.verifyToken(request.getToken(), request.getData().get("id"))) {
+            Identity identity = identityRepository.findIdentityFromProvider(request.getData().get("id"), "facebook");
+            if (identity == null) {
+                User user = userRepository.retrieve(request.getEmail());
+                if (user == null) {
+                    user = userFactory.createUser(request.getEmail(), request.getData().get("name"));
+                    user = userRepository.add(user);
+                }
+                identity = identityFactory.createIdentity(user, "facebook", request.getData().get("id"));
+                identityRepository.add(identity);
+            }
+            String token = sessionService.generateSession(identity.getUser(), httpRequest);
+            response.setToken(token);
+        }
+        return response;
     }
 
     @Override
