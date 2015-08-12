@@ -1,4 +1,4 @@
-define(['gapi.loader', 'authentication/google/google.service', 'angular', 'authentication/authentication.module'], function (gapi, service) {
+define(['gapi.loader', 'authentication/google/google.service', 'angular', 'authentication/authentication.module','rest-client/rest-client.module'], function (gapi, service) {
   'use strict';
 
   var google = angular.module('googleModule', ['authenticationModule']);

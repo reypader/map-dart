@@ -50,6 +50,7 @@ require.config({
   packages: []
 });
 require([
+  'gapi.loader',
   'angular',
   'angular-bootstrap',
   'angular-ui-validate',

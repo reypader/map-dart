@@ -1,4 +1,4 @@
-define(['authentication/facebook/facebook.service', 'angular', 'authentication/authentication.module'], function (service) {
+define(['authentication/facebook/facebook.service', 'angular', 'authentication/authentication.module','rest-client/rest-client.module'], function (service) {
   'use strict';
 
   var facebook = angular.module('facebookModule', ['authenticationModule']).config(function () {
