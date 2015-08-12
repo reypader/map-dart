@@ -42,7 +42,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Post retrieve(String id) {
         Key<Post> key = Key.create(id);
-        return getPostByKey(key);
+        return objectify().load().key(key).now();
     }
 
     private Post getPostByKey(Key<Post> key) {

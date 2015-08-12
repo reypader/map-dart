@@ -1,5 +1,7 @@
 package com.dart.user.service;
 
+import com.dart.common.service.auth.Facebook;
+import com.dart.common.service.auth.Google;
 import com.dart.common.service.auth.SessionService;
 import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.mail.MailSenderService;
@@ -18,19 +20,26 @@ import com.dart.user.api.AuthenticationRequest;
 import com.dart.user.api.AuthenticationResponse;
 import com.dart.user.api.CheckEmailResponse;
 import com.dart.user.api.RegistrationRequest;
+import com.google.inject.Inject;
 import org.mindrot.jbcrypt.BCrypt;
 
+import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author RMPader
  */
+@Singleton
 public class UserServiceImpl implements UserService {
+    private static Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
+
     private final UserRepository userRepository;
     private final UserFactory userFactory;
     private final RegistrationRepository registrationRepository;
@@ -40,11 +49,12 @@ public class UserServiceImpl implements UserService {
     private final IdentityFactory identityFactory;
     private final PropertiesProvider propertiesProvider;
     private final TokenVerificationService facebookTokenVerificationService;
-    private MailSenderService mailSender;
-    private String emailTemplate;
+    private final TokenVerificationService googleTokenVerificationService;
+    private final MailSenderService mailSender;
+    private final String emailTemplate;
 
-
-    public UserServiceImpl(TokenVerificationService facebookTokenVerificationService, SessionService SessionService, UserRepository userRepository, UserFactory userFactory, IdentityRepository identityRepository, IdentityFactory identityFactory, RegistrationRepository registrationRepository, RegistrationFactory registrationFactory, PropertiesProvider propertiesProvider) {
+    @Inject
+    public UserServiceImpl(@Facebook TokenVerificationService facebookTokenVerificationService, @Google TokenVerificationService googleTokenVerificationService, SessionService SessionService, UserRepository userRepository, UserFactory userFactory, IdentityRepository identityRepository, IdentityFactory identityFactory, RegistrationRepository registrationRepository, RegistrationFactory registrationFactory, PropertiesProvider propertiesProvider, MailSenderService mailSender) throws IOException {
         this.userRepository = userRepository;
         this.userFactory = userFactory;
         this.registrationRepository = registrationRepository;
@@ -54,6 +64,15 @@ public class UserServiceImpl implements UserService {
         this.sessionService = SessionService;
         this.propertiesProvider = propertiesProvider;
         this.facebookTokenVerificationService = facebookTokenVerificationService;
+        this.googleTokenVerificationService = googleTokenVerificationService;
+        InputStream stream = getClass().getClassLoader().getResourceAsStream("emailVerification.html");
+        StringBuffer buf = new StringBuffer();
+        Scanner sc = new Scanner(stream);
+        while (sc.hasNext()) {
+            buf.append(sc.nextLine());
+        }
+        this.emailTemplate = buf.toString();
+        this.mailSender = mailSender;
     }
 
     @Override
@@ -83,6 +102,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void verifyUser(String creationCode) {
         Registration registration = registrationRepository.retrieve(creationCode);
+        //TODO: add test for null registration
+        //TODO: handle verification of already existing user (i.e. register > sign-via FB > verify)
         User user = userFactory.createUser(registration.getEmail(), registration.getDisplayName());
         user = userRepository.add(user);
         Identity identity = identityFactory.createIdentity(user, "self", registration.getEmail());
@@ -93,6 +114,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthenticationResponse authenticateBasicUser(AuthenticationRequest request, HttpServletRequest httpRequest) {
+        //TODO: add test for non-existent user
+        logger.log(Level.INFO, request.getEmail() + " " + request.getToken());
         Identity identity = identityRepository.findIdentityFromProvider(request.getEmail(), "self");
         AuthenticationResponse response = new AuthenticationResponse();
         response.setIdentityProvider("self");
@@ -105,18 +128,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthenticationResponse authenticateFacebookUser(AuthenticationRequest request, HttpServletRequest httpRequest) {
+        return getAuthenticationResponse(request, httpRequest, "facebook", facebookTokenVerificationService);
+    }
+
+    @Override
+    public AuthenticationResponse authenticateGoogleUser(AuthenticationRequest request, HttpServletRequest httpRequest) {
+        return getAuthenticationResponse(request, httpRequest, "google", googleTokenVerificationService);
+    }
+
+    private AuthenticationResponse getAuthenticationResponse(AuthenticationRequest request, HttpServletRequest httpRequest, String providerName, TokenVerificationService tokenVerificationService) {
         AuthenticationResponse response = new AuthenticationResponse();
-        response.setIdentityProvider("facebook");
-        //TODO verify token
-        if (facebookTokenVerificationService.verifyToken(request.getToken(), request.getData().get("id"))) {
-            Identity identity = identityRepository.findIdentityFromProvider(request.getData().get("id"), "facebook");
+        response.setIdentityProvider(providerName);
+        logger.log(Level.INFO,"checking for "+ providerName);
+        if (tokenVerificationService.verifyToken(request.getToken(), request.getData().get("id"))) {
+            logger.log(Level.INFO,"Verification successful");
+            Identity identity = identityRepository.findIdentityFromProvider(request.getData().get("id"), providerName);
             if (identity == null) {
                 User user = userRepository.retrieve(request.getEmail());
                 if (user == null) {
                     user = userFactory.createUser(request.getEmail(), request.getData().get("name"));
                     user = userRepository.add(user);
                 }
-                identity = identityFactory.createIdentity(user, "facebook", request.getData().get("id"));
+                identity = identityFactory.createIdentity(user, providerName, request.getData().get("id"));
                 identityRepository.add(identity);
             }
             String token = sessionService.generateSession(identity.getUser(), httpRequest);
@@ -124,17 +157,4 @@ public class UserServiceImpl implements UserService {
         }
         return response;
     }
-
-    @Override
-    public AuthenticationResponse authenticateGoogleUser(AuthenticationRequest request, HttpServletRequest httpRequest) {
-        return null;
-    }
-
-
-    public void setMailSender(MailSenderService mailSender, String signinEmailTemplatePath) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(signinEmailTemplatePath));
-        this.emailTemplate = new String(encoded, "UTF-8");
-        this.mailSender = mailSender;
-    }
-
 }

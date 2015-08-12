@@ -29,6 +29,9 @@ public class UserImpl implements User {
     private String description;
 
     private String secret;
+
+    public UserImpl(){}
+
     public UserImpl(String email, String displayName) {
         this.id = DigestUtils.sha256Hex(email);
         this.email = email;

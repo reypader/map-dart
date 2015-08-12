@@ -135,6 +135,7 @@ public class EventRepositoryImplTest {
         repo.update(event);
     }
 
+    //TODO: add test for null
     @Test
     public void testRetrieve() throws Exception {
         EventImpl event = new EventImpl(userKey, "TEST title", new Date(), new Date(), new Point(1, 1));

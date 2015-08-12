@@ -35,6 +35,8 @@ public class SessionImpl implements Session {
 
     private Date dateCreated;
 
+    public SessionImpl(){}
+
     public SessionImpl(String token, Key<User> user, String ipAddress, Date expiry, String device, String browser, String location) {
         this.token = token;
         this.userRef = Ref.create(user);

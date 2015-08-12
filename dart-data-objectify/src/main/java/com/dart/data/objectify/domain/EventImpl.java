@@ -53,6 +53,8 @@ public class EventImpl implements Event {
     @Index
     private boolean isFinished;
 
+    public EventImpl(){};
+
     public EventImpl(Key<User> organizerKey, String title, Date startDate, Date endDate, Point location) {
         this.userRef = Ref.create(organizerKey);
         this.setTitle(title);

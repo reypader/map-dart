@@ -81,6 +81,7 @@ public class RegistrationRepositoryImplTest {
         repo.add(savedRegistration);
     }
 
+    //TODO: add test for null
     @Test
     public void testRetrieve() throws Exception {
         Registration registration = new RegistrationImpl("regCode", "email", "display name", "pass");

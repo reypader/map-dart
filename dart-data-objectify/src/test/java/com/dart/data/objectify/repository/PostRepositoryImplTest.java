@@ -107,6 +107,7 @@ public class PostRepositoryImplTest {
         repo.add(savedPost);
     }
 
+    //TODO: add test for null
     @Test
     public void testRetrieve() throws Exception {
         String content = "This is a test content";

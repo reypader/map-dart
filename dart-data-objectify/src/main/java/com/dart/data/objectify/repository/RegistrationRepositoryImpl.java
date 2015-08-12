@@ -31,8 +31,8 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 
     @Override
     public Registration retrieve(String id) {
-        Key key = Key.create(RegistrationImpl.class, id);
-        return getRegistrationByKey(key);
+        Key<RegistrationImpl> key = Key.create(RegistrationImpl.class, id);
+        return objectify().load().key(key).now();
     }
 
     private Registration getRegistrationByKey(Key<Registration> key) {

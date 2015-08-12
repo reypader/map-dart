@@ -91,6 +91,7 @@ public class IdentityRepositoryImplTest {
         repo.add(savedEvent);
     }
 
+    //TODO: add test for null
     @Test
     public void testRetrieve() throws Exception {
         Identity identity = new IdentityImpl(userKey, "self", "id");

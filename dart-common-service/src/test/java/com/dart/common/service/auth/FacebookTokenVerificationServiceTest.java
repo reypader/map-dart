@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author RMPader
  */
-public class FacebookServiceTest {
+public class FacebookTokenVerificationServiceTest {
 
     private HttpClient mockHttpClient = mock(HttpClient.class);
     private PropertiesProvider mockProperties = mock(PropertiesProvider.class);
@@ -40,7 +40,7 @@ public class FacebookServiceTest {
 
     @Test
     public void testVerifyToken() throws Exception {
-        TokenVerificationService service = new FacebookService(mockHttpClient, mockProperties);
+        TokenVerificationService service = new FacebookTokenVerificationService(mockHttpClient, mockProperties);
         assertTrue(service.verifyToken("test", "123"));
 
         verify(mockHttpClient, times(2)).execute(getCaptor.capture(), any(ResponseHandler.class));

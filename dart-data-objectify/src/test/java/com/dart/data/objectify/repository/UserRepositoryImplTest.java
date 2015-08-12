@@ -85,6 +85,7 @@ public class UserRepositoryImplTest {
         repo.add(savedUser);
     }
 
+    //TODO: add test for null
     @Test
     public void testRetrieve() throws Exception {
         User user = new UserImpl("username", "display name");

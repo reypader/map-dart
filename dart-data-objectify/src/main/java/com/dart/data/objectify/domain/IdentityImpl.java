@@ -32,6 +32,8 @@ public class IdentityImpl implements Identity {
 
     private Map<String, Object> data = new HashMap<>();
 
+    public IdentityImpl(){}
+
     public IdentityImpl(Key<User> userKey, String provider, String providedIdentity) {
         this.id = provider + ":" + providedIdentity;
         this.userRef = Ref.create(userKey);

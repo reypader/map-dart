@@ -36,6 +36,8 @@ public class PostImpl implements Post {
 
     private List<String> imageURLs = new ArrayList<>();
 
+    public PostImpl(){}
+
     public PostImpl(Key<Event> eventKey, Key<User> userKey, String content) {
         this.eventRef = Ref.create(eventKey);
         this.userRef = Ref.create(userKey);

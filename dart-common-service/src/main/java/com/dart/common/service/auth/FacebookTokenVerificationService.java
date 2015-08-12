@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author RMPader
  */
-public class FacebookService implements TokenVerificationService {
+public class FacebookTokenVerificationService implements TokenVerificationService {
 
     private HttpClient httpClient;
     private PropertiesProvider properties;
@@ -40,7 +40,7 @@ public class FacebookService implements TokenVerificationService {
 
     };
 
-    public FacebookService(HttpClient httpClient, PropertiesProvider properties) {
+    public FacebookTokenVerificationService(HttpClient httpClient, PropertiesProvider properties) {
         this.properties = properties;
         this.httpClient = httpClient;
     }
@@ -58,6 +58,7 @@ public class FacebookService implements TokenVerificationService {
             FacebookToken fbToken = gson.fromJson(receivedToken, FacebookData.class).getData();
             return weAreTheAudienceOf(fbToken) && identity.equals(fbToken.getUserId()) && fbToken.getExpiration().after(new Date());
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         } finally {
             if (getAppAccessToken != null) {

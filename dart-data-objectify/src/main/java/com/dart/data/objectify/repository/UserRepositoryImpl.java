@@ -32,8 +32,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User retrieve(String id) {
-        Key key = Key.create(UserImpl.class, id);
-        return getUserByKey(key);
+        Key<UserImpl> key = Key.create(UserImpl.class, id);
+        return objectify().load().key(key).now();
     }
 
     private User getUserByKey(Key<User> key) {

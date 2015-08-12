@@ -31,8 +31,8 @@ public class IdentityRepositoryImpl implements IdentityRepository {
 
     @Override
     public Identity retrieve(String id) {
-        Key key = Key.create(IdentityImpl.class, id);
-        return getIdentityByKey(key);
+        Key<IdentityImpl> key = Key.create(IdentityImpl.class, id);
+        return objectify().load().key(key).now();
     }
 
     private Identity getIdentityByKey(Key<Identity> key) {

@@ -52,6 +52,7 @@ public class UserServiceImplTest {
     private SessionService sessionService = mock(SessionService.class);
     private HttpServletRequest mockHttpRequest = mock(HttpServletRequest.class);
     private TokenVerificationService mockFbVerifier = mock(TokenVerificationService.class);
+    private TokenVerificationService mockGpVerifier = mock(TokenVerificationService.class);
 
     private RegistrationRepository registrationRepoSpy = spy(dummyRegistrationRepo);
     private RegistrationFactory registrationFactorySpy = spy(dummyRegistrationFactory);
@@ -60,7 +61,7 @@ public class UserServiceImplTest {
     private IdentityRepository identityRepoSpy = spy(dummyIdentityRepo);
     private IdentityFactory identityFactorySpy = spy(dummyIdentityFactory);
 
-    private UserServiceImpl service = new UserServiceImpl(mockFbVerifier, sessionService, userRepoSpy, userFactorySpy, identityRepoSpy, identityFactorySpy, registrationRepoSpy, registrationFactorySpy, new FilePropertiesProvider(getFileStream("test.testprops")));
+    private UserServiceImpl service;
 
     private String emailBody = "Hi <b>John Doe</b>,<br/><br/>Thank you for registering to Pings! To complete your registration, please verify your email by clicking on the following link:<br/>https://pings.com/signin.html?registration=";
 
@@ -79,6 +80,7 @@ public class UserServiceImplTest {
     public void setUp() throws Exception {
         User user = dummyUserFactory.createUser("pre-exist@email.com", "Existing user");
         dummyUserRepo.add(user);
+        service = new UserServiceImpl(mockFbVerifier, mockGpVerifier, sessionService, userRepoSpy, userFactorySpy, identityRepoSpy, identityFactorySpy, registrationRepoSpy, registrationFactorySpy, new FilePropertiesProvider(getFileStream("test.testprops")), mailSenderService);
     }
 
     @Test
@@ -100,7 +102,6 @@ public class UserServiceImplTest {
 
     @Test
     public void testCreateRegistration() throws Exception {
-        service.setMailSender(mailSenderService, "emailVerification.html");
         RegistrationRequest request = new RegistrationRequest();
         request.setEmail("test@email");
         request.setDisplayName("John Doe");
@@ -188,32 +189,6 @@ public class UserServiceImplTest {
         verify(identityRepoSpy, times(1)).findIdentityFromProvider("test@email", request.getProvider());
         verify(sessionService, times(0)).generateSession(any(User.class), any(HttpServletRequest.class));
         assertNull(response.getToken());
-    }
-
-    @Test
-    public void testAuthenticateFacebookUserFailure() throws Exception {
-        Map<String, String> data = new HashMap<>();
-        data.put("id", "FB_ID");
-        data.put("name", "John Doe");
-
-        AuthenticationRequest request = new AuthenticationRequest();
-        request.setEmail("test@email");
-        request.setProvider("facebook");
-        request.setToken("facebook_token");
-        request.setData(data);
-        when(mockFbVerifier.verifyToken("facebook_token", "FB_ID")).thenReturn(false);
-
-        AuthenticationResponse response = service.authenticateFacebookUser(request, mockHttpRequest);
-
-        verify(mockFbVerifier, times(1)).verifyToken("facebook_token", "FB_ID");
-        verify(userFactorySpy, times(0)).createUser(anyString(), anyString());
-        verify(userRepoSpy, times(0)).add(any(User.class));
-        verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
-        verify(identityRepoSpy, times(0)).add(any(Identity.class));
-        verify(sessionService, times(0)).generateSession(any(User.class), any(HttpServletRequest.class));
-
-        assertNull(response.getToken());
-        assertEquals("facebook", response.getIdentityProvider());
     }
 
     @Test
@@ -317,13 +292,155 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testAuthenticateGoogleUserNew() throws Exception {
+    public void testAuthenticateFacebookUserFailure() throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("id", "FB_ID");
+        data.put("name", "John Doe");
 
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setEmail("test@email");
+        request.setProvider("facebook");
+        request.setToken("facebook_token");
+        request.setData(data);
+        when(mockFbVerifier.verifyToken("facebook_token", "FB_ID")).thenReturn(false);
+
+        AuthenticationResponse response = service.authenticateFacebookUser(request, mockHttpRequest);
+
+        verify(mockFbVerifier, times(1)).verifyToken("facebook_token", "FB_ID");
+        verify(userFactorySpy, times(0)).createUser(anyString(), anyString());
+        verify(userRepoSpy, times(0)).add(any(User.class));
+        verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
+        verify(identityRepoSpy, times(0)).add(any(Identity.class));
+        verify(sessionService, times(0)).generateSession(any(User.class), any(HttpServletRequest.class));
+
+        assertNull(response.getToken());
+        assertEquals("facebook", response.getIdentityProvider());
+    }
+
+    @Test
+    public void testAuthenticateGoogleUserNewUser() throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("id", "test@email");
+        data.put("name", "John Doe");
+
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setEmail("test@email");
+        request.setProvider("google");
+        request.setToken("google_token");
+        request.setData(data);
+        when(mockGpVerifier.verifyToken("google_token", "test@email")).thenReturn(true);
+        when(sessionService.generateSession(any(User.class), same(mockHttpRequest))).thenReturn("token");
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        ArgumentCaptor<Identity> identityCaptor = ArgumentCaptor.forClass(Identity.class);
+
+        AuthenticationResponse response = service.authenticateGoogleUser(request, mockHttpRequest);
+
+        verify(mockGpVerifier, times(1)).verifyToken("google_token", "test@email");
+        verify(userFactorySpy, times(1)).createUser("test@email", "John Doe");
+        verify(userRepoSpy, times(1)).add(userCaptor.capture());
+        User userCaptured = userCaptor.getValue();
+        verify(identityFactorySpy, times(1)).createIdentity(any(User.class), eq("google"), eq("test@email"));
+        verify(identityRepoSpy, times(1)).add(identityCaptor.capture());
+        Identity identityCaptured = identityCaptor.getValue();
+        verify(sessionService, times(1)).generateSession(eq(userCaptured), same(mockHttpRequest));
+
+        assertEquals("John Doe", userCaptured.getDisplayName());
+        assertEquals("test@email", userCaptured.getId());
+        assertEquals("google", identityCaptured.getProvider());
+        assertEquals("test@email", identityCaptured.getProvidedIdentity());
+        assertEquals(userCaptured, identityCaptured.getUser());
+        assertEquals("token", response.getToken());
+        assertEquals("google", response.getIdentityProvider());
+    }
+
+    @Test
+    public void testAuthenticateGoogleUserNewIdentity() throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("id", "test@email");
+        data.put("name", "John Doe");
+
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setEmail("test@email");
+        request.setProvider("google");
+        request.setToken("google_token");
+        request.setData(data);
+
+        User user = dummyUserRepo.add(dummyUserFactory.createUser(request.getEmail(), "John Doe"));
+        when(sessionService.generateSession(any(User.class), same(mockHttpRequest))).thenReturn("token");
+        ArgumentCaptor<Identity> identityCaptor = ArgumentCaptor.forClass(Identity.class);
+        when(mockGpVerifier.verifyToken("google_token", "test@email")).thenReturn(true);
+
+        AuthenticationResponse response = service.authenticateGoogleUser(request, mockHttpRequest);
+
+        verify(userRepoSpy, times(1)).retrieve(request.getEmail());
+        verify(userFactorySpy, times(0)).createUser(anyString(), anyString());
+        verify(userRepoSpy, times(0)).add(any(User.class));
+        verify(identityFactorySpy, times(1)).createIdentity(any(User.class), eq("google"), eq("test@email"));
+        verify(identityRepoSpy, times(1)).add(identityCaptor.capture());
+        Identity identityCaptured = identityCaptor.getValue();
+        verify(sessionService, times(1)).generateSession(eq(user), same(mockHttpRequest));
+
+        assertEquals("google", identityCaptured.getProvider());
+        assertEquals("test@email", identityCaptured.getProvidedIdentity());
+        assertEquals(user, identityCaptured.getUser());
+        assertEquals("token", response.getToken());
+        assertEquals("google", response.getIdentityProvider());
     }
 
     @Test
     public void testAuthenticateGoogleUserExisting() throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("id", "test@email");
+        data.put("name", "John Doe");
 
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setEmail("test@email");
+        request.setProvider("google");
+        request.setToken("google_token");
+        request.setData(data);
+
+        User user = dummyUserRepo.add(dummyUserFactory.createUser(request.getEmail(), "John Doe"));
+        Identity identity = dummyIdentityRepo.add(dummyIdentityFactory.createIdentity(user, "google", "test@email"));
+        when(sessionService.generateSession(any(User.class), same(mockHttpRequest))).thenReturn("token");
+        when(mockGpVerifier.verifyToken("google_token", "test@email")).thenReturn(true);
+
+        AuthenticationResponse response = service.authenticateGoogleUser(request, mockHttpRequest);
+
+        verify(userRepoSpy, times(0)).retrieve(request.getEmail());
+        verify(userFactorySpy, times(0)).createUser(anyString(), anyString());
+        verify(userRepoSpy, times(0)).add(any(User.class));
+        verify(identityRepoSpy, times(1)).findIdentityFromProvider("test@email", "google");
+        verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
+        verify(identityRepoSpy, times(0)).add(any(Identity.class));
+        verify(sessionService, times(1)).generateSession(eq(user), same(mockHttpRequest));
+        assertEquals("token", response.getToken());
+        assertEquals("google", response.getIdentityProvider());
+    }
+
+    @Test
+    public void testAuthenticateGoogleUserFailure() throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("id", "test@email");
+        data.put("name", "John Doe");
+
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setEmail("test@email");
+        request.setProvider("google");
+        request.setToken("google_token");
+        request.setData(data);
+        when(mockGpVerifier.verifyToken("google_token", "test@email")).thenReturn(false);
+
+        AuthenticationResponse response = service.authenticateGoogleUser(request, mockHttpRequest);
+
+        verify(mockGpVerifier, times(1)).verifyToken("google_token", "test@email");
+        verify(userFactorySpy, times(0)).createUser(anyString(), anyString());
+        verify(userRepoSpy, times(0)).add(any(User.class));
+        verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
+        verify(identityRepoSpy, times(0)).add(any(Identity.class));
+        verify(sessionService, times(0)).generateSession(any(User.class), any(HttpServletRequest.class));
+
+        assertNull(response.getToken());
+        assertEquals("google", response.getIdentityProvider());
     }
 
 }
