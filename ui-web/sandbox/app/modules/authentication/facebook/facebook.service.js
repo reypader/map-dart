@@ -7,11 +7,11 @@ define([], function () {
     _this.loginCallback = function (response) {
       if (response.authResponse) {
         var _authResponse = response.authResponse;
-        FB.api('/me', {fields: 'email'}, function (response) {
+        FB.api('/me', {fields: 'email,name,picture'}, function (response) {
           var mode = {
             provider: 'facebook',
-            token: _authResponse.access_token,
-            data: 'id=' + _authResponse.userID
+            token: _authResponse.accessToken,
+            data: 'id=' + encodeURIComponent(_authResponse.userID) + ';name=' + encodeURIComponent(response.name) + ';photoUrl=' + encodeURIComponent(response.picture.data.url)
           };
           authenticationService.authenticate(response.email, mode, _this.callback);
         });

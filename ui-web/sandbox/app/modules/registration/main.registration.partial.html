@@ -26,7 +26,7 @@
           <div class="form-group has-feedback" ng-class="createUser.newName.$error.validator && 'has-error'">
             <label for="newName" class="control-label">Name<span
                     ng-show="createUser.newName.$error.validator"> too short</span></label>
-            <input id="newName" name="newName" ng-model="vm.newUser.name" class="form-control" placeholder="Name"
+            <input id="newName" name="newName" ng-model="vm.newUser.displayName" class="form-control" placeholder="Name"
                    ui-validate=" '$value.length >=3 || !$value' "
                    aria-describedby="nameLength" required>
             <i ng-show="createUser.newName.$error.validator"

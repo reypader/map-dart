@@ -175,10 +175,10 @@ module.exports = function (grunt) {
             //open: true,
             keepAlive: true,
             base: 'dist',
-            protocol: 'https',
-            key: grunt.file.read('dev_keys/server.key').toString(),
-            cert: grunt.file.read('dev_keys/server.crt').toString(),
-            ca: grunt.file.read('dev_keys/ca.crt').toString(),
+            protocol: 'http',
+            //key: grunt.file.read('dev_keys/server.key').toString(),
+            //cert: grunt.file.read('dev_keys/server.crt').toString(),
+            //ca: grunt.file.read('dev_keys/ca.crt').toString(),
             middleware: function (connect) {
               return [
                 connect().use(
@@ -195,10 +195,10 @@ module.exports = function (grunt) {
         livereload: {
           options: {
             livereload: {
-              port: '<%= connect.options.livereload %>',
-              key: grunt.file.read('dev_keys/server.key').toString(),
-              cert: grunt.file.read('dev_keys/server.crt').toString(),
-              ca: grunt.file.read('dev_keys/ca.crt').toString(),
+              port: '<%= connect.options.livereload %>'
+              //key: grunt.file.read('dev_keys/server.key').toString(),
+              //cert: grunt.file.read('dev_keys/server.crt').toString(),
+              //ca: grunt.file.read('dev_keys/ca.crt').toString(),
             }
           },
           files: [

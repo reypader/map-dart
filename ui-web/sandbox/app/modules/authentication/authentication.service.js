@@ -7,9 +7,12 @@ define([], function () {
 
     _this.authenticate = function (email, mode, callback) {
       restClientService.authenticate({
-        email: email,
-        provider: mode.provider,
-        token: mode.token
+        additional_data: mode.data,
+        resource: {
+          email: email,
+          provider: mode.provider,
+          token: mode.token
+        }
       }).then(function (response) {
         if (response.token) {
           _this.setSession(response.token);
@@ -26,6 +29,7 @@ define([], function () {
     }
 
     _this.setSession = function (token) {
+      alert("storing " + token);
       $cookies.put('sessionToken', token, {secure: true});
     }
   }

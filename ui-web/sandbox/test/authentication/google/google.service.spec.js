@@ -17,6 +17,12 @@ define(['gapi.loader', 'angular', 'angular-mocks', 'authentication/google/google
         var basicProfile = {
           getEmail: function () {
             return 'test@email';
+          },
+          getName: function () {
+            return 'John Doe';
+          },
+          getImageUrl: function () {
+            return 'url'
           }
         };
         var authInstance = {
@@ -51,7 +57,7 @@ define(['gapi.loader', 'angular', 'angular-mocks', 'authentication/google/google
         expect(authenticationService.authenticate).toHaveBeenCalledWith('test@email', {
           provider: 'google',
           token: 'token',
-          data: 'email=test@email'
+          data: 'id=test%40email;name=John%20Doe;photoUrl=url'
         }, undefined);
       }
     );

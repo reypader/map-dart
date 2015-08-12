@@ -2,7 +2,7 @@ FB = {
   init: function () {
   },
   api: function (url, fields, callback) {
-    callback({email: "test@email"});
+    callback({email: "test@email",name:"John Doe",picture:{data:{url:'url'}}});
   }
 };
 define(['angular', 'angular-mocks', 'authentication/facebook/facebook.module', 'authentication/authentication.module'], function () {
@@ -25,11 +25,11 @@ define(['angular', 'angular-mocks', 'authentication/facebook/facebook.module', '
         facebookService.loginCallback({});
         expect(authenticationService.authenticate).not.toHaveBeenCalled();
 
-        facebookService.loginCallback({authResponse: {access_token: 'token', userID: 'user_id'}});
+        facebookService.loginCallback({authResponse: {accessToken: 'token', userID: 'user_id'}});
         expect(authenticationService.authenticate).toHaveBeenCalledWith('test@email', {
           provider: 'facebook',
           token: 'token',
-          data: 'id=user_id'
+          data: 'id=user_id;name=John%20Doe;photoUrl=url'
         }, undefined);
       }
     );

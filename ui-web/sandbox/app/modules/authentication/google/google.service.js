@@ -9,10 +9,12 @@ define(['gapi.loader'], function (gapi) {
       var user = authInstance.currentUser.get();
       if (authInstance.isSignedIn.get() && response.id_token && user.hasGrantedScopes("profile email")) {
         var email = user.getBasicProfile().getEmail();
+        var name = user.getBasicProfile().getName();
+        var photoUrl = user.getBasicProfile().getImageUrl();
         var mode = {
           provider: 'google',
           token: response.id_token,
-          data: 'email=' + email
+          data: 'id=' + encodeURIComponent(email) + ';name=' + encodeURIComponent(name) + ';photoUrl=' + encodeURIComponent(photoUrl)
         };
         authenticationService.authenticate(email, mode, _this.callback);
       }

@@ -31,14 +31,18 @@ define(['angular', 'angular-mocks', 'authentication/authentication.module', 'res
         expect(authenticationService.authenticated).toBe(false);
         authenticationService.authenticate('test@email', {
           provider: 'facebook',
-          token: 'token'
+          token: 'token',
+          data: 'data'
         }, dummy.callback);
 
         $rootScope.$digest();
         expect(restClientService.authenticate).toHaveBeenCalledWith({
-          email: 'test@email',
-          provider: 'facebook',
-          token: 'token'
+          additional_data: 'data',
+          resource: {
+            email: 'test@email',
+            provider: 'facebook',
+            token: 'token'
+          }
         });
         expect(authenticationService.setSession).toHaveBeenCalled();
         expect(dummy.callback).toHaveBeenCalledWith(true);
@@ -59,14 +63,18 @@ define(['angular', 'angular-mocks', 'authentication/authentication.module', 'res
         expect(authenticationService.authenticated).toBe(false);
         authenticationService.authenticate('test@email', {
           provider: 'facebook',
-          token: 'token'
+          token: 'token',
+          data: 'data'
         }, dummy.callback);
 
         $rootScope.$digest();
         expect(restClientService.authenticate).toHaveBeenCalledWith({
-          email: 'test@email',
-          provider: 'facebook',
-          token: 'token'
+          additional_data: 'data',
+          resource: {
+            email: 'test@email',
+            provider: 'facebook',
+            token: 'token'
+          }
         });
         expect(authenticationService.setSession).not.toHaveBeenCalled();
         expect(dummy.callback).toHaveBeenCalledWith(false);
