@@ -4,6 +4,8 @@
  */
 
 define(['angular', 'bootstrap', 'jquery'], function () {
+  'use strict';
+  
   angular.module('passwordStrengthModule', [])
     .directive('passwordStrength', [
       function () {

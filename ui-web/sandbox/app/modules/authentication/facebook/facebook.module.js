@@ -1,4 +1,10 @@
-define(['authentication/facebook/facebook.service', 'angular', 'authentication/authentication.module'], function (service) {
+define([
+  'progressbar',
+  'authentication/facebook/facebook.service',
+  'facebook',
+  'angular',
+  'authentication/authentication.module'
+], function (progress, service) {
   'use strict';
 
   var facebook = angular.module('facebookModule', ['authenticationModule']).config(function () {

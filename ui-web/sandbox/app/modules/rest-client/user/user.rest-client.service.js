@@ -1,4 +1,6 @@
 define(["gapi.loader"], function (gapi) {
+  'use strict';
+
   var service = function service($q) {
     var _this = this;
 

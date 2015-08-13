@@ -1,4 +1,10 @@
-define(['navigation/navigation.config', 'navigation/navigation.controller', 'angular', 'angular-route', 'angular-cookies'], function (config, controller) {
+define([
+  'navigation/navigation.config',
+  'navigation/navigation.controller',
+  'angular',
+  'angular-route',
+  'angular-cookies'
+], function (config, controller) {
   'use strict';
 
   var app = angular.module('navigationModule', ['ngRoute', 'ngCookies']);

@@ -1,4 +1,4 @@
-define(['gapi.loader'], function (gapi) {
+define(['gapi.loader','progressbar'], function (gapi,progress) {
   'use strict';
 
   function config() {

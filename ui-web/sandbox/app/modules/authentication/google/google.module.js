@@ -1,4 +1,10 @@
-define(['gapi.loader', 'authentication/google/google.service', 'angular', 'authentication/authentication.module'], function (gapi, service) {
+define([
+  'progressbar',
+  'gapi.loader',
+  'authentication/google/google.service',
+  'angular',
+  'authentication/authentication.module'
+], function (progress,gapi, service) {
   'use strict';
 
   var google = angular.module('googleModule', ['authenticationModule']);

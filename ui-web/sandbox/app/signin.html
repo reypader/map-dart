@@ -5,12 +5,14 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script type="text/javascript" ng-if="false">
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') c = c.substring(1);
-      if (c.indexOf("sessionToken=") == 0)  window.location.href = "https://" + window.location.host;
-    }
+    (function () {
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1);
+        if (c.indexOf("sessionToken=") == 0)  window.location.href = "http://" + window.location.host;
+      }
+    })();
   </script>
   <title>Pings</title>
 

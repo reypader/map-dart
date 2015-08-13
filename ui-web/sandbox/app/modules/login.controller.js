@@ -1,4 +1,10 @@
-define(['angular', 'cryptojs', 'authentication/facebook/facebook.module', 'authentication/google/google.module', 'authentication/authentication.module'], function () {
+define([
+  'angular',
+  'cryptojs',
+  'authentication/facebook/facebook.module',
+  'authentication/google/google.module',
+  'authentication/authentication.module'
+], function () {
   'use strict';
 
   var oauth = angular.module('loginModule', ['facebookModule', 'googleModule', 'authenticationModule']);
@@ -37,5 +43,4 @@ define(['angular', 'cryptojs', 'authentication/facebook/facebook.module', 'authe
     };
   }
   ])
-})
-;
+});

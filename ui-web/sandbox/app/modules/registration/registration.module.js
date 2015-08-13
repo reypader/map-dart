@@ -8,10 +8,11 @@ define([
   'angular-route',
   'cryptojs',
   'angular-recaptcha',
-  'rest-client/user/user.rest-client.module'], function (config, controller, newEmailDirective, strictEmailDirective) {
+  'rest-client/user/user.rest-client.module'
+], function (config, controller, newEmailDirective, strictEmailDirective) {
   'use strict';
 
-  var registration = angular.module('registrationModule', ['userRestClient', 'ui.bootstrap', 'ngRoute','vcRecaptcha']);
+  var registration = angular.module('registrationModule', ['userRestClient', 'ui.bootstrap', 'ngRoute', 'vcRecaptcha']);
   registration.config(config);
   registration.controller('RegistrationController', controller);
   registration.directive('newEmail', newEmailDirective);
