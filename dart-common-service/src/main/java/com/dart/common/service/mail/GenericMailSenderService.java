@@ -1,12 +1,13 @@
 package com.dart.common.service.mail;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -17,7 +18,7 @@ public class GenericMailSenderService implements MailSenderService {
     private static Logger logger = Logger.getLogger(GenericMailSenderService.class.getName());
 
     @Override
-    public void sendMail(String recipientAddress, String recipientName, String subject, String message) {
+    public void sendMail(String recipientAddress, String recipientName, String subject, String message) throws MessagingException {
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         try {
@@ -27,8 +28,8 @@ public class GenericMailSenderService implements MailSenderService {
             msg.setSubject(subject);
             msg.setText(message);
             Transport.send(msg);
-        } catch (Exception e) {
-            logger.log(Level.WARNING, "Failed to send email", e);
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 }

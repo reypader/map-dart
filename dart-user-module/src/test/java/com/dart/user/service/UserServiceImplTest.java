@@ -138,7 +138,7 @@ public class UserServiceImplTest {
         verify(identityFactorySpy, times(1)).createIdentity(isA(User.class), eq("self"), eq("test@email"));
         verify(identityRepoSpy, times(1)).add(identityCaptor.capture());
         Identity identityCaptured = identityCaptor.getValue();
-        verify(registrationRepoSpy, times(1)).delete(registration);
+        verify(registrationRepoSpy, times(1)).deleteRegistrationForEmail("test@email");
 
         assertEquals("John Doe", userCaptured.getDisplayName());
         assertEquals("test@email", userCaptured.getId());
@@ -158,7 +158,7 @@ public class UserServiceImplTest {
         verify(userRepoSpy, times(0)).add(any(User.class));
         verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
         verify(identityRepoSpy, times(0)).add(any(Identity.class));
-        verify(registrationRepoSpy, times(0)).delete(any(Registration.class));
+        verify(registrationRepoSpy, times(0)).deleteRegistrationForEmail(anyString());
         assertTrue(response.isError());
     }
 
@@ -177,7 +177,7 @@ public class UserServiceImplTest {
         verify(userRepoSpy, times(1)).add(any(User.class));
         verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
         verify(identityRepoSpy, times(0)).add(any(Identity.class));
-        verify(registrationRepoSpy, times(1)).delete(any(Registration.class));
+        verify(registrationRepoSpy, times(1)).deleteRegistrationForEmail("pre-exist@email.com");
         assertTrue(response.isError());
     }
 

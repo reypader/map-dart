@@ -22,6 +22,7 @@ import com.google.inject.Inject;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.inject.Singleton;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
@@ -84,17 +85,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createRegistration(RegistrationRequest request) {
-        String hashed = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
-        Registration registration = registrationFactory.createRegistration(request.getEmail(), request.getDisplayName(), hashed);
-        Registration newRegistration = registrationRepository.add(registration);
-        if (mailSender != null) {
+        try {
+            String hashed = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
+            Registration registration = registrationFactory.createRegistration(request.getEmail(), request.getDisplayName(), hashed);
+            Registration newRegistration = registrationRepository.add(registration);
             Map<String, String> data = new HashMap<>();
             data.put("name", request.getDisplayName());
             data.put("link", propertiesProvider.getUserWebsiteURL() + "/signin.html?registration=" + newRegistration.getId());
             String body = TemplateHelper.render(emailTemplate, data);
             mailSender.sendMail(registration.getEmail(), registration.getDisplayName(), "Registration Confirmation", body);
+        } catch (MessagingException e) {
+            logger.log(Level.WARNING, "Failed to send email to " + request.getEmail());
+            registrationRepository.deleteRegistrationForEmail(request.getEmail());
         }
-
     }
 
     @Override
