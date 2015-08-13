@@ -1,9 +1,6 @@
 package com.dart.user.api.google;
 
-import com.dart.user.api.AuthenticationRequest;
-import com.dart.user.api.AuthenticationResponse;
-import com.dart.user.api.CheckEmailResponse;
-import com.dart.user.api.RegistrationRequest;
+import com.dart.user.api.*;
 import com.dart.user.service.UserService;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -11,7 +8,6 @@ import com.google.api.server.spi.config.ApiMethod.HttpMethod;
 import com.google.api.server.spi.config.Named;
 import com.google.inject.Inject;
 
-import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -44,8 +40,8 @@ public class UserEndpoint {
     }
 
     @ApiMethod(name = "verify", path = "verify", httpMethod = HttpMethod.GET)
-    public void verify(@Named("creation_code") String creationCode) {
-        service.verifyUser(creationCode);
+    public VerificationResponse verify(@Named("creation_code") String creationCode) {
+        return service.verifyUser(creationCode);
     }
 
     @ApiMethod(name = "auth.basic", path = "auth/basic", httpMethod = HttpMethod.POST)

@@ -14,7 +14,7 @@ public interface UserService {
 
     void createRegistration(RegistrationRequest request);
 
-    void verifyUser(String creationCode);
+    VerificationResponse verifyUser(String creationCode);
 
     AuthenticationResponse authenticateBasicUser(AuthenticationRequest request, HttpServletRequest httpRequest);
 

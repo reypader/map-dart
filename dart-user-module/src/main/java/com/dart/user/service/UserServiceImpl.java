@@ -10,16 +10,14 @@ import com.dart.common.service.util.TemplateHelper;
 import com.dart.data.domain.Identity;
 import com.dart.data.domain.Registration;
 import com.dart.data.domain.User;
+import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.factory.IdentityFactory;
 import com.dart.data.factory.RegistrationFactory;
 import com.dart.data.factory.UserFactory;
 import com.dart.data.repository.IdentityRepository;
 import com.dart.data.repository.RegistrationRepository;
 import com.dart.data.repository.UserRepository;
-import com.dart.user.api.AuthenticationRequest;
-import com.dart.user.api.AuthenticationResponse;
-import com.dart.user.api.CheckEmailResponse;
-import com.dart.user.api.RegistrationRequest;
+import com.dart.user.api.*;
 import com.google.inject.Inject;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -100,26 +98,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void verifyUser(String creationCode) {
+    public VerificationResponse verifyUser(String creationCode) {
+        VerificationResponse response = new VerificationResponse();
         Registration registration = registrationRepository.retrieve(creationCode);
-        //TODO: add test for null registration
-        //TODO: handle verification of already existing user (i.e. register > sign-via FB > verify)
-        User user = userFactory.createUser(registration.getEmail(), registration.getDisplayName());
-        user = userRepository.add(user);
-        Identity identity = identityFactory.createIdentity(user, "self", registration.getEmail());
-        identity.addData("password", registration.getPassword());
-        identityRepository.add(identity);
-        registrationRepository.delete(registration);
+        try {
+            if (registration != null) {
+                User user = userFactory.createUser(registration.getEmail(), registration.getDisplayName());
+                user = userRepository.add(user);
+                Identity identity = identityFactory.createIdentity(user, "self", registration.getEmail());
+                identity.addData("password", registration.getPassword());
+                identityRepository.add(identity);
+            } else {
+                logger.log(Level.WARNING, "Tried to verify a non-existent registration: " + creationCode);
+                response.setError(true);
+            }
+            return response;
+        } catch (EntityCollisionException e) {
+            registrationRepository.delete(registration);
+            logger.log(Level.WARNING, "Tried to verify a registration but the user was already known to us: " + registration.getEmail());
+            response.setError(true);
+            return response;
+        } finally{
+            //TODO delete all registration for the same email
+            registrationRepository.delete(registration);
+        }
     }
 
     @Override
     public AuthenticationResponse authenticateBasicUser(AuthenticationRequest request, HttpServletRequest httpRequest) {
-        //TODO: add test for non-existent user
-        logger.log(Level.INFO, request.getEmail() + " " + request.getToken());
         Identity identity = identityRepository.findIdentityFromProvider(request.getEmail(), "self");
         AuthenticationResponse response = new AuthenticationResponse();
         response.setIdentityProvider("self");
-        if (BCrypt.checkpw(request.getToken(), identity.getData().get("password").toString())) {
+        if (identity != null && BCrypt.checkpw(request.getToken(), identity.getData().get("password").toString())) {
             String token = sessionService.generateSession(identity.getUser(), httpRequest);
             response.setToken(token);
         }
@@ -139,9 +149,7 @@ public class UserServiceImpl implements UserService {
     private AuthenticationResponse getAuthenticationResponse(AuthenticationRequest request, HttpServletRequest httpRequest, String providerName, TokenVerificationService tokenVerificationService) {
         AuthenticationResponse response = new AuthenticationResponse();
         response.setIdentityProvider(providerName);
-        logger.log(Level.INFO,"checking for "+ providerName);
         if (tokenVerificationService.verifyToken(request.getToken(), request.getData().get("id"))) {
-            logger.log(Level.INFO,"Verification successful");
             Identity identity = identityRepository.findIdentityFromProvider(request.getData().get("id"), providerName);
             if (identity == null) {
                 User user = userRepository.retrieve(request.getEmail());

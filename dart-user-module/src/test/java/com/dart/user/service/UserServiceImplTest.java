@@ -19,10 +19,7 @@ import com.dart.data.factory.UserFactory;
 import com.dart.data.repository.IdentityRepository;
 import com.dart.data.repository.RegistrationRepository;
 import com.dart.data.repository.UserRepository;
-import com.dart.user.api.AuthenticationRequest;
-import com.dart.user.api.AuthenticationResponse;
-import com.dart.user.api.CheckEmailResponse;
-import com.dart.user.api.RegistrationRequest;
+import com.dart.user.api.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -132,7 +129,7 @@ public class UserServiceImplTest {
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         ArgumentCaptor<Identity> identityCaptor = ArgumentCaptor.forClass(Identity.class);
 
-        service.verifyUser(registration.getId());
+        VerificationResponse response = service.verifyUser(registration.getId());
 
         verify(registrationRepoSpy, times(1)).retrieve(registration.getId());
         verify(userFactorySpy, times(1)).createUser("test@email", "John Doe");
@@ -149,6 +146,39 @@ public class UserServiceImplTest {
         assertEquals("test@email", identityCaptured.getProvidedIdentity());
         assertEquals(data, identityCaptured.getData());
         assertEquals(userCaptured, identityCaptured.getUser());
+        assertFalse(response.isError());
+    }
+
+    @Test
+    public void testVerifyInvalidRegistration() throws Exception {
+        VerificationResponse response = service.verifyUser("derp");
+
+        verify(registrationRepoSpy, times(1)).retrieve("derp");
+        verify(userFactorySpy, times(0)).createUser(anyString(), anyString());
+        verify(userRepoSpy, times(0)).add(any(User.class));
+        verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
+        verify(identityRepoSpy, times(0)).add(any(Identity.class));
+        verify(registrationRepoSpy, times(0)).delete(any(Registration.class));
+        assertTrue(response.isError());
+    }
+
+    @Test
+    public void testVerifyExistingUser() throws Exception {
+        Map<String, Object> data = new HashMap<>();
+        data.put("password", "pass");
+
+        Registration registration = dummyRegistrationFactory.createRegistration("pre-exist@email.com", "John Doe", "pass");
+        dummyRegistrationRepo.add(registration);
+
+        VerificationResponse response = service.verifyUser(registration.getId());
+
+        verify(registrationRepoSpy, times(1)).retrieve(registration.getId());
+        verify(userFactorySpy, times(1)).createUser("pre-exist@email.com", "John Doe");
+        verify(userRepoSpy, times(1)).add(any(User.class));
+        verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
+        verify(identityRepoSpy, times(0)).add(any(Identity.class));
+        verify(registrationRepoSpy, times(1)).delete(any(Registration.class));
+        assertTrue(response.isError());
     }
 
     @Test
@@ -169,6 +199,21 @@ public class UserServiceImplTest {
         verify(identityRepoSpy, times(1)).findIdentityFromProvider("test@email", request.getProvider());
         verify(sessionService, times(1)).generateSession(eq(user), same(mockHttpRequest));
         assertEquals("token", response.getToken());
+        assertEquals("self", response.getIdentityProvider());
+    }
+
+    @Test
+    public void testAuthenticateBasicNonExistentUser() throws Exception {
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setEmail("test@email");
+        request.setProvider("self");
+        request.setToken("password");
+
+        AuthenticationResponse response = service.authenticateBasicUser(request, mockHttpRequest);
+
+        verify(identityRepoSpy, times(1)).findIdentityFromProvider("test@email", request.getProvider());
+        verify(sessionService, times(0)).generateSession(any(User.class), any(HttpServletRequest.class));
+        assertNull(response.getToken());
         assertEquals("self", response.getIdentityProvider());
     }
 
