@@ -23,6 +23,10 @@
     "angular-ui-validate": "~1.1.1",
     "angular-cookies": "~1.4.3",
     "requirejs-plugins": "~1.0.3",
-    "angular-recaptcha": "~2.2.4"
+    "angular-recaptcha": "~2.2.4",
+    "nprogress": "~0.2.0"
+  },
+  "scripts": {
+    "postinstall": "grunt init"
   }
 }

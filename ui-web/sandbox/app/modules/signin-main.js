@@ -13,7 +13,8 @@ require.config({
     'angular-cookies': '../../bower_components/angular-cookies/angular-cookies',
     'ng-password-strength': '../../bower_components/ng-password-strength/app/scripts/scripts/ng-password-strength',
     lodash: '../../bower_components/lodash/lodash',
-    'angular-recaptcha': '../../bower_components/angular-recaptcha/release/angular-recaptcha'
+    'angular-recaptcha': '../../bower_components/angular-recaptcha/release/angular-recaptcha',
+    nprogress: '../../bower_components/nprogress/nprogress'
   },
   shim: {
     bootstrap: {
@@ -45,25 +46,28 @@ require.config({
     },
     facebook: {
       exports: 'FB'
+    },
+    nprogress: {
+      exports: 'NProgress'
     }
   },
   packages: []
 });
 require([
+  'progressbar',
   'gapi.loader',
-  'facebook',
-  'cryptojs',
   'angular',
   'angular-bootstrap',
   'angular-ui-validate',
   'password-strength.directive',
   'anchor-smooth-scroll.directive',
-
   'login.controller',
   'registration/registration.module'
-], function () {
+], function (progress) {
   'use strict';
 
+  progress.increment();
+  console.log("Loading other dependencies...");
   angular.bootstrap(document, [
     'ngAnimate',
     'passwordStrengthModule',

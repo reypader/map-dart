@@ -17,9 +17,11 @@ Object.keys(window.__karma__.files).forEach(function (file) {
 require.config({
 
   paths: {
+    facebook: '//connect.facebook.net/en_US/sdk',
     cryptojs: '//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256',
     angular: '../../bower_components/angular/angular',
     async: '../../bower_components/requirejs-plugins/src/async',
+    nprogress: '../../bower_components/nprogress/nprogress',
     'angular-route': '../../bower_components/angular-route/angular-route',
     'angular-mocks': '../../node_modules/angular-mocks/angular-mocks',
     'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls',
@@ -48,6 +50,9 @@ require.config({
         'angular',
         'recaptcha.loader'
       ]
+    },
+    nprogress: {
+      exports: 'NProgress'
     }
   },
 

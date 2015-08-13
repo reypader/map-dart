@@ -15,7 +15,8 @@ define([
       cookie: false,
       xfbml: false
     });
-
+    progress.increment();
+    console.log("Loading Facebook scripts...");
   });
   facebook.service('facebookService', service);
 });

@@ -14,7 +14,9 @@ require.config({
     'ng-password-strength': '../../bower_components/ng-password-strength/dist/scripts/ng-password-strength',
     lodash: '../../bower_components/lodash/lodash',
     'angular-recaptcha': '../../bower_components/angular-recaptcha/release/angular-recaptcha',
-    'font-awesome': '../../bower_components/font-awesome/fonts/*'
+    'font-awesome': '../../bower_components/font-awesome/fonts/*',
+    pace: '../../bower_components/pace/pace',
+    nprogress: '../../bower_components/nprogress/nprogress'
   },
   shim: {
     bootstrap: {
@@ -54,6 +56,9 @@ require.config({
     },
     facebook: {
       exports: 'FB'
+    },
+    nprogress: {
+      exports: 'NProgress'
     }
   },
   packages: [
@@ -62,11 +67,14 @@ require.config({
   waitSeconds: 60
 });
 require([
+  'progressbar',
   'angular',
   'angular-cookies',
   'navigation/navigation.module', 'home/home.module'
-], function () {
+], function (progress) {
   'use strict';
 
+  progress.increment();
+  console.log("Loading other dependencies...");
   angular.bootstrap(document, ['navigationModule', 'homeModule']);
 });
