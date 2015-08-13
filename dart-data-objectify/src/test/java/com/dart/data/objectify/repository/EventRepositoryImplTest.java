@@ -135,7 +135,6 @@ public class EventRepositoryImplTest {
         repo.update(event);
     }
 
-    //TODO: add test for null
     @Test
     public void testRetrieve() throws Exception {
         EventImpl event = new EventImpl(userKey, "TEST title", new Date(), new Date(), new Point(1, 1));
@@ -144,6 +143,11 @@ public class EventRepositoryImplTest {
         Event foundEvent = repo.retrieve(Key.create(savedEvent).toWebSafeString());
 
         assertEverything(savedEvent, foundEvent);
+    }
+
+    @Test
+    public void testRetrieveNull() throws Exception {
+        assertNull(repo.retrieve(Key.create(EventImpl.class, 1234L).toWebSafeString()));
     }
 
     @Test

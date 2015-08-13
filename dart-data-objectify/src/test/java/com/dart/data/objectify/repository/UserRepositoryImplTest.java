@@ -85,7 +85,6 @@ public class UserRepositoryImplTest {
         repo.add(savedUser);
     }
 
-    //TODO: add test for null
     @Test
     public void testRetrieve() throws Exception {
         User user = new UserImpl("username", "display name");
@@ -96,6 +95,11 @@ public class UserRepositoryImplTest {
         int entityCount = ofy().load().type(UserImpl.class).count();
         assertEquals(1, entityCount);
         assertEverything(savedUser, foundUser);
+    }
+
+    @Test
+    public void testRetrieveNull() throws Exception {
+        assertNull(repo.retrieve("derp"));
     }
 
     @Test

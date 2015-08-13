@@ -17,6 +17,7 @@ import java.util.List;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by RMPader on 7/27/15.
@@ -81,7 +82,6 @@ public class RegistrationRepositoryImplTest {
         repo.add(savedRegistration);
     }
 
-    //TODO: add test for null
     @Test
     public void testRetrieve() throws Exception {
         Registration registration = new RegistrationImpl("regCode", "email", "display name", "pass");
@@ -93,6 +93,11 @@ public class RegistrationRepositoryImplTest {
         int entityCount = ofy().load().type(RegistrationImpl.class).count();
         assertEquals(1, entityCount);
         assertEverything(savedRegistration, foundRegistration);
+    }
+
+    @Test
+    public void testRetrieveNull() throws Exception {
+        assertNull(repo.retrieve("derp"));
     }
 
     @Test

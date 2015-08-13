@@ -98,7 +98,6 @@ public class SessionRepositoryImplTest {
         repo.add(savedSession);
     }
 
-    //TODO: add test for null
     @Test
     public void testRetrieve() throws Exception {
         Session session = new SessionImpl("generated-token", userKey, "127.0.0.1", new Date(), "device", "browser", "location");
@@ -110,6 +109,11 @@ public class SessionRepositoryImplTest {
         int entityCount = ofy().load().type(SessionImpl.class).count();
         assertEquals(1, entityCount);
         assertEverything(savedSession, foundSession);
+    }
+
+    @Test
+    public void testRetrieveNull() throws Exception {
+        assertNull(repo.retrieve("derp"));
     }
 
     @Test
