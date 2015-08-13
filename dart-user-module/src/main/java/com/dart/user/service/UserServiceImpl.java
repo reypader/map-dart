@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
                 Identity identity = identityFactory.createIdentity(user, "self", registration.getEmail());
                 identity.addData("password", registration.getPassword());
                 identityRepository.add(identity);
+                response.setError(false);
             } else {
                 logger.log(Level.WARNING, "Tried to verify a non-existent registration: " + creationCode);
                 response.setError(true);
@@ -118,9 +119,10 @@ public class UserServiceImpl implements UserService {
             logger.log(Level.WARNING, "Tried to verify a registration but the user was already known to us: " + registration.getEmail());
             response.setError(true);
             return response;
-        } finally{
-            //TODO delete all registration for the same email
-            registrationRepository.delete(registration);
+        } finally {
+            if (registration != null) {
+                registrationRepository.deleteRegistrationForEmail(registration.getEmail());
+            }
         }
     }
 

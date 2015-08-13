@@ -4,6 +4,7 @@ import com.dart.data.domain.Registration;
 import com.dart.data.objectify.factory.RegistrationFactoryImpl;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.OnSave;
 
 import java.util.Date;
@@ -18,6 +19,7 @@ public class RegistrationImpl implements Registration {
     @Id
     private String registrationCode;
 
+    @Index
     private String email;
 
     private String displayName;

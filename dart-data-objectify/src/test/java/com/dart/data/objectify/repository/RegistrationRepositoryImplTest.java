@@ -15,9 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by RMPader on 7/27/15.
@@ -133,4 +131,16 @@ public class RegistrationRepositoryImplTest {
         assertEquals(0, entityCount);
     }
 
+    @Test
+    public void testDeleteRegistrationForEmail() throws Exception {
+        repo.add(new RegistrationImpl("regCode", "email", "display name", "pass"));
+        repo.add(new RegistrationImpl("regCod4", "emailer", "display name", "pass"));
+        repo.add(new RegistrationImpl("regCode2", "email", "display name", "pass"));
+        repo.add(new RegistrationImpl("regCod3", "email", "display name", "pass"));
+
+        repo.deleteRegistrationForEmail("email");
+
+        int entityCount = ofy().load().type(RegistrationImpl.class).count();
+        assertEquals(1, entityCount);
+    }
 }

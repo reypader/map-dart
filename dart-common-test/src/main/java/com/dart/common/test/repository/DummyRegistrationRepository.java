@@ -50,4 +50,13 @@ public class DummyRegistrationRepository implements RegistrationRepository {
     public void delete(Registration entity) {
         dummyStore.remove(entity.getId());
     }
+
+    @Override
+    public void deleteRegistrationForEmail(String email) {
+        for (Registration registration : dummyStore.values()) {
+            if (registration.getEmail().equals(email)) {
+                dummyStore.remove(registration.getId());
+            }
+        }
+    }
 }
