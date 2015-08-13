@@ -1,18 +1,16 @@
 define([], function () {
   'use strict';
 
-  function service(restClientService, $cookies) {
+  function service(userRestClientService, $cookies) {
     var _this = this;
     _this.authenticated = false;
 
     _this.authenticate = function (email, mode, callback) {
-      restClientService.authenticate({
-        additional_data: mode.data,
-        resource: {
-          email: email,
-          provider: mode.provider,
-          token: mode.token
-        }
+      userRestClientService.authenticate({
+        email: email,
+        provider: mode.provider,
+        token: mode.token,
+        data: mode.data
       }).then(function (response) {
         if (response.token) {
           _this.setSession(response.token);
@@ -35,7 +33,7 @@ define([], function () {
   }
 
 
-  service.$inject = ['restClientService', '$cookies'];
+  service.$inject = ['userRestClientService', '$cookies'];
 
   return service;
 });

@@ -1,7 +1,7 @@
 define([], function () {
   'use strict';
 
-  function controller(restClientService, vcRecaptchaService) {
+  function controller(userRestClientService, vcRecaptchaService) {
     var _this = this;
     _this.newUser = {};
     _this.registrationDone = false;
@@ -18,11 +18,11 @@ define([], function () {
     };
 
     this.registerUser = function registerUser() {
-      restClientService.validateRecaptcha(_this.response).then(function (response) {
+      userRestClientService.validateRecaptcha(_this.response).then(function (response) {
         if (response.userIsHuman) {
           var hash = CryptoJS.SHA256(_this.npassword);
           _this.newUser.password = hash.toString(CryptoJS.enc.Base64);
-          restClientService.registerUser(_this.newUser).then(function () {
+          userRestClientService.registerUser(_this.newUser).then(function () {
             _this.registrationDone = true;
           });
         } else {
@@ -32,7 +32,7 @@ define([], function () {
     }
   }
 
-  controller.$inject = ['restClientService', 'vcRecaptchaService'];
+  controller.$inject = ['userRestClientService', 'vcRecaptchaService'];
 
   return controller;
 });

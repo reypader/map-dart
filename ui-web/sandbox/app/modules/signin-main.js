@@ -51,17 +51,15 @@ require.config({
 });
 require([
   'gapi.loader',
+  'facebook',
+  'cryptojs',
   'angular',
   'angular-bootstrap',
   'angular-ui-validate',
   'password-strength.directive',
   'anchor-smooth-scroll.directive',
-  'facebook',
+
   'login.controller',
-  'authentication/authentication.module',
-  'authentication/facebook/facebook.module',
-  'authentication/google/google.module',
-  'rest-client/rest-client.module',
   'registration/registration.module'
 ], function () {
   'use strict';
@@ -70,12 +68,9 @@ require([
     'ngAnimate',
     'passwordStrengthModule',
     'anchorSmoothScrollModule',
-    'authenticationModule',
-    'googleModule',
-    'facebookModule',
-    'loginModule',
     'ui.bootstrap',
-    'ui.validate', 'restClient',
-    'registrationModule'
+    'ui.validate',
+    'registrationModule',
+    'loginModule'
   ]);
 });

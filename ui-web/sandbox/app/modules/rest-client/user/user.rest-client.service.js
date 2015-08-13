@@ -19,17 +19,25 @@ define(["gapi.loader"], function (gapi) {
     };
 
     _this.authenticate = function (request) {
+      var cloudEndpointRequest = {
+        additional_data: request.data,
+        resource: {
+          email: request.email,
+          provider: request.provider,
+          token: request.token,
+        }
+      };
       var def = $q.defer();
-      if (request.resource.provider === 'self') {
-        gapi.client.user.auth.basic(request).then(function (response) {
+      if (request.provider === 'self') {
+        gapi.client.user.auth.basic(cloudEndpointRequest).then(function (response) {
           def.resolve(response.result);
         });
-      } else if (request.resource.provider === 'facebook') {
-        gapi.client.user.auth.facebook(request).then(function (response) {
+      } else if (request.provider === 'facebook') {
+        gapi.client.user.auth.facebook(cloudEndpointRequest).then(function (response) {
           def.resolve(response.result);
         });
-      } else if (request.resource.provider === 'google') {
-        gapi.client.user.auth.google(request).then(function (response) {
+      } else if (request.provider === 'google') {
+        gapi.client.user.auth.google(cloudEndpointRequest).then(function (response) {
           def.resolve(response.result);
         });
       }

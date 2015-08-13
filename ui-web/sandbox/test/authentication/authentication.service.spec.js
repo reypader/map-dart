@@ -1,17 +1,17 @@
-define(['angular', 'angular-mocks', 'authentication/authentication.module', 'rest-client/rest-client.module'], function () {
+define(['angular', 'angular-mocks', 'authentication/authentication.module', 'rest-client/user/user.rest-client.module'], function () {
   'use strict';
 
   describe("Authentication Service", function () {
     var $rootScope;
     var authenticationService;
-    var restClientService;
+    var userRestClientService;
     var $q;
 
     beforeEach(module('authenticationModule'));
 
-    beforeEach(inject(function (_$rootScope_, _restClientService_, _$q_, _authenticationService_) {
+    beforeEach(inject(function (_$rootScope_, _userRestClientService_, _$q_, _authenticationService_) {
       $rootScope = _$rootScope_;
-      restClientService = _restClientService_;
+      userRestClientService = _userRestClientService_;
       $q = _$q_;
       authenticationService = _authenticationService_;
     }));
@@ -23,7 +23,7 @@ define(['angular', 'angular-mocks', 'authentication/authentication.module', 'res
           }
         }
         spyOn(dummy, 'callback');
-        spyOn(restClientService, 'authenticate').and.returnValue($q.when({
+        spyOn(userRestClientService, 'authenticate').and.returnValue($q.when({
           token: 'token'
         }));
         spyOn(authenticationService, 'setSession');
@@ -36,13 +36,11 @@ define(['angular', 'angular-mocks', 'authentication/authentication.module', 'res
         }, dummy.callback);
 
         $rootScope.$digest();
-        expect(restClientService.authenticate).toHaveBeenCalledWith({
-          additional_data: 'data',
-          resource: {
-            email: 'test@email',
-            provider: 'facebook',
-            token: 'token'
-          }
+        expect(userRestClientService.authenticate).toHaveBeenCalledWith({
+          email: 'test@email',
+          provider: 'facebook',
+          token: 'token',
+          data: 'data'
         });
         expect(authenticationService.setSession).toHaveBeenCalled();
         expect(dummy.callback).toHaveBeenCalledWith(true);
@@ -57,7 +55,7 @@ define(['angular', 'angular-mocks', 'authentication/authentication.module', 'res
           }
         }
         spyOn(dummy, 'callback');
-        spyOn(restClientService, 'authenticate').and.returnValue($q.when({}));
+        spyOn(userRestClientService, 'authenticate').and.returnValue($q.when({}));
         spyOn(authenticationService, 'setSession');
 
         expect(authenticationService.authenticated).toBe(false);
@@ -68,13 +66,11 @@ define(['angular', 'angular-mocks', 'authentication/authentication.module', 'res
         }, dummy.callback);
 
         $rootScope.$digest();
-        expect(restClientService.authenticate).toHaveBeenCalledWith({
-          additional_data: 'data',
-          resource: {
-            email: 'test@email',
-            provider: 'facebook',
-            token: 'token'
-          }
+        expect(userRestClientService.authenticate).toHaveBeenCalledWith({
+          email: 'test@email',
+          provider: 'facebook',
+          token: 'token',
+          data: 'data'
         });
         expect(authenticationService.setSession).not.toHaveBeenCalled();
         expect(dummy.callback).toHaveBeenCalledWith(false);

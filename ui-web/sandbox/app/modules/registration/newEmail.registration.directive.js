@@ -1,7 +1,7 @@
 define([], function () {
   'use strict';
 
-  function directive(restClientService, $q) {
+  function directive(userRestClientService, $q) {
     var EMAIL_REGEXP = /[A-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     return {
       restrict: 'A',
@@ -13,7 +13,7 @@ define([], function () {
             var val = modelValue || viewValue;
             if (EMAIL_REGEXP.test(val) && ctrl.$validators.email) {
               var def = $q.defer();
-              restClientService.checkEmail(val).then(function (response) {
+              userRestClientService.checkEmail(val).then(function (response) {
                 if (response.emailUsed) {
                   def.reject();
                 } else {
@@ -31,7 +31,7 @@ define([], function () {
     };
   }
 
-  directive.$inject = ['restClientService', '$q'];
+  directive.$inject = ['userRestClientService', '$q'];
 
   return directive;
 });
