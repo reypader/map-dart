@@ -4,6 +4,7 @@ import com.dart.common.test.domain.DummyPost;
 import com.dart.data.domain.Event;
 import com.dart.data.domain.Post;
 import com.dart.data.domain.User;
+import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.repository.PostRepository;
 
 import java.util.*;
@@ -62,7 +63,10 @@ public class DummyPostRepository implements PostRepository {
     }
 
     @Override
-    public Post update(Post entity) {
+    public Post update(Post entity) throws EntityNotFoundException {
+        if (dummyStore.get(entity.getId()) == null) {
+            throw new EntityNotFoundException("Entity not found");
+        }
         dummyStore.remove(entity.getId());
         dummyStore.put(entity.getId(), entity);
         return entity;

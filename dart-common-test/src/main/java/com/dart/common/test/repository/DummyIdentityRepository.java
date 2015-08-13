@@ -2,6 +2,8 @@ package com.dart.common.test.repository;
 
 import com.dart.common.test.domain.DummyIdentity;
 import com.dart.data.domain.Identity;
+import com.dart.data.exception.EntityCollisionException;
+import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.repository.IdentityRepository;
 
 import java.util.HashMap;
@@ -20,6 +22,9 @@ public class DummyIdentityRepository implements IdentityRepository {
 
     @Override
     public Identity add(Identity entity) {
+        if (dummyStore.get(entity.getId()) != null) {
+            throw new EntityCollisionException("Entity already exists");
+        }
         DummyIdentity identity = (DummyIdentity) entity;
         dummyStore.put(identity.getId(), identity);
         return identity;
@@ -31,7 +36,10 @@ public class DummyIdentityRepository implements IdentityRepository {
     }
 
     @Override
-    public Identity update(Identity entity) {
+    public Identity update(Identity entity) throws EntityNotFoundException {
+        if (dummyStore.get(entity.getId()) == null) {
+            throw new EntityNotFoundException("Entity not found");
+        }
         dummyStore.remove(entity.getId());
         dummyStore.put(entity.getId(), entity);
         return entity;

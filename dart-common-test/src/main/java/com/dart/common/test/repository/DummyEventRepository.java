@@ -3,6 +3,7 @@ package com.dart.common.test.repository;
 import com.dart.common.test.domain.DummyEvent;
 import com.dart.data.domain.Event;
 import com.dart.data.domain.User;
+import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.repository.EventRepository;
 import com.dart.data.util.Point;
 import com.dart.data.util.Rectangle;
@@ -35,7 +36,10 @@ public class DummyEventRepository implements EventRepository {
     }
 
     @Override
-    public Event update(Event entity) {
+    public Event update(Event entity) throws EntityNotFoundException {
+        if (dummyStore.get(entity.getId()) == null) {
+            throw new EntityNotFoundException("Entity not found");
+        }
         dummyStore.remove(entity.getId());
         dummyStore.put(entity.getId(), entity);
         return entity;
