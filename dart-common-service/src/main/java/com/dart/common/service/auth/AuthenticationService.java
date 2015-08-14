@@ -8,7 +8,8 @@ import java.util.Date;
 /**
  * @author RMPader
  */
-public interface AuthenticationTokenService {
+public interface AuthenticationService {
+
 
     String generateToken(Date expiry, User user, HttpServletRequest request);
 

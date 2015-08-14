@@ -1,5 +1,6 @@
-package com.dart.common.service.auth;
+package com.dart.common.service.auth.facebook;
 
+import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.properties.PropertiesProvider;
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;

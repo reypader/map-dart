@@ -1,4 +1,4 @@
-package com.dart.common.service.auth;
+package com.dart.common.service.auth.facebook;
 
 import com.google.inject.BindingAnnotation;
 
@@ -13,5 +13,5 @@ import java.lang.annotation.Target;
 @BindingAnnotation
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Google {
+public @interface Facebook {
 }

@@ -17,11 +17,11 @@ import static org.mockito.Mockito.when;
 /**
  * @author RMPader
  */
-public class JwtAuthenticationTokenServiceTest {
+public class JwtAuthenticationServiceTest {
 
     private HttpServletRequest mockHttpRequest = mock(HttpServletRequest.class);
 
-    private AuthenticationTokenService service = new JwtAuthenticationTokenService(new FilePropertiesProvider(getFileStream("test.testprops")));
+    private AuthenticationService service = new JwtAuthenticationService(new FilePropertiesProvider(getFileStream("test.testprops")));
     private User user = new DummyUserFactory().createUser("test@email", "John Doe");
 
     private InputStream getFileStream(String fileName) {

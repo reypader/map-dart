@@ -27,16 +27,25 @@ import java.util.List;
 /**
  * @author RMPader
  */
-public class JwtAuthenticationTokenService implements AuthenticationTokenService {
+public class JwtAuthenticationService implements AuthenticationService {
 
     private final PropertiesProvider propertiesProvider;
     private final Checker checker;
 
-    public JwtAuthenticationTokenService(PropertiesProvider propertiesProvider) {
+    public JwtAuthenticationService(PropertiesProvider propertiesProvider) {
         this.propertiesProvider = propertiesProvider;
         this.checker = new CheckerImpl(propertiesProvider);
     }
 
+    /**
+     * Generate a JWT for the given user based on the IP address used for the request. The created JWT will expire at
+     * the date indicated. The signature will be signed using the user's secret.
+     *
+     * @param expiry  the date of expiry for the token.
+     * @param user    the user to whom this token is associated with.
+     * @param request the HTTP request used to request for the token.
+     * @return the JWT signed with the user's secret.
+     */
     @Override
     public String generateToken(Date expiry, User user, HttpServletRequest request) {
         try {
@@ -61,6 +70,14 @@ public class JwtAuthenticationTokenService implements AuthenticationTokenService
         }
     }
 
+    /**
+     * Verify if the token included in the request is signed with the user's secret key and that the originating IP
+     * address matches the one indicated in the token.
+     *
+     * @param user
+     * @param request
+     * @return
+     */
     @Override
     public boolean verifyToken(User user, HttpServletRequest request) {
         try {

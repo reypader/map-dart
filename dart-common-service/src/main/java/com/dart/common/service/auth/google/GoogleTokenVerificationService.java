@@ -1,5 +1,6 @@
-package com.dart.common.service.auth;
+package com.dart.common.service.auth.google;
 
+import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.properties.PropertiesProvider;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;

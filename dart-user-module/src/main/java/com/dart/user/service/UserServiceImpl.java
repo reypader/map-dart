@@ -1,8 +1,8 @@
 package com.dart.user.service;
 
-import com.dart.common.service.auth.Facebook;
-import com.dart.common.service.auth.Google;
-import com.dart.common.service.auth.AuthenticationTokenService;
+import com.dart.common.service.auth.facebook.Facebook;
+import com.dart.common.service.auth.google.Google;
+import com.dart.common.service.auth.AuthenticationService;
 import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.mail.MailSenderService;
 import com.dart.common.service.properties.PropertiesProvider;
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     private final UserFactory userFactory;
     private final RegistrationRepository registrationRepository;
     private final RegistrationFactory registrationFactory;
-    private final AuthenticationTokenService authenticationTokenService;
+    private final AuthenticationService authenticationService;
     private final IdentityRepository identityRepository;
     private final IdentityFactory identityFactory;
     private final PropertiesProvider propertiesProvider;
@@ -51,14 +51,14 @@ public class UserServiceImpl implements UserService {
     private final String emailTemplate;
 
     @Inject
-    public UserServiceImpl(@Facebook TokenVerificationService facebookTokenVerificationService, @Google TokenVerificationService googleTokenVerificationService, AuthenticationTokenService AuthenticationTokenService, UserRepository userRepository, UserFactory userFactory, IdentityRepository identityRepository, IdentityFactory identityFactory, RegistrationRepository registrationRepository, RegistrationFactory registrationFactory, PropertiesProvider propertiesProvider, MailSenderService mailSender) throws IOException {
+    public UserServiceImpl(@Facebook TokenVerificationService facebookTokenVerificationService, @Google TokenVerificationService googleTokenVerificationService, AuthenticationService AuthenticationService, UserRepository userRepository, UserFactory userFactory, IdentityRepository identityRepository, IdentityFactory identityFactory, RegistrationRepository registrationRepository, RegistrationFactory registrationFactory, PropertiesProvider propertiesProvider, MailSenderService mailSender) throws IOException {
         this.userRepository = userRepository;
         this.userFactory = userFactory;
         this.registrationRepository = registrationRepository;
         this.registrationFactory = registrationFactory;
         this.identityRepository = identityRepository;
         this.identityFactory = identityFactory;
-        this.authenticationTokenService = AuthenticationTokenService;
+        this.authenticationService = AuthenticationService;
         this.propertiesProvider = propertiesProvider;
         this.facebookTokenVerificationService = facebookTokenVerificationService;
         this.googleTokenVerificationService = googleTokenVerificationService;
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
             Calendar now = Calendar.getInstance();
             now.add(Calendar.DAY_OF_YEAR, propertiesProvider.getDefaultTokenValidityDays());
             Date later = now.getTime();
-            String token = authenticationTokenService.generateToken(later, identity.getUser(), httpRequest);
+            String token = authenticationService.generateToken(later, identity.getUser(), httpRequest);
             response.setToken(token);
         }
         return response;
@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
             Calendar now = Calendar.getInstance();
             now.add(Calendar.DAY_OF_YEAR, propertiesProvider.getDefaultTokenValidityDays());
             Date later = now.getTime();
-            String token = authenticationTokenService.generateToken(later, identity.getUser(), httpRequest);
+            String token = authenticationService.generateToken(later, identity.getUser(), httpRequest);
             response.setToken(token);
         }
         return response;

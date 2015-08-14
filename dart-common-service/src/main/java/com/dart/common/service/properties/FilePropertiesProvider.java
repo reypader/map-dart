@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
+ * {@link PropertiesProvider} that reads from an input stream to populate property values.
+ *
  * @author RMPader
  */
 public class FilePropertiesProvider implements PropertiesProvider {

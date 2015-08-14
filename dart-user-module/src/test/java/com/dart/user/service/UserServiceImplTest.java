@@ -1,6 +1,6 @@
 package com.dart.user.service;
 
-import com.dart.common.service.auth.AuthenticationTokenService;
+import com.dart.common.service.auth.AuthenticationService;
 import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.mail.MailSenderService;
 import com.dart.common.service.properties.FilePropertiesProvider;
@@ -48,7 +48,7 @@ public class UserServiceImplTest {
     private DummyIdentityRepository dummyIdentityRepo = new DummyIdentityRepository();
     private DummyIdentityFactory dummyIdentityFactory = new DummyIdentityFactory();
     private MailSenderService mailSenderService = mock(MailSenderService.class);
-    private AuthenticationTokenService authenticationTokenService = mock(AuthenticationTokenService.class);
+    private AuthenticationService authenticationService = mock(AuthenticationService.class);
     private HttpServletRequest mockHttpRequest = mock(HttpServletRequest.class);
     private TokenVerificationService mockFbVerifier = mock(TokenVerificationService.class);
     private TokenVerificationService mockGpVerifier = mock(TokenVerificationService.class);
@@ -82,7 +82,7 @@ public class UserServiceImplTest {
         later = now.getTime();
         User user = dummyUserFactory.createUser("pre-exist@email.com", "Existing user");
         dummyUserRepo.add(user);
-        service = new UserServiceImpl(mockFbVerifier, mockGpVerifier, authenticationTokenService, userRepoSpy, userFactorySpy, identityRepoSpy, identityFactorySpy, registrationRepoSpy, registrationFactorySpy, new FilePropertiesProvider(getFileStream("test.testprops")), mailSenderService);
+        service = new UserServiceImpl(mockFbVerifier, mockGpVerifier, authenticationService, userRepoSpy, userFactorySpy, identityRepoSpy, identityFactorySpy, registrationRepoSpy, registrationFactorySpy, new FilePropertiesProvider(getFileStream("test.testprops")), mailSenderService);
     }
 
     @Test
@@ -197,12 +197,12 @@ public class UserServiceImplTest {
         Identity identity = dummyIdentityFactory.createIdentity(user, "self", "test@email");
         identity.addData("password", BCrypt.hashpw("password", BCrypt.gensalt()));
         dummyIdentityRepo.add(identity);
-        when(authenticationTokenService.generateToken(any(Date.class), eq(user), same(mockHttpRequest))).thenReturn("token");
+        when(authenticationService.generateToken(any(Date.class), eq(user), same(mockHttpRequest))).thenReturn("token");
 
         AuthenticationResponse response = service.authenticateBasicUser(request, mockHttpRequest);
 
         verify(identityRepoSpy, times(1)).findIdentityFromProvider("test@email", request.getProvider());
-        verify(authenticationTokenService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
+        verify(authenticationService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
         assertEquals("token", response.getToken());
         assertEquals("self", response.getIdentityProvider());
     }
@@ -217,7 +217,7 @@ public class UserServiceImplTest {
         AuthenticationResponse response = service.authenticateBasicUser(request, mockHttpRequest);
 
         verify(identityRepoSpy, times(1)).findIdentityFromProvider("test@email", request.getProvider());
-        verify(authenticationTokenService, times(0)).generateToken(any(Date.class), any(User.class), any(HttpServletRequest.class));
+        verify(authenticationService, times(0)).generateToken(any(Date.class), any(User.class), any(HttpServletRequest.class));
         assertNull(response.getToken());
         assertEquals("self", response.getIdentityProvider());
     }
@@ -237,7 +237,7 @@ public class UserServiceImplTest {
         AuthenticationResponse response = service.authenticateBasicUser(request, mockHttpRequest);
 
         verify(identityRepoSpy, times(1)).findIdentityFromProvider("test@email", request.getProvider());
-        verify(authenticationTokenService, times(0)).generateToken(any(Date.class), any(User.class), any(HttpServletRequest.class));
+        verify(authenticationService, times(0)).generateToken(any(Date.class), any(User.class), any(HttpServletRequest.class));
         assertNull(response.getToken());
     }
 
@@ -253,7 +253,7 @@ public class UserServiceImplTest {
         request.setToken("facebook_token");
         request.setData(data);
         when(mockFbVerifier.verifyToken("facebook_token", "FB_ID")).thenReturn(true);
-        when(authenticationTokenService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
+        when(authenticationService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         ArgumentCaptor<Identity> identityCaptor = ArgumentCaptor.forClass(Identity.class);
 
@@ -266,7 +266,7 @@ public class UserServiceImplTest {
         verify(identityFactorySpy, times(1)).createIdentity(any(User.class), eq("facebook"), eq("FB_ID"));
         verify(identityRepoSpy, times(1)).add(identityCaptor.capture());
         Identity identityCaptured = identityCaptor.getValue();
-        verify(authenticationTokenService, times(1)).generateToken(any(Date.class), eq(userCaptured), same(mockHttpRequest));
+        verify(authenticationService, times(1)).generateToken(any(Date.class), eq(userCaptured), same(mockHttpRequest));
 
         assertEquals("John Doe", userCaptured.getDisplayName());
         assertEquals("test@email", userCaptured.getId());
@@ -290,7 +290,7 @@ public class UserServiceImplTest {
         request.setData(data);
 
         User user = dummyUserRepo.add(dummyUserFactory.createUser(request.getEmail(), "John Doe"));
-        when(authenticationTokenService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
+        when(authenticationService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
         ArgumentCaptor<Identity> identityCaptor = ArgumentCaptor.forClass(Identity.class);
         when(mockFbVerifier.verifyToken("facebook_token", "FB_ID")).thenReturn(true);
 
@@ -302,7 +302,7 @@ public class UserServiceImplTest {
         verify(identityFactorySpy, times(1)).createIdentity(any(User.class), eq("facebook"), eq("FB_ID"));
         verify(identityRepoSpy, times(1)).add(identityCaptor.capture());
         Identity identityCaptured = identityCaptor.getValue();
-        verify(authenticationTokenService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
+        verify(authenticationService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
 
         assertEquals("facebook", identityCaptured.getProvider());
         assertEquals("FB_ID", identityCaptured.getProvidedIdentity());
@@ -325,7 +325,7 @@ public class UserServiceImplTest {
 
         User user = dummyUserRepo.add(dummyUserFactory.createUser(request.getEmail(), "John Doe"));
         Identity identity = dummyIdentityRepo.add(dummyIdentityFactory.createIdentity(user, "facebook", "FB_ID"));
-        when(authenticationTokenService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
+        when(authenticationService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
         when(mockFbVerifier.verifyToken("facebook_token", "FB_ID")).thenReturn(true);
 
         AuthenticationResponse response = service.authenticateFacebookUser(request, mockHttpRequest);
@@ -336,7 +336,7 @@ public class UserServiceImplTest {
         verify(identityRepoSpy, times(1)).findIdentityFromProvider("FB_ID", "facebook");
         verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
         verify(identityRepoSpy, times(0)).add(any(Identity.class));
-        verify(authenticationTokenService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
+        verify(authenticationService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
         assertEquals("token", response.getToken());
         assertEquals("facebook", response.getIdentityProvider());
     }
@@ -361,7 +361,7 @@ public class UserServiceImplTest {
         verify(userRepoSpy, times(0)).add(any(User.class));
         verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
         verify(identityRepoSpy, times(0)).add(any(Identity.class));
-        verify(authenticationTokenService, times(0)).generateToken(any(Date.class), any(User.class), any(HttpServletRequest.class));
+        verify(authenticationService, times(0)).generateToken(any(Date.class), any(User.class), any(HttpServletRequest.class));
 
         assertNull(response.getToken());
         assertEquals("facebook", response.getIdentityProvider());
@@ -379,7 +379,7 @@ public class UserServiceImplTest {
         request.setToken("google_token");
         request.setData(data);
         when(mockGpVerifier.verifyToken("google_token", "test@email")).thenReturn(true);
-        when(authenticationTokenService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
+        when(authenticationService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         ArgumentCaptor<Identity> identityCaptor = ArgumentCaptor.forClass(Identity.class);
 
@@ -392,7 +392,7 @@ public class UserServiceImplTest {
         verify(identityFactorySpy, times(1)).createIdentity(any(User.class), eq("google"), eq("test@email"));
         verify(identityRepoSpy, times(1)).add(identityCaptor.capture());
         Identity identityCaptured = identityCaptor.getValue();
-        verify(authenticationTokenService, times(1)).generateToken(any(Date.class), eq(userCaptured), same(mockHttpRequest));
+        verify(authenticationService, times(1)).generateToken(any(Date.class), eq(userCaptured), same(mockHttpRequest));
 
         assertEquals("John Doe", userCaptured.getDisplayName());
         assertEquals("test@email", userCaptured.getId());
@@ -416,7 +416,7 @@ public class UserServiceImplTest {
         request.setData(data);
 
         User user = dummyUserRepo.add(dummyUserFactory.createUser(request.getEmail(), "John Doe"));
-        when(authenticationTokenService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
+        when(authenticationService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
         ArgumentCaptor<Identity> identityCaptor = ArgumentCaptor.forClass(Identity.class);
         when(mockGpVerifier.verifyToken("google_token", "test@email")).thenReturn(true);
 
@@ -428,7 +428,7 @@ public class UserServiceImplTest {
         verify(identityFactorySpy, times(1)).createIdentity(any(User.class), eq("google"), eq("test@email"));
         verify(identityRepoSpy, times(1)).add(identityCaptor.capture());
         Identity identityCaptured = identityCaptor.getValue();
-        verify(authenticationTokenService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
+        verify(authenticationService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
 
         assertEquals("google", identityCaptured.getProvider());
         assertEquals("test@email", identityCaptured.getProvidedIdentity());
@@ -451,7 +451,7 @@ public class UserServiceImplTest {
 
         User user = dummyUserRepo.add(dummyUserFactory.createUser(request.getEmail(), "John Doe"));
         Identity identity = dummyIdentityRepo.add(dummyIdentityFactory.createIdentity(user, "google", "test@email"));
-        when(authenticationTokenService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
+        when(authenticationService.generateToken(any(Date.class), any(User.class), same(mockHttpRequest))).thenReturn("token");
         when(mockGpVerifier.verifyToken("google_token", "test@email")).thenReturn(true);
 
         AuthenticationResponse response = service.authenticateGoogleUser(request, mockHttpRequest);
@@ -462,7 +462,7 @@ public class UserServiceImplTest {
         verify(identityRepoSpy, times(1)).findIdentityFromProvider("test@email", "google");
         verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
         verify(identityRepoSpy, times(0)).add(any(Identity.class));
-        verify(authenticationTokenService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
+        verify(authenticationService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
         assertEquals("token", response.getToken());
         assertEquals("google", response.getIdentityProvider());
     }
@@ -487,7 +487,7 @@ public class UserServiceImplTest {
         verify(userRepoSpy, times(0)).add(any(User.class));
         verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
         verify(identityRepoSpy, times(0)).add(any(Identity.class));
-        verify(authenticationTokenService, times(0)).generateToken(any(Date.class), any(User.class), any(HttpServletRequest.class));
+        verify(authenticationService, times(0)).generateToken(any(Date.class), any(User.class), any(HttpServletRequest.class));
 
         assertNull(response.getToken());
         assertEquals("google", response.getIdentityProvider());

@@ -1,6 +1,10 @@
 package com.dart.user.config;
 
 import com.dart.common.service.auth.*;
+import com.dart.common.service.auth.facebook.Facebook;
+import com.dart.common.service.auth.facebook.FacebookTokenVerificationService;
+import com.dart.common.service.auth.google.Google;
+import com.dart.common.service.auth.google.GoogleTokenVerificationService;
 import com.dart.common.service.mail.GenericMailSenderService;
 import com.dart.common.service.mail.MailSenderService;
 import com.dart.common.service.properties.FilePropertiesProvider;
@@ -41,7 +45,7 @@ public class UserModule extends AbstractModule {
         bind(UserFactory.class).to(UserFactoryImpl.class);
         bind(RegistrationRepository.class).to(RegistrationRepositoryImpl.class);
         bind(RegistrationFactory.class).to(RegistrationFactoryImpl.class);
-        bind(AuthenticationTokenService.class).to(JwtAuthenticationTokenService.class);
+        bind(AuthenticationService.class).to(JwtAuthenticationService.class);
         bind(IdentityRepository.class).to(IdentityRepositoryImpl.class);
         bind(IdentityFactory.class).to(IdentityFactoryImpl.class);
         bind(PropertiesProvider.class).to(FilePropertiesProvider.class);
@@ -71,8 +75,8 @@ public class UserModule extends AbstractModule {
     }
 
     @Provides
-    public JwtAuthenticationTokenService jwtSessionService(FilePropertiesProvider filePropertiesProvider) {
-        return new JwtAuthenticationTokenService(filePropertiesProvider);
+    public JwtAuthenticationService jwtSessionService(FilePropertiesProvider filePropertiesProvider) {
+        return new JwtAuthenticationService(filePropertiesProvider);
     }
 
     @Provides

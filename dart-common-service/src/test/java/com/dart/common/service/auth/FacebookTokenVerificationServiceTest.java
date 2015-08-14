@@ -1,5 +1,6 @@
 package com.dart.common.service.auth;
 
+import com.dart.common.service.auth.facebook.FacebookTokenVerificationService;
 import com.dart.common.service.properties.PropertiesProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
