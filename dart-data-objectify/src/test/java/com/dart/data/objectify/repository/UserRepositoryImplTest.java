@@ -130,6 +130,7 @@ public class UserRepositoryImplTest {
 
         repo.delete(savedUser);
 
+        Thread.sleep(1000);
         int entityCount = ofy().load().type(UserImpl.class).count();
         assertEquals(0, entityCount);
     }

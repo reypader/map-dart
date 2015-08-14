@@ -140,11 +140,11 @@ public class SessionRepositoryImplTest {
     @Test
     public void testDelete() throws Exception {
         Session session = new SessionImpl("generated-token", userKey, "127.0.0.1", new Date(), "device", "browser", "location");
-
         Session savedSession = repo.add(session);
 
         repo.delete(savedSession);
 
+        Thread.sleep(1000);
         int entityCount = ofy().load().type(SessionImpl.class).count();
         assertEquals(0, entityCount);
     }

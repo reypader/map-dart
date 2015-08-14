@@ -157,6 +157,7 @@ public class PostRepositoryImplTest {
 
         repo.delete(savedPost);
 
+        Thread.sleep(1000);
         int entityCount = ofy().load().type(PostImpl.class).count();
         assertEquals(0, entityCount);
     }

@@ -139,6 +139,7 @@ public class IdentityRepositoryImplTest {
 
         repo.delete(savedIdentity);
 
+        Thread.sleep(1000);
         int entityCount = ofy().load().type(IdentityImpl.class).count();
         assertEquals(0, entityCount);
     }

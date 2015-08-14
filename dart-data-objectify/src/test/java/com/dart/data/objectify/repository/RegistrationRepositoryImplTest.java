@@ -127,6 +127,7 @@ public class RegistrationRepositoryImplTest {
 
         repo.delete(savedRegistration);
 
+        Thread.sleep(1000);
         int entityCount = ofy().load().type(RegistrationImpl.class).count();
         assertEquals(0, entityCount);
     }
@@ -140,6 +141,7 @@ public class RegistrationRepositoryImplTest {
 
         repo.deleteRegistrationForEmail("email");
 
+        Thread.sleep(1000);
         int entityCount = ofy().load().type(RegistrationImpl.class).count();
         assertEquals(1, entityCount);
     }

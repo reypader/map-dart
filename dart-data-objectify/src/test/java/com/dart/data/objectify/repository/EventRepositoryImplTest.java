@@ -172,6 +172,7 @@ public class EventRepositoryImplTest {
 
         repo.delete(savedEvent);
 
+        Thread.sleep(1000);
         int entityCount = ofy().load().type(EventImpl.class).count();
         assertEquals(0, entityCount);
     }
