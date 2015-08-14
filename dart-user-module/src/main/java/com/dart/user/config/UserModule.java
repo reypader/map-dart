@@ -41,7 +41,7 @@ public class UserModule extends AbstractModule {
         bind(UserFactory.class).to(UserFactoryImpl.class);
         bind(RegistrationRepository.class).to(RegistrationRepositoryImpl.class);
         bind(RegistrationFactory.class).to(RegistrationFactoryImpl.class);
-        bind(SessionService.class).to(JwtSessionService.class);
+        bind(AuthenticationTokenService.class).to(JwtAuthenticationTokenService.class);
         bind(IdentityRepository.class).to(IdentityRepositoryImpl.class);
         bind(IdentityFactory.class).to(IdentityFactoryImpl.class);
         bind(PropertiesProvider.class).to(FilePropertiesProvider.class);
@@ -71,8 +71,8 @@ public class UserModule extends AbstractModule {
     }
 
     @Provides
-    public JwtSessionService jwtSessionService() {
-        return new JwtSessionService();
+    public JwtAuthenticationTokenService jwtSessionService(FilePropertiesProvider filePropertiesProvider) {
+        return new JwtAuthenticationTokenService(filePropertiesProvider);
     }
 
     @Provides

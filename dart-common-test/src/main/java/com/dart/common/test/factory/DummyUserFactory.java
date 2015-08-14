@@ -18,6 +18,7 @@ public class DummyUserFactory implements UserFactory {
         instance.setEmail(email);
         instance.setDisplayName(displayName);
         instance.setDateCreated(new Date());
+        instance.setSecret(UUID.randomUUID().toString());
         return instance;
     }
 }

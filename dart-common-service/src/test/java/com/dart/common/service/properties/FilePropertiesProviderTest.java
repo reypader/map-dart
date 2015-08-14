@@ -58,8 +58,8 @@ public class FilePropertiesProviderTest {
     }
 
     @Test
-    public void testGetOtherSecret() throws Exception {
-        assertEquals("secret", props.getOtherSecret());
+    public void testGetDefaultTokenValidityDays() throws Exception {
+        assertEquals(1, props.getDefaultTokenValidityDays());
     }
 
     @Test

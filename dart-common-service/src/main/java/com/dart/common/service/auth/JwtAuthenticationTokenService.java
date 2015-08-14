@@ -1,51 +1,57 @@
 package com.dart.common.service.auth;
 
 import com.dart.common.service.properties.PropertiesProvider;
-import com.dart.data.domain.Session;
+import com.dart.common.service.util.IPAddressHelper;
 import com.dart.data.domain.User;
-import com.dart.data.factory.SessionFactory;
-import com.dart.data.repository.SessionRepository;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
+import net.oauth.jsontoken.Checker;
 import net.oauth.jsontoken.JsonToken;
+import net.oauth.jsontoken.JsonTokenParser;
 import net.oauth.jsontoken.crypto.HmacSHA256Signer;
+import net.oauth.jsontoken.crypto.HmacSHA256Verifier;
+import net.oauth.jsontoken.crypto.SignatureAlgorithm;
+import net.oauth.jsontoken.crypto.Verifier;
+import net.oauth.jsontoken.discovery.VerifierProvider;
+import net.oauth.jsontoken.discovery.VerifierProviders;
 import org.joda.time.Instant;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.InvalidKeyException;
 import java.security.SignatureException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author RMPader
  */
 public class JwtAuthenticationTokenService implements AuthenticationTokenService {
-    private final SessionFactory sessionFactory;
-    private final SessionRepository sessionRepository;
-    private final PropertiesProvider propertiesProvider;
 
-    public JwtAuthenticationTokenService(SessionFactory sessionFactory, SessionRepository sessionRepository, PropertiesProvider propertiesProvider) {
-        this.sessionFactory = sessionFactory;
-        this.sessionRepository = sessionRepository;
+    private final PropertiesProvider propertiesProvider;
+    private final Checker checker;
+
+    public JwtAuthenticationTokenService(PropertiesProvider propertiesProvider) {
         this.propertiesProvider = propertiesProvider;
+        this.checker = new CheckerImpl(propertiesProvider);
     }
 
     @Override
-    public String generateSession(Date expiry, User user, HttpServletRequest request) {
+    public String generateToken(Date expiry, User user, HttpServletRequest request) {
         try {
-            HmacSHA256Signer signer = new HmacSHA256Signer(propertiesProvider.getAppName(), null, propertiesProvider.getOtherSecret().getBytes());
-            Calendar cal = Calendar.getInstance();
+            HmacSHA256Signer signer = new HmacSHA256Signer(propertiesProvider.getAppName(), null, user.getSecret().getBytes());
+            Calendar now = Calendar.getInstance();
 
             JsonToken token = new JsonToken(signer);
             token.setAudience(propertiesProvider.getAppName());
-            token.setIssuedAt(new Instant(cal.getTimeInMillis()));
+            token.setIssuedAt(new Instant(now.getTimeInMillis()));
             token.setExpiration(new Instant(expiry.getTime()));
 
             JsonObject payload = token.getPayloadAsJsonObject();
             payload.addProperty("user", user.getId());
+            payload.addProperty("client", BCrypt.hashpw(IPAddressHelper.getIPAddress(request), BCrypt.gensalt()));
             String tokenId = token.serializeAndSign();
-
-            Session session = sessionFactory.createSession(x`)
 
             return tokenId;
         } catch (InvalidKeyException e) {
@@ -56,12 +62,62 @@ public class JwtAuthenticationTokenService implements AuthenticationTokenService
     }
 
     @Override
-    public boolean verifySession(User user, HttpServletRequest request) {
-        return true;
+    public boolean verifyToken(User user, HttpServletRequest request) {
+        try {
+            String[] authHeader = request.getHeader("Authorization").split(" ");
+            String authHeaderType = authHeader[0];
+            String authHeaderValue = authHeader[1];
+            if (authHeaderType.equals("Bearer")) {
+                Verifier hmacVerifier = new HmacSHA256Verifier(user.getSecret().getBytes());
+                VerifierProvider hmacLocator = new VerifierProviderImpl(hmacVerifier);
+                VerifierProviders locators = new VerifierProviders();
+                locators.setVerifierProvider(SignatureAlgorithm.HS256, hmacLocator);
+                JsonTokenParser parser = new JsonTokenParser(locators, checker);
+                JsonToken jt = parser.verifyAndDeserialize(authHeaderValue);
+                JsonObject payload = jt.getPayloadAsJsonObject();
+                String claimId = payload.getAsJsonPrimitive("user").getAsString();
+                String claimIp = payload.getAsJsonPrimitive("client").getAsString();
+                return BCrypt.checkpw(IPAddressHelper.getIPAddress(request), claimIp) && user.getId().equals(claimId);
+            } else {
+                return false;
+            }
+        } catch (SignatureException e) {
+            return false;
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Override
-    public void invalidateSession(String sessionId) {
+    public static class VerifierProviderImpl implements VerifierProvider {
+
+        private final Verifier verifier;
+
+        public VerifierProviderImpl(Verifier verifier) {
+            this.verifier = verifier;
+        }
+
+        @Override
+        public List<Verifier> findVerifier(String id, String key) {
+            return Lists.newArrayList(verifier);
+        }
+    }
+
+    public static class CheckerImpl implements Checker {
+
+        private PropertiesProvider propertiesProvider;
+
+        public CheckerImpl(PropertiesProvider propertiesProvider) {
+            this.propertiesProvider = propertiesProvider;
+        }
+
+        @Override
+        public void check(JsonObject payload) throws SignatureException {
+            String audience = payload.getAsJsonPrimitive("aud").getAsString();
+            if (!audience.equals(propertiesProvider.getAppName())) {
+                throw new SignatureException("Audience does not match");
+            }
+        }
 
     }
+
 }
