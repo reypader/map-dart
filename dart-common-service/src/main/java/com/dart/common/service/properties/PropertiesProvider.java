@@ -18,9 +18,13 @@ public interface PropertiesProvider {
     String getFacebookSecret();
     String getFacebookEndpoint();
 
+    String getRecaptchaEndpoint();
+    String getRecaptchaSecret();
     //Other stuff
     String getUserWebsiteURL();
     String getSignupEmailTemplate();
+
     String getAppName();
+
     int getDefaultTokenValidityDays();
 }

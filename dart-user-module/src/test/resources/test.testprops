@@ -10,3 +10,5 @@ sys.token.validity.days=1
 sys.signup.email=email
 sys.ui.web=https://pings.com
 sys.name=Pings
+recaptcha.endpoint=recaptchaendpoint
+recaptcha.secret=recaptchasecret

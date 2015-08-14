@@ -71,4 +71,19 @@ public class FilePropertiesProviderTest {
     public void testGetUserWebsiteURL() throws Exception {
         assertEquals("web", props.getUserWebsiteURL());
     }
+
+    @Test
+    public void testGetRecaptchaEndpoint() throws Exception {
+        assertEquals("recaptchaendpoint", props.getRecaptchaEndpoint());
+    }
+
+    @Test
+    public void testGetAppName() throws Exception {
+        assertEquals("Pings", props.getAppName());
+    }
+
+    @Test
+    public void testGetRecaptchaSecret() throws Exception {
+        assertEquals("recaptchasecret", props.getRecaptchaSecret());
+    }
 }

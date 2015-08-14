@@ -1,11 +1,13 @@
 package com.dart.user.service;
 
-import com.dart.common.service.auth.facebook.Facebook;
-import com.dart.common.service.auth.google.Google;
 import com.dart.common.service.auth.AuthenticationService;
 import com.dart.common.service.auth.TokenVerificationService;
+import com.dart.common.service.auth.facebook.Facebook;
+import com.dart.common.service.auth.google.Google;
+import com.dart.common.service.auth.google.Recaptcha;
 import com.dart.common.service.mail.MailSenderService;
 import com.dart.common.service.properties.PropertiesProvider;
+import com.dart.common.service.util.IPAddressHelper;
 import com.dart.common.service.util.TemplateHelper;
 import com.dart.data.domain.Identity;
 import com.dart.data.domain.Registration;
@@ -47,11 +49,12 @@ public class UserServiceImpl implements UserService {
     private final PropertiesProvider propertiesProvider;
     private final TokenVerificationService facebookTokenVerificationService;
     private final TokenVerificationService googleTokenVerificationService;
+    private final TokenVerificationService recaptchaTokenVerificationService;
     private final MailSenderService mailSender;
     private final String emailTemplate;
 
     @Inject
-    public UserServiceImpl(@Facebook TokenVerificationService facebookTokenVerificationService, @Google TokenVerificationService googleTokenVerificationService, AuthenticationService AuthenticationService, UserRepository userRepository, UserFactory userFactory, IdentityRepository identityRepository, IdentityFactory identityFactory, RegistrationRepository registrationRepository, RegistrationFactory registrationFactory, PropertiesProvider propertiesProvider, MailSenderService mailSender) throws IOException {
+    public UserServiceImpl(@Recaptcha TokenVerificationService recaptchaTokenVerificationService, @Facebook TokenVerificationService facebookTokenVerificationService, @Google TokenVerificationService googleTokenVerificationService, AuthenticationService AuthenticationService, UserRepository userRepository, UserFactory userFactory, IdentityRepository identityRepository, IdentityFactory identityFactory, RegistrationRepository registrationRepository, RegistrationFactory registrationFactory, PropertiesProvider propertiesProvider, MailSenderService mailSender) throws IOException {
         this.userRepository = userRepository;
         this.userFactory = userFactory;
         this.registrationRepository = registrationRepository;
@@ -62,6 +65,7 @@ public class UserServiceImpl implements UserService {
         this.propertiesProvider = propertiesProvider;
         this.facebookTokenVerificationService = facebookTokenVerificationService;
         this.googleTokenVerificationService = googleTokenVerificationService;
+        this.recaptchaTokenVerificationService = recaptchaTokenVerificationService;
         InputStream stream = getClass().getClassLoader().getResourceAsStream("emailVerification.html");
         StringBuffer buf = new StringBuffer();
         Scanner sc = new Scanner(stream);
@@ -172,6 +176,14 @@ public class UserServiceImpl implements UserService {
             String token = authenticationService.generateToken(later, identity.getUser(), httpRequest);
             response.setToken(token);
         }
+        return response;
+    }
+
+    @Override
+    public RecaptchaResponse validateRecaptchaResult(String recaptchaResult, HttpServletRequest httpRequest) {
+        boolean result = recaptchaTokenVerificationService.verifyToken(recaptchaResult, IPAddressHelper.getIPAddress(httpRequest));
+        RecaptchaResponse response = new RecaptchaResponse();
+        response.setUserIsHuman(result);
         return response;
     }
 }

@@ -63,6 +63,11 @@ public class UserEndpoint {
         return service.authenticateGoogleUser(request, httpRequest);
     }
 
+    @ApiMethod(name = "recaptcha", path = "recaptcha", httpMethod = HttpMethod.POST)
+    public RecaptchaResponse recaptcha(HttpServletRequest httpRequest, @Named("recaptcha_result") String recaptchaResult) throws UnsupportedEncodingException {
+        return service.validateRecaptchaResult(recaptchaResult, httpRequest);
+    }
+
     private Map<String, String> parseAdditionalData(@Named("data") String data) throws UnsupportedEncodingException {
         String[] pairs = data.split(";");
         Map<String, String> additionalData = new HashMap<>();

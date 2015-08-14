@@ -22,6 +22,8 @@ public class FilePropertiesProvider implements PropertiesProvider {
     private String signupEmailTemplate;
     private String userWebsite;
     private String appName;
+    private String recaptchaEndpoint;
+    private String recaptchaSecret;
     private int defaultTokenValidityDays;
 
     public FilePropertiesProvider(InputStream stream) {
@@ -49,6 +51,8 @@ public class FilePropertiesProvider implements PropertiesProvider {
                 this.userWebsite = userWebsite.substring(0, userWebsite.length() - 1);
             }
             this.appName = prop.getProperty("sys.name");
+            this.recaptchaEndpoint = prop.getProperty("recaptcha.endpoint");
+            this.recaptchaSecret = prop.getProperty("recaptcha.secret");
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -98,6 +102,16 @@ public class FilePropertiesProvider implements PropertiesProvider {
     @Override
     public String getFacebookEndpoint() {
         return facebookLoginEndpoint;
+    }
+
+    @Override
+    public String getRecaptchaEndpoint() {
+        return recaptchaEndpoint;
+    }
+
+    @Override
+    public String getRecaptchaSecret() {
+        return recaptchaSecret;
     }
 
     @Override

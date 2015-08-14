@@ -52,6 +52,7 @@ public class UserServiceImplTest {
     private HttpServletRequest mockHttpRequest = mock(HttpServletRequest.class);
     private TokenVerificationService mockFbVerifier = mock(TokenVerificationService.class);
     private TokenVerificationService mockGpVerifier = mock(TokenVerificationService.class);
+    private TokenVerificationService mockRecaptchaVerifier = mock(TokenVerificationService.class);
 
     private RegistrationRepository registrationRepoSpy = spy(dummyRegistrationRepo);
     private RegistrationFactory registrationFactorySpy = spy(dummyRegistrationFactory);
@@ -82,7 +83,7 @@ public class UserServiceImplTest {
         later = now.getTime();
         User user = dummyUserFactory.createUser("pre-exist@email.com", "Existing user");
         dummyUserRepo.add(user);
-        service = new UserServiceImpl(mockFbVerifier, mockGpVerifier, authenticationService, userRepoSpy, userFactorySpy, identityRepoSpy, identityFactorySpy, registrationRepoSpy, registrationFactorySpy, new FilePropertiesProvider(getFileStream("test.testprops")), mailSenderService);
+        service = new UserServiceImpl(mockRecaptchaVerifier,mockFbVerifier, mockGpVerifier, authenticationService, userRepoSpy, userFactorySpy, identityRepoSpy, identityFactorySpy, registrationRepoSpy, registrationFactorySpy, new FilePropertiesProvider(getFileStream("test.testprops")), mailSenderService);
     }
 
     @Test
@@ -493,4 +494,24 @@ public class UserServiceImplTest {
         assertEquals("google", response.getIdentityProvider());
     }
 
+    @Test
+    public void testValidateRecaptchaResult() throws Exception {
+        when(mockRecaptchaVerifier.verifyToken("recaptcha","127.0.0.1")).thenReturn(true);
+        when(mockHttpRequest.getRemoteAddr()).thenReturn("127.0.0.1");
+
+        RecaptchaResponse response = service.validateRecaptchaResult("recaptcha", mockHttpRequest);
+
+        verify(mockRecaptchaVerifier, times(1)).verifyToken("recaptcha","127.0.0.1");
+        assertTrue(response.isUserHuman());
+    }
+    @Test
+    public void testValidateRecaptchaResultFail() throws Exception {
+        when(mockRecaptchaVerifier.verifyToken("recaptcha", "127.0.0.1")).thenReturn(false);
+        when(mockHttpRequest.getRemoteAddr()).thenReturn("127.0.0.1");
+
+        RecaptchaResponse response = service.validateRecaptchaResult("recaptcha", mockHttpRequest);
+
+        verify(mockRecaptchaVerifier, times(1)).verifyToken("recaptcha","127.0.0.1");
+        assertFalse(response.isUserHuman());
+    }
 }

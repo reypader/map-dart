@@ -1,10 +1,14 @@
 package com.dart.user.config;
 
-import com.dart.common.service.auth.*;
+import com.dart.common.service.auth.AuthenticationService;
+import com.dart.common.service.auth.JwtAuthenticationService;
+import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.auth.facebook.Facebook;
 import com.dart.common.service.auth.facebook.FacebookTokenVerificationService;
 import com.dart.common.service.auth.google.Google;
 import com.dart.common.service.auth.google.GoogleTokenVerificationService;
+import com.dart.common.service.auth.google.Recaptcha;
+import com.dart.common.service.auth.google.RecaptchaTokenVerificationService;
 import com.dart.common.service.mail.GenericMailSenderService;
 import com.dart.common.service.mail.MailSenderService;
 import com.dart.common.service.properties.FilePropertiesProvider;
@@ -51,6 +55,7 @@ public class UserModule extends AbstractModule {
         bind(PropertiesProvider.class).to(FilePropertiesProvider.class);
         bind(TokenVerificationService.class).annotatedWith(Facebook.class).to(FacebookTokenVerificationService.class);
         bind(TokenVerificationService.class).annotatedWith(Google.class).to(GoogleTokenVerificationService.class);
+        bind(TokenVerificationService.class).annotatedWith(Recaptcha.class).to(RecaptchaTokenVerificationService.class);
         bind(MailSenderService.class).to(GenericMailSenderService.class);
     }
 
@@ -102,6 +107,11 @@ public class UserModule extends AbstractModule {
     @Provides
     public GoogleTokenVerificationService googleTokenVerificationService(FilePropertiesProvider filePropertiesProvider) {
         return new GoogleTokenVerificationService(filePropertiesProvider);
+    }
+
+    @Provides
+    public RecaptchaTokenVerificationService recaptchaTokenVerificationService(CloseableHttpClient httpClient, FilePropertiesProvider filePropertiesProvider) {
+        return new RecaptchaTokenVerificationService(httpClient, filePropertiesProvider);
     }
 
     @Provides
