@@ -58,8 +58,8 @@ public class JwtAuthenticationService implements AuthenticationService {
             token.setExpiration(new Instant(expiry.getTime()));
 
             JsonObject payload = token.getPayloadAsJsonObject();
-            payload.addProperty("user", user.getId());
-            payload.addProperty("client", BCrypt.hashpw(IPAddressHelper.getIPAddress(request), BCrypt.gensalt()));
+            payload.addProperty("user", BCrypt.hashpw(user.getId(), BCrypt.gensalt()));
+            payload.addProperty("agent", BCrypt.hashpw(IPAddressHelper.getIPAddress(request), BCrypt.gensalt()));
             String tokenId = token.serializeAndSign();
 
             return tokenId;
@@ -93,8 +93,8 @@ public class JwtAuthenticationService implements AuthenticationService {
                 JsonToken jt = parser.verifyAndDeserialize(authHeaderValue);
                 JsonObject payload = jt.getPayloadAsJsonObject();
                 String claimId = payload.getAsJsonPrimitive("user").getAsString();
-                String claimIp = payload.getAsJsonPrimitive("client").getAsString();
-                return BCrypt.checkpw(IPAddressHelper.getIPAddress(request), claimIp) && user.getId().equals(claimId);
+                String claimIp = payload.getAsJsonPrimitive("agent").getAsString();
+                return BCrypt.checkpw(IPAddressHelper.getIPAddress(request), claimIp) && BCrypt.checkpw(user.getId(), claimId);
             } else {
                 return false;
             }
