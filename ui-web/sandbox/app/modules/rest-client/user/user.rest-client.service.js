@@ -47,17 +47,11 @@ define(["gapi.loader"], function (gapi) {
     };
 
     _this.validateRecaptcha = function (recaptchaResult) {
-      var p = $q.defer();
-      setTimeout(function () {
-        if (false) {
-          alert("captcha for: '" + JSON.stringify(recaptchaResult) + "' failed");
-          p.resolve({userIsHuman: false});
-        } else {
-          alert("captcha for: '" + JSON.stringify(recaptchaResult) + "' successful");
-          p.resolve({userIsHuman: true});
-        }
-      }, 1000);
-      return p.promise;
+      var def = $q.defer();
+      gapi.client.user.recaptcha({recaptcha_result:recaptchaResult}).then(function(response){
+        def.resolve(response.result);
+      });
+      return def.promise;
     }
   }
 

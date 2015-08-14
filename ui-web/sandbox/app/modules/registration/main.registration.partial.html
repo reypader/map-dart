@@ -53,11 +53,15 @@
                class="form-control-feedback fa fa-times"></i>
             <span id="passwordMatch" class="sr-only"></span>
           </div>
-          <div class="g-recaptcha" vc-recaptcha
-               key="'6Ld18c0SAAAAAFvAhvj200jLd6GDqIj2RgFvtOJM'"
-               on-create="vm.setWidgetId(widgetId)"
-               on-success="vm.setResponse(response)"
-               on-expire="vm.cbExpiration()"></div>
+          <div class="form-group has-feedback" ng-class="vm.recaptcha ==='fail' && 'has-error'">
+            <label for="recaptcha" class="control-label">Are you human?<span
+                    ng-show="vm.recaptcha ==='fail'">...hmm.. try again</span></label>
+            <div id="recaptcha" class="g-recaptcha" vc-recaptcha
+                 key="'6Ld18c0SAAAAAFvAhvj200jLd6GDqIj2RgFvtOJM'"
+                 on-create="vm.setWidgetId(widgetId)"
+                 on-success="vm.setResponse(response)"
+                 on-expire="vm.cbExpiration()"></div>
+          </div>
           <button class="btn btn-primary btn-block" type="submit"
                   ng-disabled="strength < 2 || !createUser.$valid||createUser.$error.usedEmail || createUser.$error.email || createUser.$pending.usedEmail">
             Create account
