@@ -20,7 +20,7 @@ public interface PropertiesProvider {
 
     //Other stuff
     String getUserWebsiteURL();
-    String getOtherSecret();
     String getSignupEmailTemplate();
     String getAppName();
+    int getDefaultTokenValidityDays();
 }

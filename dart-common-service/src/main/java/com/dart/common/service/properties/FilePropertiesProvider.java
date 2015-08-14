@@ -17,10 +17,10 @@ public class FilePropertiesProvider implements PropertiesProvider {
     private String facebookAppId;
     private String facebookLoginEndpoint;
     private String facebookAppSecret;
-    private String otherSecret;
     private String signupEmailTemplate;
     private String userWebsite;
     private String appName;
+    private int defaultTokenValidityDays;
 
     public FilePropertiesProvider(InputStream stream) {
         Properties prop = new Properties();
@@ -40,7 +40,7 @@ public class FilePropertiesProvider implements PropertiesProvider {
             if (facebookLoginEndpoint.endsWith("/")) {
                 this.facebookLoginEndpoint = facebookLoginEndpoint.substring(0, facebookLoginEndpoint.length() - 1);
             }
-            this.otherSecret = prop.getProperty("sys.secret");
+            this.defaultTokenValidityDays = Integer.valueOf(prop.getProperty("sys.token.validity.days"));
             this.signupEmailTemplate = prop.getProperty("sys.signup.email");
             this.userWebsite = prop.getProperty("sys.ui.web");
             if (userWebsite.endsWith("/")) {
@@ -104,11 +104,6 @@ public class FilePropertiesProvider implements PropertiesProvider {
     }
 
     @Override
-    public String getOtherSecret() {
-        return otherSecret;
-    }
-
-    @Override
     public String getSignupEmailTemplate() {
         return signupEmailTemplate;
     }
@@ -116,5 +111,10 @@ public class FilePropertiesProvider implements PropertiesProvider {
     @Override
     public String getAppName() {
         return appName;
+    }
+
+    @Override
+    public int getDefaultTokenValidityDays() {
+        return defaultTokenValidityDays;
     }
 }
