@@ -502,7 +502,7 @@ public class UserServiceImplTest {
         RecaptchaResponse response = service.validateRecaptchaResult("recaptcha", mockHttpRequest);
 
         verify(mockRecaptchaVerifier, times(1)).verifyToken("recaptcha","127.0.0.1");
-        assertTrue(response.isUserHuman());
+        assertTrue(response.isUserIsHuman());
     }
     @Test
     public void testValidateRecaptchaResultFail() throws Exception {
@@ -512,6 +512,6 @@ public class UserServiceImplTest {
         RecaptchaResponse response = service.validateRecaptchaResult("recaptcha", mockHttpRequest);
 
         verify(mockRecaptchaVerifier, times(1)).verifyToken("recaptcha","127.0.0.1");
-        assertFalse(response.isUserHuman());
+        assertFalse(response.isUserIsHuman());
     }
 }

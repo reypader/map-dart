@@ -7,7 +7,7 @@ public class RecaptchaResponse {
 
     private boolean userIsHuman;
 
-    public boolean isUserHuman() {
+    public boolean isUserIsHuman() {
         return userIsHuman;
     }
 
