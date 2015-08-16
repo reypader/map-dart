@@ -80,8 +80,8 @@ public class UserModule extends AbstractModule {
     }
 
     @Provides
-    public JwtHttpRequestAuthorizationService jwtSessionService(FilePropertiesProvider filePropertiesProvider) {
-        return new JwtHttpRequestAuthorizationService(filePropertiesProvider);
+    public JwtHttpRequestAuthorizationService jwtSessionService(UserRepositoryImpl userRepositoryImpl, FilePropertiesProvider filePropertiesProvider) {
+        return new JwtHttpRequestAuthorizationService(userRepositoryImpl, filePropertiesProvider);
     }
 
     @Provides
