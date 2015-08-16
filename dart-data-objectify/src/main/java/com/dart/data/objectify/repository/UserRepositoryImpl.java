@@ -6,6 +6,7 @@ import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.UserImpl;
 import com.dart.data.repository.UserRepository;
+import com.google.appengine.repackaged.org.apache.commons.codec.digest.DigestUtils;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 
@@ -58,4 +59,8 @@ public class UserRepositoryImpl implements UserRepository {
         objectify().delete().entity(entity);
     }
 
+    @Override
+    public User retrieveByEmail(String email) {
+        return retrieve(DigestUtils.sha256Hex(email));
+    }
 }

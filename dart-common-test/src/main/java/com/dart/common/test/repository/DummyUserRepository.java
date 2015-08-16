@@ -41,4 +41,14 @@ public class DummyUserRepository implements UserRepository {
     public void delete(User entity) {
         dummyStore.remove(entity.getId());
     }
+
+    @Override
+    public User retrieveByEmail(String email) {
+        for (User user : dummyStore.values()) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        return null;
+    }
 }

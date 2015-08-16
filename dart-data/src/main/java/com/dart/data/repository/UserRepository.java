@@ -8,5 +8,5 @@ import com.dart.data.domain.User;
  * @author RMPader
  */
 public interface UserRepository extends CrudRepository<User> {
-
+    User retrieveByEmail(String email);
 }

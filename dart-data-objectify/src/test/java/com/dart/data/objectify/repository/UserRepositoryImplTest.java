@@ -7,6 +7,7 @@ import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.domain.UserImpl;
 import com.dart.data.repository.UserRepository;
 import com.google.appengine.repackaged.org.apache.commons.codec.digest.DigestUtils;
+import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.Closeable;
@@ -16,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by RMPader on 7/27/15.
@@ -129,4 +129,21 @@ public class UserRepositoryImplTest {
         assertEquals(0, entityCount);
     }
 
+    @Test
+    public void testRetrieveByEmail() throws Exception {
+        User user = new UserImpl("username", "display name");
+        User savedUser = repo.add(user);
+
+        User foundUser = repo.retrieveByEmail("username");
+
+        int entityCount = ofy().load().type(UserImpl.class).count();
+        assertEquals(1, entityCount);
+        assertEverything(savedUser, foundUser);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testRetrieveByEmailNull() throws Exception {
+        User foundUser = repo.retrieveByEmail("wat");
+        assertNull(foundUser);
+    }
 }
