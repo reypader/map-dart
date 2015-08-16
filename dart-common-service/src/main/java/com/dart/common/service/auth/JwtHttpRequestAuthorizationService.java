@@ -3,6 +3,7 @@ package com.dart.common.service.auth;
 import com.dart.common.service.properties.PropertiesProvider;
 import com.dart.common.service.util.IPAddressHelper;
 import com.dart.data.domain.User;
+import com.dart.data.repository.UserRepository;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import net.oauth.jsontoken.Checker;
@@ -27,19 +28,21 @@ import java.util.List;
 /**
  * @author RMPader
  */
-public class JwtAuthenticationService implements AuthenticationService {
+public class JwtHttpRequestAuthorizationService implements HttpRequestAuthorizationService {
 
     private final PropertiesProvider propertiesProvider;
     private final Checker checker;
+    private final UserRepository userRepository;
 
-    public JwtAuthenticationService(PropertiesProvider propertiesProvider) {
+    public JwtHttpRequestAuthorizationService(UserRepository userRepository, PropertiesProvider propertiesProvider) {
         this.propertiesProvider = propertiesProvider;
+        this.userRepository = userRepository;
         this.checker = new CheckerImpl(propertiesProvider);
     }
 
     /**
-     * Generate a JWT for the given user based on the IP address used for the request. The created JWT will expire at
-     * the date indicated. The signature will be signed using the user's secret.
+     * Generate a JWT for the given user based on the IP address used for the request and signed using the user's
+     * secret. The created JWT will expire at the date indicated.
      *
      * @param expiry  the date of expiry for the token.
      * @param user    the user to whom this token is associated with.
@@ -58,7 +61,6 @@ public class JwtAuthenticationService implements AuthenticationService {
             token.setExpiration(new Instant(expiry.getTime()));
 
             JsonObject payload = token.getPayloadAsJsonObject();
-            payload.addProperty("user", BCrypt.hashpw(user.getId(), BCrypt.gensalt()));
             payload.addProperty("agent", BCrypt.hashpw(IPAddressHelper.getIPAddress(request), BCrypt.gensalt()));
             String tokenId = token.serializeAndSign();
 
@@ -70,21 +72,12 @@ public class JwtAuthenticationService implements AuthenticationService {
         }
     }
 
-    /**
-     * Verify if the token included in the request is signed with the user's secret key and that the originating IP
-     * address matches the one indicated in the token.
-     *
-     * @param user
-     * @param request
-     * @return
-     */
     @Override
-    public boolean verifyToken(User user, HttpServletRequest request) {
+    public User verifyToken(HttpServletRequest request) {
         try {
-            String[] authHeader = request.getHeader("Authorization").split(" ");
-            String authHeaderType = authHeader[0];
-            String authHeaderValue = authHeader[1];
-            if (authHeaderType.equals("Bearer")) {
+            User user = userRepository.retrieve(request.getHeader("FROM"));
+            String authHeaderValue = request.getHeader("AUTHORIZATION");
+            if (user != null) {
                 Verifier hmacVerifier = new HmacSHA256Verifier(user.getSecret().getBytes());
                 VerifierProvider hmacLocator = new VerifierProviderImpl(hmacVerifier);
                 VerifierProviders locators = new VerifierProviders();
@@ -92,14 +85,17 @@ public class JwtAuthenticationService implements AuthenticationService {
                 JsonTokenParser parser = new JsonTokenParser(locators, checker);
                 JsonToken jt = parser.verifyAndDeserialize(authHeaderValue);
                 JsonObject payload = jt.getPayloadAsJsonObject();
-                String claimId = payload.getAsJsonPrimitive("user").getAsString();
                 String claimIp = payload.getAsJsonPrimitive("agent").getAsString();
-                return BCrypt.checkpw(IPAddressHelper.getIPAddress(request), claimIp) && BCrypt.checkpw(user.getId(), claimId);
-            } else {
-                return false;
+
+                if (BCrypt.checkpw(IPAddressHelper.getIPAddress(request), claimIp)) {
+                    return user;
+                } else {
+                    return null;
+                }
             }
+            return null;
         } catch (SignatureException e) {
-            return false;
+            return null;
         } catch (InvalidKeyException e) {
             throw new RuntimeException(e);
         }

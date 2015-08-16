@@ -1,6 +1,6 @@
 package com.dart.user.service;
 
-import com.dart.common.service.auth.AuthenticationService;
+import com.dart.common.service.auth.HttpRequestAuthorizationService;
 import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.auth.facebook.Facebook;
 import com.dart.common.service.auth.google.Google;
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     private final UserFactory userFactory;
     private final RegistrationRepository registrationRepository;
     private final RegistrationFactory registrationFactory;
-    private final AuthenticationService authenticationService;
+    private final HttpRequestAuthorizationService httpRequestAuthorizationService;
     private final IdentityRepository identityRepository;
     private final IdentityFactory identityFactory;
     private final PropertiesProvider propertiesProvider;
@@ -54,14 +54,14 @@ public class UserServiceImpl implements UserService {
     private final String emailTemplate;
 
     @Inject
-    public UserServiceImpl(@Recaptcha TokenVerificationService recaptchaTokenVerificationService, @Facebook TokenVerificationService facebookTokenVerificationService, @Google TokenVerificationService googleTokenVerificationService, AuthenticationService AuthenticationService, UserRepository userRepository, UserFactory userFactory, IdentityRepository identityRepository, IdentityFactory identityFactory, RegistrationRepository registrationRepository, RegistrationFactory registrationFactory, PropertiesProvider propertiesProvider, MailSenderService mailSender) throws IOException {
+    public UserServiceImpl(@Recaptcha TokenVerificationService recaptchaTokenVerificationService, @Facebook TokenVerificationService facebookTokenVerificationService, @Google TokenVerificationService googleTokenVerificationService, HttpRequestAuthorizationService HttpRequestAuthorizationService, UserRepository userRepository, UserFactory userFactory, IdentityRepository identityRepository, IdentityFactory identityFactory, RegistrationRepository registrationRepository, RegistrationFactory registrationFactory, PropertiesProvider propertiesProvider, MailSenderService mailSender) throws IOException {
         this.userRepository = userRepository;
         this.userFactory = userFactory;
         this.registrationRepository = registrationRepository;
         this.registrationFactory = registrationFactory;
         this.identityRepository = identityRepository;
         this.identityFactory = identityFactory;
-        this.authenticationService = AuthenticationService;
+        this.httpRequestAuthorizationService = HttpRequestAuthorizationService;
         this.propertiesProvider = propertiesProvider;
         this.facebookTokenVerificationService = facebookTokenVerificationService;
         this.googleTokenVerificationService = googleTokenVerificationService;
@@ -140,8 +140,10 @@ public class UserServiceImpl implements UserService {
             Calendar now = Calendar.getInstance();
             now.add(Calendar.DAY_OF_YEAR, propertiesProvider.getDefaultTokenValidityDays());
             Date later = now.getTime();
-            String token = authenticationService.generateToken(later, identity.getUser(), httpRequest);
+            User user = identity.getUser();
+            String token = httpRequestAuthorizationService.generateToken(later, user, httpRequest);
             response.setToken(token);
+            response.setUser(user.getId());
         }
         return response;
     }
@@ -173,8 +175,10 @@ public class UserServiceImpl implements UserService {
             Calendar now = Calendar.getInstance();
             now.add(Calendar.DAY_OF_YEAR, propertiesProvider.getDefaultTokenValidityDays());
             Date later = now.getTime();
-            String token = authenticationService.generateToken(later, identity.getUser(), httpRequest);
+            User user = identity.getUser();
+            String token = httpRequestAuthorizationService.generateToken(later, user, httpRequest);
             response.setToken(token);
+            response.setUser(user.getId());
         }
         return response;
     }

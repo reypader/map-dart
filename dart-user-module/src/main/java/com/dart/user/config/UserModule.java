@@ -1,7 +1,7 @@
 package com.dart.user.config;
 
-import com.dart.common.service.auth.AuthenticationService;
-import com.dart.common.service.auth.JwtAuthenticationService;
+import com.dart.common.service.auth.HttpRequestAuthorizationService;
+import com.dart.common.service.auth.JwtHttpRequestAuthorizationService;
 import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.auth.facebook.Facebook;
 import com.dart.common.service.auth.facebook.FacebookTokenVerificationService;
@@ -49,7 +49,7 @@ public class UserModule extends AbstractModule {
         bind(UserFactory.class).to(UserFactoryImpl.class);
         bind(RegistrationRepository.class).to(RegistrationRepositoryImpl.class);
         bind(RegistrationFactory.class).to(RegistrationFactoryImpl.class);
-        bind(AuthenticationService.class).to(JwtAuthenticationService.class);
+        bind(HttpRequestAuthorizationService.class).to(JwtHttpRequestAuthorizationService.class);
         bind(IdentityRepository.class).to(IdentityRepositoryImpl.class);
         bind(IdentityFactory.class).to(IdentityFactoryImpl.class);
         bind(PropertiesProvider.class).to(FilePropertiesProvider.class);
@@ -80,8 +80,8 @@ public class UserModule extends AbstractModule {
     }
 
     @Provides
-    public JwtAuthenticationService jwtSessionService(FilePropertiesProvider filePropertiesProvider) {
-        return new JwtAuthenticationService(filePropertiesProvider);
+    public JwtHttpRequestAuthorizationService jwtSessionService(FilePropertiesProvider filePropertiesProvider) {
+        return new JwtHttpRequestAuthorizationService(filePropertiesProvider);
     }
 
     @Provides
