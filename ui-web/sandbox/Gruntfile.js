@@ -230,7 +230,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-usemin');
 
 
-  grunt.registerTask('serve', ['connect', 'watch']);
+  grunt.registerTask('serve', ['test', 'connect', 'watch']);
   grunt.registerTask('test', ['init', 'karma']);
   grunt.registerTask('release', ['test', 'requirejs', 'copy:pages', 'copy:require', 'copy:statics', 'build-pages']);
   grunt.registerTask('compile-style', ['customize_bootstrap', 'less']);
