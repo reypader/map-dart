@@ -90,7 +90,7 @@ public class UserServiceImplTest {
     public void testCheckEmailUsageUsed() throws Exception {
         CheckEmailResponse actualResponse = service.checkEmailUsage("pre-exist@email.com");
 
-        verify(userRepoSpy, times(1)).retrieve("pre-exist@email.com");
+        verify(userRepoSpy, times(1)).retrieveByEmail("pre-exist@email.com");
         assertTrue(actualResponse.isEmailUsed());
     }
 
@@ -98,7 +98,7 @@ public class UserServiceImplTest {
     public void testCheckEmailUsageUnused() throws Exception {
         CheckEmailResponse actualResponse = service.checkEmailUsage("non-exist@email.com");
 
-        verify(userRepoSpy, times(1)).retrieve("non-exist@email.com");
+        verify(userRepoSpy, times(1)).retrieveByEmail("non-exist@email.com");
         assertFalse(actualResponse.isEmailUsed());
     }
 
@@ -147,7 +147,7 @@ public class UserServiceImplTest {
         verify(registrationRepoSpy, times(1)).deleteRegistrationForEmail("test@email");
 
         assertEquals("John Doe", userCaptured.getDisplayName());
-        assertEquals("test@email", userCaptured.getId());
+        assertEquals("test@email", userCaptured.getEmail());
         assertEquals("self", identityCaptured.getProvider());
         assertEquals("test@email", identityCaptured.getProvidedIdentity());
         assertEquals(data, identityCaptured.getData());
@@ -179,8 +179,9 @@ public class UserServiceImplTest {
         VerificationResponse response = service.verifyUser(registration.getId());
 
         verify(registrationRepoSpy, times(1)).retrieve(registration.getId());
-        verify(userFactorySpy, times(1)).createUser("pre-exist@email.com", "John Doe");
-        verify(userRepoSpy, times(1)).add(any(User.class));
+        verify(userRepoSpy, times(1)).retrieveByEmail("pre-exist@email.com");
+        verify(userFactorySpy, times(0)).createUser("pre-exist@email.com", "John Doe");
+        verify(userRepoSpy, times(0)).add(any(User.class));
         verify(identityFactorySpy, times(0)).createIdentity(any(User.class), anyString(), anyString());
         verify(identityRepoSpy, times(0)).add(any(Identity.class));
         verify(registrationRepoSpy, times(1)).deleteRegistrationForEmail("pre-exist@email.com");
@@ -273,7 +274,7 @@ public class UserServiceImplTest {
         verify(httpRequestAuthorizationService, times(1)).generateToken(any(Date.class), eq(userCaptured), same(mockHttpRequest));
 
         assertEquals("John Doe", userCaptured.getDisplayName());
-        assertEquals("test@email", userCaptured.getId());
+        assertEquals("test@email", userCaptured.getEmail());
         assertEquals("facebook", identityCaptured.getProvider());
         assertEquals("FB_ID", identityCaptured.getProvidedIdentity());
         assertEquals(userCaptured, identityCaptured.getUser());
@@ -301,7 +302,7 @@ public class UserServiceImplTest {
 
         AuthenticationResponse response = service.authenticateFacebookUser(request, mockHttpRequest);
 
-        verify(userRepoSpy, times(1)).retrieve(request.getEmail());
+        verify(userRepoSpy, times(1)).retrieveByEmail(request.getEmail());
         verify(userFactorySpy, times(0)).createUser(anyString(), anyString());
         verify(userRepoSpy, times(0)).add(any(User.class));
         verify(identityFactorySpy, times(1)).createIdentity(any(User.class), eq("facebook"), eq("FB_ID"));
@@ -403,7 +404,7 @@ public class UserServiceImplTest {
         verify(httpRequestAuthorizationService, times(1)).generateToken(any(Date.class), eq(userCaptured), same(mockHttpRequest));
 
         assertEquals("John Doe", userCaptured.getDisplayName());
-        assertEquals("test@email", userCaptured.getId());
+        assertEquals("test@email", userCaptured.getEmail());
         assertEquals("google", identityCaptured.getProvider());
         assertEquals("test@email", identityCaptured.getProvidedIdentity());
         assertEquals(userCaptured, identityCaptured.getUser());
@@ -431,7 +432,7 @@ public class UserServiceImplTest {
 
         AuthenticationResponse response = service.authenticateGoogleUser(request, mockHttpRequest);
 
-        verify(userRepoSpy, times(1)).retrieve(request.getEmail());
+        verify(userRepoSpy, times(1)).retrieveByEmail(request.getEmail());
         verify(userFactorySpy, times(0)).createUser(anyString(), anyString());
         verify(userRepoSpy, times(0)).add(any(User.class));
         verify(identityFactorySpy, times(1)).createIdentity(any(User.class), eq("google"), eq("test@email"));

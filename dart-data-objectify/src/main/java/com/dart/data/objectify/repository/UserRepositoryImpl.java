@@ -6,9 +6,12 @@ import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.ObjectifyProvider;
 import com.dart.data.objectify.domain.UserImpl;
 import com.dart.data.repository.UserRepository;
-import com.google.appengine.repackaged.org.apache.commons.codec.digest.DigestUtils;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
+
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.dart.data.objectify.ObjectifyProvider.objectify;
 
@@ -16,13 +19,16 @@ import static com.dart.data.objectify.ObjectifyProvider.objectify;
  * Created by RMPader on 7/25/15.
  */
 public class UserRepositoryImpl implements UserRepository {
+    Logger logger = Logger.getLogger(UserRepositoryImpl.class.getName());
+
     static {
         ObjectifyProvider.register(UserImpl.class);
     }
 
     @Override
     public User add(User entity) {
-        if (objectify().load().entity(entity).now() == null) {
+        int emailUsage = objectify().load().type(UserImpl.class).filter("email", entity.getEmail()).list().size();
+        if (((UserImpl) entity).getRawId() == null && emailUsage == 0) {
             Key<User> key = objectify().save().entity(entity).now();
             return getUserByKey(key);
         } else {
@@ -32,8 +38,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User retrieve(String id) {
-        Key<UserImpl> key = Key.create(UserImpl.class, id);
-        return objectify().load().key(key).now();
+        Key<User> key = Key.create(id);
+        return (UserImpl) objectify().load().key(key).now();
     }
 
     private User getUserByKey(Key<User> key) {
@@ -61,6 +67,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User retrieveByEmail(String email) {
-        return retrieve(DigestUtils.sha256Hex(email));
+        List<UserImpl> users = objectify().load().type(UserImpl.class).filter("email", email).list();
+        if (users.size() < 1) {
+            return null;
+        } else if (users.size() == 1) {
+            return users.get(0);
+        } else {
+            logger.log(Level.SEVERE, "Duplicate email address usage detected");
+            throw new IllegalStateException("Duplicate email address usage detected");
+        }
     }
 }

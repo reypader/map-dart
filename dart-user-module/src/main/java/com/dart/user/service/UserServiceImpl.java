@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CheckEmailResponse checkEmailUsage(String email) {
-        User user = userRepository.retrieve(email);
+        User user = userRepository.retrieveByEmail(email);
 
         CheckEmailResponse response = new CheckEmailResponse();
         response.setEmailUsed(user != null);
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
         VerificationResponse response = new VerificationResponse();
         Registration registration = registrationRepository.retrieve(creationCode);
         try {
-            if (registration != null) {
+            if (registration != null && !checkEmailUsage(registration.getEmail()).isEmailUsed()) {
                 User user = userFactory.createUser(registration.getEmail(), registration.getDisplayName());
                 user = userRepository.add(user);
                 Identity identity = identityFactory.createIdentity(user, "self", registration.getEmail());
@@ -164,7 +164,7 @@ public class UserServiceImpl implements UserService {
         if (tokenVerificationService.verifyToken(request.getToken(), request.getData().get("id"))) {
             Identity identity = identityRepository.findIdentityFromProvider(request.getData().get("id"), providerName);
             if (identity == null) {
-                User user = userRepository.retrieve(request.getEmail());
+                User user = userRepository.retrieveByEmail(request.getEmail());
                 if (user == null) {
                     user = userFactory.createUser(request.getEmail(), request.getData().get("name"));
                     user = userRepository.add(user);
