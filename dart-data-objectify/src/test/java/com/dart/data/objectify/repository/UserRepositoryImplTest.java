@@ -6,6 +6,7 @@ import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.objectify.domain.UserImpl;
 import com.dart.data.repository.UserRepository;
+import com.google.appengine.repackaged.org.apache.commons.codec.digest.DigestUtils;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.Closeable;
@@ -55,6 +56,8 @@ public class UserRepositoryImplTest {
         assertEquals(e1.getDisplayName(), e2.getDisplayName());
         assertEquals(e1.getDescription(), e2.getDescription());
         assertEquals(e1.getPhotoURL(), e2.getPhotoURL());
+        assertEquals(e1.getEmail(), e2.getEmail());
+        assertEquals(DigestUtils.sha256Hex(e1.getEmail()), e2.getId());
     }
 
     @Test
@@ -68,9 +71,10 @@ public class UserRepositoryImplTest {
         int entityCount = ofy().load().type(UserImpl.class).count();
         assertEquals(1, entityCount);
         assertEquals("display name", savedUser.getDisplayName());
-        assertEquals("username", savedUser.getId());
         assertEquals("I like derping", savedUser.getDescription());
         assertEquals("URL", savedUser.getPhotoURL());
+        assertEquals("username", savedUser.getEmail());
+        assertEquals(DigestUtils.sha256Hex("username"), savedUser.getId());
         assertNotNull(savedUser.getDateCreated());
     }
 

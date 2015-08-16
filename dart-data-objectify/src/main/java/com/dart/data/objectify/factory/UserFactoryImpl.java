@@ -10,7 +10,7 @@ import com.dart.data.objectify.domain.UserImpl;
 public class UserFactoryImpl implements UserFactory {
 
     @Override
-    public User createUser(String username, String displayName) {
-        return new UserImpl(username, displayName);
+    public User createUser(String email, String displayName) {
+        return new UserImpl(email, displayName);
     }
 }

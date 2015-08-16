@@ -1,9 +1,9 @@
 package com.dart.data.objectify.domain;
 
 import com.dart.data.domain.User;
+import com.google.appengine.repackaged.org.apache.commons.codec.digest.DigestUtils;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.OnSave;
 
 import java.util.Date;
@@ -16,12 +16,11 @@ import java.util.Objects;
 public class UserImpl implements User {
 
     @Id
-    private String username;
+    private String id;
+
+    private String email;
 
     private String displayName;
-
-    @Index
-    private String lowercaseDisplayName;
 
     private Date dateCreated;
 
@@ -29,8 +28,9 @@ public class UserImpl implements User {
 
     private String description;
 
-    public UserImpl(String username, String displayName) {
-        this.username = username;
+    public UserImpl(String email, String displayName) {
+        this.id = DigestUtils.sha256Hex(email);
+        this.email = email;
         this.setDisplayName(displayName);
     }
 
@@ -44,12 +44,17 @@ public class UserImpl implements User {
 
     @Override
     public String getId() {
-        return username;
+        return id;
     }
 
     @Override
     public Date getDateCreated() {
         return dateCreated;
+    }
+
+    @Override
+    public String getEmail() {
+        return email;
     }
 
     @Override
@@ -70,7 +75,6 @@ public class UserImpl implements User {
     @Override
     public void setDescription(String description) {
         this.description = description;
-        this.lowercaseDisplayName = displayName.toLowerCase();
     }
 
     @Override

@@ -10,10 +10,20 @@ import java.util.Objects;
  */
 public class DummyUser implements User {
     private String id;
+    private String email;
     private String displayName;
     private String description;
     private String photoURL;
     private Date dateCreated;
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @Override
     public String getDisplayName() {

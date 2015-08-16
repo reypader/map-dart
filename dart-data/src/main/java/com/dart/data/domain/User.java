@@ -8,6 +8,8 @@ package com.dart.data.domain;
  */
 public interface User extends Entity {
 
+    String getEmail();
+
     String getDisplayName();
 
     void setDisplayName(String displayName);

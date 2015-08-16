@@ -5,15 +5,17 @@ import com.dart.data.domain.User;
 import com.dart.data.factory.UserFactory;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Dummy implementation of {@link UserFactory} class for unit testing. Use Mockito.spy() to verify invocations.
  */
 public class DummyUserFactory implements UserFactory {
     @Override
-    public User createUser(String username, String displayName) {
+    public User createUser(String email, String displayName) {
         DummyUser instance = new DummyUser();
-        instance.setId(username);
+        instance.setId(UUID.randomUUID().toString());
+        instance.setEmail(email);
         instance.setDisplayName(displayName);
         instance.setDateCreated(new Date());
         return instance;
