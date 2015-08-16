@@ -8,6 +8,8 @@ define(["gapi.loader"], function (gapi) {
       var def = $q.defer();
       gapi.client.user.email.check({email: email}).then(function (response) {
         def.resolve(response.result);
+      }, function (response) {
+        def.reject(response.result);
       });
       return def.promise;
     };
@@ -16,6 +18,8 @@ define(["gapi.loader"], function (gapi) {
       var def = $q.defer();
       gapi.client.user.register(newUser).then(function (response) {
         def.resolve(response.result);
+      }, function (response) {
+        def.reject(response.result);
       });
       return def.promise;
     };
@@ -33,14 +37,20 @@ define(["gapi.loader"], function (gapi) {
       if (request.provider === 'self') {
         gapi.client.user.auth.basic(cloudEndpointRequest).then(function (response) {
           def.resolve(response.result);
+        }, function (response) {
+          def.reject(response.result);
         });
       } else if (request.provider === 'facebook') {
         gapi.client.user.auth.facebook(cloudEndpointRequest).then(function (response) {
           def.resolve(response.result);
+        }, function (response) {
+          def.reject(response.result);
         });
       } else if (request.provider === 'google') {
         gapi.client.user.auth.google(cloudEndpointRequest).then(function (response) {
           def.resolve(response.result);
+        }, function (response) {
+          def.reject(response.result);
         });
       }
       return def.promise;
@@ -48,8 +58,10 @@ define(["gapi.loader"], function (gapi) {
 
     _this.validateRecaptcha = function (recaptchaResult) {
       var def = $q.defer();
-      gapi.client.user.recaptcha({recaptcha_result:recaptchaResult}).then(function(response){
+      gapi.client.user.recaptcha({recaptcha_result: recaptchaResult}).then(function (response) {
         def.resolve(response.result);
+      }, function (response) {
+        def.reject(response.result);
       });
       return def.promise;
     }

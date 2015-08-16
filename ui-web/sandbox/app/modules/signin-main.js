@@ -66,7 +66,8 @@ require([
 ], function (progress) {
   'use strict';
 
-  progress.increment();
+  progress.setScriptCount(4);
+  progress.scriptLoad();
   console.log("Loading other dependencies...");
   angular.bootstrap(document, [
     'ngAnimate',

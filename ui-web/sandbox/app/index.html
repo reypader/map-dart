@@ -5,6 +5,22 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pings</title>
+  <script type="text/javascript" ng-if="false">
+    (function () {
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        var found = false;
+        while (c.charAt(0) == ' ') c = c.substring(1);
+        if (c.indexOf("sessionToken=") == 0)  {
+          found = true;
+        }
+      }
+      if (!found) {
+        window.location.href = "http://" + window.location.host + "/signin.html#/?next=" + window.location.hash.substr(1);
+      }
+    })();
+  </script>
   <!--<link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.min.css"/>-->
 
   <!-- build:css styles/index.css -->

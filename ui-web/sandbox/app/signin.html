@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pings</title>
   <script type="text/javascript" ng-if="false">
     (function () {
       var ca = document.cookie.split(';');
@@ -14,7 +15,6 @@
       }
     })();
   </script>
-  <title>Pings</title>
 
   <!--<link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.min.css"/>-->
 
@@ -33,9 +33,9 @@
 
   <script data-main="modules/signin-main" src="require.js"></script>
 </head>
-<body ng-cloak>
+<body>
 <div id="fb-root"></div>
-<div class="container" ng-controller="LoginController as vm">
+<div class="container" ng-controller="LoginController as vm" ng-cloak>
   <form class="form-signin" ng-submit="vm.basicLogin()">
     <h2 class="form-signin-heading">Sign in to Pings</h2>
     <span ng-show="vm.loginFailed" style="color:red">Invalid username or password.</span>&nbsp;

@@ -21,7 +21,7 @@ define(['angular', 'login.controller', 'authentication/facebook/facebook.module'
 
       controller.fbLogin();
 
-      expect(facebookService.fbLogin).toHaveBeenCalledWith(controller.redirectToHome);
+      expect(facebookService.fbLogin).toHaveBeenCalledWith(controller.redirectToHome, controller.authFail);
     }));
 
     it("should call googleService.gpLogin with the redirectToHome callback on gpLogin", inject(function ($controller) {
@@ -31,7 +31,7 @@ define(['angular', 'login.controller', 'authentication/facebook/facebook.module'
 
       controller.gpLogin();
 
-      expect(googleService.gpLogin).toHaveBeenCalledWith(controller.redirectToHome);
+      expect(googleService.gpLogin).toHaveBeenCalledWith(controller.redirectToHome, controller.authFail);
     }));
 
     it("should call authenticationService.authenticate with the redirectToHome callback on basicLogin", inject(function ($controller) {
@@ -46,7 +46,7 @@ define(['angular', 'login.controller', 'authentication/facebook/facebook.module'
       expect(authenticationService.authenticate).toHaveBeenCalledWith('test@email', {
         provider: 'self',
         token: 'bc276c3b995088c08cf933c43657bd73854864ae75168aa777159bcf3f882a6d'
-      }, controller.redirectToHome);
+      }, controller.redirectToHome, controller.authFail);
     }));
 
   });

@@ -195,7 +195,7 @@ module.exports = function (grunt) {
         livereload: {
           options: {
             livereload: {
-              port: '<%= connect.options.livereload %>'
+              port: '<%= connect.options.livereload %>',
               //key: grunt.file.read('dev_keys/server.key').toString(),
               //cert: grunt.file.read('dev_keys/server.crt').toString(),
               //ca: grunt.file.read('dev_keys/ca.crt').toString(),

@@ -16,18 +16,22 @@ define(['gapi.loader'], function (gapi) {
           token: response.id_token,
           data: 'id=' + encodeURIComponent(email) + ';name=' + encodeURIComponent(name) + ';photoUrl=' + encodeURIComponent(photoUrl)
         };
-        authenticationService.authenticate(email, mode, _this.callback);
+        authenticationService.authenticate(email, mode, _this.secondaryCallback, _this.failCallback);
+      } else {
+        if (_this.failCallback) {
+          _this.failCallback();
+        }
       }
     };
 
-    _this.gpLogin = function (callback) {
-      _this.callback = callback;
+    _this.gpLogin = function (secondaryCallback, failCallback) {
+      _this.secondaryCallback = secondaryCallback;
+      _this.failCallback = failCallback;
       var authInstance = gapi.auth2.getAuthInstance();
       authInstance.signIn().then(function () {
-          var user = gapi.auth2.getAuthInstance().currentUser.get();
-          _this.loginCallback(user.getAuthResponse());
-        }
-      );
+        var user = gapi.auth2.getAuthInstance().currentUser.get();
+        _this.loginCallback(user.getAuthResponse());
+      }, _this.failCallback);
     }
   }
 

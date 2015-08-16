@@ -1,10 +1,9 @@
 define([
-  'progressbar',
   'authentication/facebook/facebook.service',
   'facebook',
   'angular',
   'authentication/authentication.module'
-], function (progress, service) {
+], function (service) {
   'use strict';
 
   var facebook = angular.module('facebookModule', ['authenticationModule']).config(function () {
@@ -15,8 +14,6 @@ define([
       cookie: false,
       xfbml: false
     });
-    progress.increment();
-    console.log("Loading Facebook scripts...");
   });
   facebook.service('facebookService', service);
 });

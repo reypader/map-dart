@@ -1,4 +1,4 @@
-define([], function () {
+define(['progressbar'], function () {
   'use strict';
 
   function service(authenticationService) {
@@ -13,13 +13,18 @@ define([], function () {
             token: _authResponse.accessToken,
             data: 'id=' + encodeURIComponent(_authResponse.userID) + ';name=' + encodeURIComponent(response.name) + ';photoUrl=' + encodeURIComponent(response.picture.data.url)
           };
-          authenticationService.authenticate(response.email, mode, _this.callback);
+          authenticationService.authenticate(response.email, mode, _this.secondaryCallback,_this.failCallback);
         });
+      } else {
+        if (_this.failCallback) {
+          _this.failCallback();
+        }
       }
     };
 
-    _this.fbLogin = function (callback) {
-      _this.callback = callback;
+    _this.fbLogin = function (secondaryCallback, failCallback) {
+      _this.secondaryCallback = secondaryCallback;
+      _this.failCallback = failCallback;
       FB.login(_this.loginCallback, {
         scope: 'email'
       });
