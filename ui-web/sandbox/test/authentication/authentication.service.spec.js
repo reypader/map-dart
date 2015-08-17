@@ -28,7 +28,6 @@ define(['angular', 'angular-mocks', 'authentication/authentication.module', 'res
         }));
         spyOn(authenticationService, 'setSession');
 
-        expect(authenticationService.authenticated).toBe(false);
         authenticationService.authenticate('test@email', {
           provider: 'facebook',
           token: 'token',
@@ -44,7 +43,6 @@ define(['angular', 'angular-mocks', 'authentication/authentication.module', 'res
         });
         expect(authenticationService.setSession).toHaveBeenCalled();
         expect(dummy.callback).toHaveBeenCalledWith(true);
-        expect(authenticationService.authenticated).toBe(true);
       }
     );
 
@@ -58,7 +56,6 @@ define(['angular', 'angular-mocks', 'authentication/authentication.module', 'res
         spyOn(userRestClientService, 'authenticate').and.returnValue($q.when({}));
         spyOn(authenticationService, 'setSession');
 
-        expect(authenticationService.authenticated).toBe(false);
         authenticationService.authenticate('test@email', {
           provider: 'facebook',
           token: 'token',
@@ -74,7 +71,6 @@ define(['angular', 'angular-mocks', 'authentication/authentication.module', 'res
         });
         expect(authenticationService.setSession).not.toHaveBeenCalled();
         expect(dummy.callback).toHaveBeenCalledWith(false);
-        expect(authenticationService.authenticated).toBe(false);
       }
     );
   });

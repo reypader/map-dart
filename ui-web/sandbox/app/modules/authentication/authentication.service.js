@@ -3,7 +3,6 @@ define(['progressbar'], function (progress) {
 
   function service(userRestClientService, $cookies) {
     var _this = this;
-    _this.authenticated = false;
 
     _this.authenticate = function (email, mode, callback, failCallback) {
       progress.increment();
@@ -15,8 +14,7 @@ define(['progressbar'], function (progress) {
       }).then(function (response) {
         progress.done();
         if (response.token) {
-          _this.setSession(response.token);
-          _this.authenticated = true;
+          _this.setSession(response);
           if (callback) {
             callback(true);
           }
@@ -25,12 +23,22 @@ define(['progressbar'], function (progress) {
             callback(false);
           }
         }
-      },failCallback);
+      }, failCallback);
     }
 
-    _this.setSession = function (token) {
-      alert("storing " + token);
-      $cookies.put('sessionToken', token, {secure: true});
+    _this.setSession = function (response) {
+      console.log("store: " + response.identityProvider);
+      $cookies.put('provider', response.identityProvider, {secure: false});
+      console.log("store: " + response.user);
+      $cookies.put('user', response.user, {secure: false});
+      console.log("store: " + response.token);
+      $cookies.put('sessionToken', response.token, {secure: false});
+    }
+
+    _this.clearSession = function () {
+      $cookies.remove('provider', {secure: false});
+      $cookies.remove('user', {secure: false});
+      $cookies.remove('sessionToken', {secure: false});
     }
   }
 
