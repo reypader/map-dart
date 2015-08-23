@@ -1,5 +1,11 @@
-define(['gapi.loader'], function (gapi) {
+define([
+  'gapi.loader'
+], function (gapi) {
   'use strict';
+
+  service.$inject = [
+    'authenticationService'
+  ];
 
   function service(authenticationService) {
     var _this = this;
@@ -34,8 +40,6 @@ define(['gapi.loader'], function (gapi) {
       }, _this.failCallback);
     }
   }
-
-  service.$inject = ['authenticationService'];
 
   return service;
 });

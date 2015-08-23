@@ -1,6 +1,11 @@
 define([], function () {
   'use strict';
 
+  directive.$inject = [
+    'userRestClientService',
+    '$q'
+  ];
+
   function directive(userRestClientService, $q) {
     var EMAIL_REGEXP = /[A-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     return {
@@ -30,8 +35,6 @@ define([], function () {
       }
     };
   }
-
-  directive.$inject = ['userRestClientService', '$q'];
 
   return directive;
 });

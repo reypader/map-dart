@@ -1,5 +1,12 @@
-define(['progressbar'], function (progress) {
+define([
+  'progressbar'
+], function (progress) {
   'use strict';
+
+  service.$inject = [
+    'userRestClientService',
+    '$cookies'
+  ];
 
   function service(userRestClientService, $cookies) {
     var _this = this;
@@ -41,9 +48,6 @@ define(['progressbar'], function (progress) {
       $cookies.remove('sessionToken', {secure: false});
     }
   }
-
-
-  service.$inject = ['userRestClientService', '$cookies'];
 
   return service;
 });

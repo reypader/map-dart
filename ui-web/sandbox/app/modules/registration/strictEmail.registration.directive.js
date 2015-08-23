@@ -1,6 +1,8 @@
 define([], function () {
   'use strict';
 
+  directive.$inject = [];
+
   function directive() {
     return {
       require: 'ngModel',
@@ -16,8 +18,6 @@ define([], function () {
       }
     };
   }
-
-  directive.$inject = [];
 
   return directive;
 });

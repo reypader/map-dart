@@ -1,7 +1,13 @@
-define(["gapi.loader"], function (gapi) {
+define([
+  'gapi.loader'
+], function (gapi) {
   'use strict';
 
-  var service = function service($q) {
+  service.$inject = [
+    '$q'
+  ];
+
+  function service($q) {
     var _this = this;
 
     _this.checkEmail = function (email) {
@@ -66,8 +72,6 @@ define(["gapi.loader"], function (gapi) {
       return def.promise;
     }
   }
-
-  service.$inject = ['$q'];
 
   return service;
 })

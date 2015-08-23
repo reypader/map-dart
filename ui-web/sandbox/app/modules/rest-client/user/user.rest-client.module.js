@@ -5,7 +5,7 @@ define([
 ], function (config, service) {
   'use strict';
 
-  var app = angular.module('userRestClient', []);
-  app.config(config);
-  app.service('userRestClientService', service);
+  angular.module('userRestClient', [])
+    .config(config)
+    .service('userRestClientService', service);
 });

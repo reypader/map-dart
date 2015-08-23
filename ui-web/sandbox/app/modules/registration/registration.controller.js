@@ -1,5 +1,12 @@
-define(['progressbar'], function (progress) {
+define([
+  'progressbar'
+], function (progress) {
   'use strict';
+
+  controller.$inject = [
+    'userRestClientService',
+    'vcRecaptchaService'
+  ];
 
   function controller(userRestClientService, vcRecaptchaService) {
     var _this = this;
@@ -38,8 +45,6 @@ define(['progressbar'], function (progress) {
       });
     }
   }
-
-  controller.$inject = ['userRestClientService', 'vcRecaptchaService'];
 
   return controller;
 });

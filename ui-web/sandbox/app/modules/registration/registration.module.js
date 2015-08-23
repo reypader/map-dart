@@ -1,8 +1,8 @@
 define([
-  'registration/registration.config',
-  'registration/registration.controller',
-  'registration/newEmail.registration.directive',
-  'registration/strictEmail.registration.directive',
+  './registration.config',
+  './registration.controller',
+  './newEmail.registration.directive',
+  './strictEmail.registration.directive',
   'angular',
   'angular-bootstrap',
   'angular-route',
@@ -12,10 +12,10 @@ define([
 ], function (config, controller, newEmailDirective, strictEmailDirective) {
   'use strict';
 
-  var registration = angular.module('registrationModule', ['userRestClient', 'ui.bootstrap', 'ngRoute', 'vcRecaptcha']);
-  registration.config(config);
-  registration.controller('RegistrationController', controller);
-  registration.directive('newEmail', newEmailDirective);
-  registration.directive('strictEmail', strictEmailDirective);
+  angular.module('registrationModule', ['userRestClient', 'ui.bootstrap', 'ngRoute', 'vcRecaptcha'])
+    .config(config)
+    .controller('RegistrationController', controller)
+    .directive('newEmail', newEmailDirective)
+    .directive('strictEmail', strictEmailDirective);
 
 });

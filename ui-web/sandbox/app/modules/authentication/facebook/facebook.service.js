@@ -1,5 +1,11 @@
-define(['progressbar'], function () {
+define([
+  'facebook'
+], function (FB) {
   'use strict';
+
+  service.$inject = [
+    'authenticationService'
+  ];
 
   function service(authenticationService) {
     var _this = this;
@@ -13,7 +19,7 @@ define(['progressbar'], function () {
             token: _authResponse.accessToken,
             data: 'id=' + encodeURIComponent(_authResponse.userID) + ';name=' + encodeURIComponent(response.name) + ';photoUrl=' + encodeURIComponent(response.picture.data.url)
           };
-          authenticationService.authenticate(response.email, mode, _this.secondaryCallback,_this.failCallback);
+          authenticationService.authenticate(response.email, mode, _this.secondaryCallback, _this.failCallback);
         });
       } else {
         if (_this.failCallback) {
@@ -30,8 +36,6 @@ define(['progressbar'], function () {
       });
     }
   }
-
-  service.$inject = ['authenticationService'];
 
   return service;
 });

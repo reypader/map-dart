@@ -1,19 +1,13 @@
 define([
-  'authentication/facebook/facebook.service',
-  'facebook',
+  './facebook.config',
+  './facebook.service',
   'angular',
   'authentication/authentication.module'
-], function (service) {
+], function (config, service) {
   'use strict';
 
-  var facebook = angular.module('facebookModule', ['authenticationModule']).config(function () {
-    FB.init({
-      appId: '1597342647199773',
-      version: 'v2.4',
-      status: true,
-      cookie: false,
-      xfbml: false
-    });
-  });
-  facebook.service('facebookService', service);
+  angular
+    .module('facebookModule', ['authenticationModule']).config(config)
+    .service('facebookService', service);
+
 });

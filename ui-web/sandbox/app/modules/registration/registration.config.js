@@ -1,6 +1,10 @@
 define([], function () {
   'use strict';
 
+  config.$inject = [
+    '$routeProvider'
+  ];
+
   function config($routeProvider) {
     $routeProvider.when('/', {
       templateUrl: 'modules/registration/main.registration.partial.html',
@@ -9,8 +13,6 @@ define([], function () {
     }).otherwise({redirectTo: '/'});
 
   }
-
-  config.$inject = ['$routeProvider'];
 
   return config;
 });

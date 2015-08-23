@@ -3,7 +3,7 @@ define([], function () {
 
   function config($routeProvider) {
     $routeProvider.when('/home', {
-      templateUrl: 'home.partial.html',
+      templateUrl: 'modules/home/home.partial.html',
       controller: 'HomeCtrl',
       controllerAs: 'homeCtrl'
     });
