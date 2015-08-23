@@ -10,7 +10,7 @@ html, body, .fill-height {
   height: 100%;
 }
 
-.no-scroll{
+.no-scroll {
   overflow-y: hidden;
 }
 
@@ -43,13 +43,6 @@ html, body, .fill-height {
   text-align: center;
   z-index: 1000;
 }
-
-/*#map-container > div {*/
-/*/!* make the block inline *!/*/
-/*display: inline-block;*/
-/*/!* reset container's center alignment *!/*/
-/*text-align: left;*/
-/*}*/
 
 #show-map-btn:hover {
   background-color: #007448;

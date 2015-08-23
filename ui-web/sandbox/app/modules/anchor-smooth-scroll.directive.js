@@ -9,7 +9,7 @@ define(['angular'], function () {
    * Anchor Smooth Scroll - Smooth scroll to the given anchor on click
    *   adapted from this stackoverflow answer: http://stackoverflow.com/a/21918502/257494
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-  angular.module('anchorSmoothScrollModule', []).directive('anchorSmoothScroll', function ($location) {
+  angular.module('anchorSmoothScrollModule', []).directive('anchorSmoothScroll', function () {
     'use strict';
 
     return {
@@ -19,7 +19,7 @@ define(['angular'], function () {
         'anchorSmoothScroll': '@'
       },
 
-      link: function ($scope, $element, $attrs) {
+      link: function ($scope, $element) {
 
         initialize();
 

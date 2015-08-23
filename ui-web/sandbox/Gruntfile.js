@@ -6,12 +6,24 @@ module.exports = function (grunt) {
     css: 'app/styles',
     fonts: 'app/fonts',
     scripts: 'app/modules',
-    bower_path: 'bower_components'
+    bower_path: 'bower_components',
+    distribution: 'dist',
   };
   // Project configuration.
   grunt.initConfig({
       globalConfig: globalConfig,
-      clean: ['dist', '.tmp', '<%= globalConfig.fonts %>/*.*', 'app/require.js', '<%= globalConfig.css %>/compiled-bootstrap', '<%= globalConfig.css %>/*.*'],
+      clean: [
+        '<%= globalConfig.distribution %>/fonts',
+        '<%= globalConfig.distribution %>/images',
+        '<%= globalConfig.distribution %>/modules',
+        '<%= globalConfig.distribution %>/styles',
+        '<%= globalConfig.distribution %>/*.{js,html,css}',
+        '.tmp',
+        '<%= globalConfig.fonts %>/*.*',
+        'app/require.js',
+        '<%= globalConfig.css %>/compiled-bootstrap',
+        '<%= globalConfig.css %>/*.*'
+      ],
       jshint: {
         options: {
           curly: true,
@@ -57,12 +69,22 @@ module.exports = function (grunt) {
         //}
       },
       requirejs: {
-        compile: {
+        main: {
           options: {
             baseUrl: '<%= globalConfig.scripts %>',
             mainConfigFile: '<%= globalConfig.scripts %>/main.js',
             name: 'main',
             out: 'dist/modules/main.js',
+            optimize: "uglify",
+            preserveLicenseComments: false
+          }
+        },
+        signin: {
+          options: {
+            baseUrl: '<%= globalConfig.scripts %>',
+            mainConfigFile: '<%= globalConfig.scripts %>/signin-main.js',
+            name: 'signin-main',
+            out: 'dist/modules/signin-main.js',
             optimize: "uglify",
             preserveLicenseComments: false
           }
@@ -234,7 +256,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-usemin');
 
 
-  grunt.registerTask('serve', ['test','connect', 'watch']);
+  grunt.registerTask('serve', ['test', 'connect', 'watch']);
   grunt.registerTask('test', ['init', 'karma']);
   grunt.registerTask('release', ['test', 'requirejs', 'copy:pages', 'copy:require', 'copy:statics', 'build-pages']);
   grunt.registerTask('compile-style', ['customize_bootstrap', 'less']);
