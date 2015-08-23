@@ -3,11 +3,7 @@ define([], function () {
 
   function controller() {
     var _this = this;
-    _this.activeTab = 'Home';
-
-    _this.changeTab = function changeTab(tabName) {
-      _this.activeTab = tabName;
-    }
+    _this.isCollapsed = true;
   }
 
   controller.$inject = [];

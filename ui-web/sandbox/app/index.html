@@ -12,22 +12,23 @@
         var c = ca[i];
         var found = false;
         while (c.charAt(0) == ' ') c = c.substring(1);
-        if (c.indexOf("sessionToken=") == 0)  {
+        if (c.indexOf("sessionToken=") == 0) {
           found = true;
         }
       }
-      if (!found) {
-        window.location.href = "http://" + window.location.host + "/signin.html#/?next=" + window.location.hash.substr(1);
-      }
+//      if (!found) {
+//        window.location.href = "http://" + window.location.host + "/signin.html#/?next=" + window.location.hash.substr(1);
+//      }
     })();
   </script>
   <!--<link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.min.css"/>-->
 
   <!-- build:css styles/index.css -->
-  <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css"/>
   <link rel="stylesheet" type="text/css" href="styles/compiled-bootstrap/bootstrap.css"/>
   <link rel="stylesheet" type="text/css" href="styles/raw/main.css"/>
-  <link rel="stylesheet" type="text/css" href="../bower_components/nprogress/nprogress.css"/>
+  <link rel="stylesheet" type="text/css" href="styles/raw/nprogress.css"/>
+  <link rel="stylesheet" type="text/css" href="../bower_components/angular-rangeslider/angular.rangeSlider.css">
+
   <!-- endbuild -->
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -38,82 +39,216 @@
   <script data-main="modules/main" src="require.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-default navbar-static-top" ng-controller="NavCtrl as nav">
-  <div class="container">
+<!--<div class="navbar-sm">-->
+<!--<div class="navbar-primary">-->
+<nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavigationController as nav">
+  <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-              aria-expanded="false" aria-controls="navbar">
+      <button type="button" class="navbar-toggle collapsed" ng-click="nav.isCollapsed = !nav.isCollapsed">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Project name</a>
+      <a class="navbar-brand" href="#">Pings</a>
     </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li class="ng-class: nav.activeTab === 'home' && 'active' ;"><a href="#home"
-                                                                        ng-click="nav.changeTab('home')">Home</a>
-        </li>
-        <li class="ng-class: nav.activeTab === 'about' && 'active' ;"><a href="#about"
-                                                                         ng-click="nav.changeTab('about')">About</a>
-        </li>
-        <li class="ng-class: nav.activeTab === 'contact' && 'active' ;"><a href="#contact"
-                                                                           ng-click="nav.changeTab('contact')">Contact</a>
-        </li>
-        <li class="dropdown">
+    <div id="navbar" class="navbar-collapse" collapse="nav.isCollapsed" style="overflow: hidden">
+      <!--<ul class="nav navbar-nav">-->
+      <!--<li><a href="#">Landscape</a></li>-->
+      <!--<li><a href="#">Cities</a></li>-->
+      <!--<li><a href="#">Events</a></li>-->
+      <!--<li><a href="#">Calamity</a></li>-->
+      <!--</ul>-->
+      <!--<h3 class="nav article-title"><strong>Main article title</strong></h3>-->
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group input-group">
+          <input type="text" class="form-control" placeholder="Search for...">
+<span class="input-group-btn">
+<button class="btn btn-default" type="button">Go!</button>
+</span>
+        </div>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown" ng-class="{ open : dd1 }" ng-init="dd1 = false" ng-click="dd1 = !dd1">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-             aria-expanded="false">Dropdown <span class="caret"></span></a>
+             aria-expanded="false">Site<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li class="dropdown-header">Nav header</li>
-            <li><a href="#">Separated link</a></li>
-            <li><a href="#">One more separated link</a></li>
+            <li><a href="#">Contact us</a></li>
+            <li><a href="#">About the site</a></li>
+            <!--<li role="separator" class="divider"></li>-->
           </ul>
         </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="../navbar/">Default</a></li>
-        <li class="active"><a href="./">Static top <span class="sr-only">(current)</span></a></li>
-        <li><a href="../navbar-fixed-top/">Fixed top</a></li>
+        <li><a href="../profile">Profile</a></li>
+        <li><a href="#">Logout</a></li>
       </ul>
     </div>
-    <!--/.nav-collapse -->
   </div>
 </nav>
-<div class="container-full">
-  <div ng-view></div>
+<div id="map-container" class="animate-slide" ng-show="mc.showMap" ng-controller="MapController as mc">
+  <div id="map">
+
+    <!--<b  utton id="create-button" follow-pointer="!mc.showCreateButton" ng-hide="!mc.showCreateButton" type="button"-->
+    <!--class="btn btn-primary" style="position:fixed;margin-top:10px;margin-left:10px; z-index: 1000"><span-->
+    <!--class="glyphicon glyphicon-flag"></span> Ping!-->
+    <!--</button>-->
+    <ui-gmap-google-map
+            options="mc.map.options"
+            center='mc.map.center'
+            zoom='mc.map.zoom'></ui-gmap-google-map>
+  </div>
+  <div>
+    <div style="height:3px;width: 100%;background-color: #007448;" ng-show="mc.ready"></div>
+    <button id="show-map-btn" style="border-top: 0;" type="button" class="btn btn-primary btn-show-map"
+            ng-show="mc.ready" ng-click="mc.showMap = !mc.showMap">
+      Show Map
+    </button>
+  </div>
 </div>
-<script type="text/javascript">
-  /*!
-   * IE10 viewport hack for Surface/desktop Windows 8 bug
-   * Copyright 2014-2015 Twitter, Inc.
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-   */
+<div id="content" class="container" style="padding-top:51px;">
+  <hr/>
+  <div class="row">
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>New York City skyline</strong></h5>
+        <img src="images/samples/newyork-n.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        <p>
+          Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+          repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum
+          ut.
+          Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec.
+        </p>
+      </div>
+    </div>
+    <div class="item">
 
-  //DEV NOTES: copied here to save on GETs (GAE has a cap on GETs incoming)
-
-  // See the Getting Started docs for more information:
-  // http://getbootstrap.com/getting-started/#support-ie10-width
-
-  (function () {
-    'use strict';
-
-    if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
-      var msViewportStyle = document.createElement('style')
-      msViewportStyle.appendChild(
-              document.createTextNode(
-                      '@-ms-viewport{width:auto!important}'
-              )
-      )
-      document.querySelector('head').appendChild(msViewportStyle)
-    }
-
-  })();
-
-</script>
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>Camping in the wild</strong></h5>
+        <img src="images/samples/camping.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
+        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
+        philosophia id eam, tantas latine laoreet his ne.
+      </div>
+    </div>
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>St. Peter Square</strong></h5>
+        <img src="images/samples/vatican.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
+        Mea affert fabulas forensibus eu.
+      </div>
+    </div>
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>Niagra falls</strong></h5>
+        <img src="images/samples/niagra1.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
+        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
+        philosophia id eam, tantas latine laoreet his ne.
+      </div>
+    </div>
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>Old Faithful in Yellowstone</strong></h5>
+        <img src="images/samples/yellowstone.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
+        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
+        philosophia id eam, tantas latine laoreet his ne.
+      </div>
+    </div>
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>Swiss Alps</strong></h5>
+        <img src="images/samples/alps.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
+        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
+        philosophia id eam, tantas latine laoreet his ne.Ullum putent mea ex, pri fabellas tacimates complectitur at. Et
+        quo duis congue. Eam ut cibo debitis. Vix dolorum expetendis ullamcorper ex.
+      </div>
+    </div>
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>Viewing Deck in Niagra Falls</strong></h5>
+        <img src="images/samples/niagra2.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset.
+      </div>
+    </div>
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>Mt. Pulag</strong></h5>
+        <img src="images/samples/banner.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
+        Mea affert fabulas forensibus eu. Virtute dissentiunt philosophia id eam, tantas latine laoreet his ne.
+      </div>
+    </div>
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>I love NYC</strong></h5>
+        <img src="images/samples/newyork.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
+        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
+        philosophia id eam.
+      </div>
+    </div>
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>Fine dining in Miami</strong></h5>
+        <img src="images/samples/resto.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
+        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
+        philosophia id eam, tantas latine laoreet his ne.
+      </div>
+    </div>
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>Half Dome in Yosemite</strong></h5>
+        <img src="images/samples/yosemite.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+        repudiare elaboraret comprehensam, ea iuvaret maluisset sed.
+      </div>
+    </div>
+    <div class="item">
+      <div class="panel panel-default">
+        <h5 class="item-header"><strong>Angkor Wat</strong></h5>
+        <img src="images/samples/wat.jpg" class="img-rounded">
+        <h6><i>by: <a href="#">traveller</a></i></h6>
+        <hr/>
+        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
+        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
+        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
+        philosophia id eam, tantas latine laoreet his ne.
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>

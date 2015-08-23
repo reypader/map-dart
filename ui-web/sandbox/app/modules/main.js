@@ -1,7 +1,6 @@
 require.config({
   paths: {
     facebook: '//connect.facebook.net/en_US/sdk',
-    cryptojs: '//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256',
     async: '../../bower_components/requirejs-plugins/src/async',
     angular: '../../bower_components/angular/angular',
     bootstrap: '../../bower_components/bootstrap/dist/js/bootstrap',
@@ -11,12 +10,19 @@ require.config({
     'angular-ui-validate': '../../bower_components/angular-ui-validate/dist/validate',
     'angular-route': '../../bower_components/angular-route/angular-route',
     'angular-cookies': '../../bower_components/angular-cookies/angular-cookies',
+    'angular-google-maps': '../../bower_components/angular-google-maps/dist/angular-google-maps',
     'ng-password-strength': '../../bower_components/ng-password-strength/dist/scripts/ng-password-strength',
     lodash: '../../bower_components/lodash/lodash',
     'angular-recaptcha': '../../bower_components/angular-recaptcha/release/angular-recaptcha',
     'font-awesome': '../../bower_components/font-awesome/fonts/*',
-    pace: '../../bower_components/pace/pace',
-    nprogress: '../../bower_components/nprogress/nprogress'
+    nprogress: '../../bower_components/nprogress/nprogress',
+    'angular-rangeslider': '../../bower_components/angular-rangeslider/angular.rangeSlider',
+    'angular-ui-slider': '../../bower_components/angular-ui-slider/src/slider',
+    'jquery-ui': '../../bower_components/jquery-ui/ui/jquery-ui',
+    'angularjs-slider': '../../bower_components/angularjs-slider/rzslider',
+    'angular-slimscroll': '../../bower_components/angular-slimscroll/angular-slimscroll',
+    slimScroll: '../../bower_components/slimScroll/jquery.slimscroll.min',
+    'jquery-slimscroll': '../../bower_components/jquery-slimscroll/jquery.slimscroll.min'
   },
   shim: {
     bootstrap: {
@@ -52,6 +58,25 @@ require.config({
       deps: [
         'angular',
         'recaptcha.loader'
+      ]
+    },
+    'angular-google-maps': {
+      deps: [
+        'angular',
+        'lodash'
+      ]
+    },
+    'angular-rangeslider': {
+      deps: [
+        'angular',
+        'jquery'
+      ]
+    },
+    'angular-slimscroll': {
+      deps: [
+        'angular',
+        'jquery',
+        'jquery-slimscroll'
       ]
     },
     facebook: {

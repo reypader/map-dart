@@ -9,8 +9,5 @@ define([
 
   var app = angular.module('navigationModule', ['ngRoute', 'ngCookies']);
   app.config(config);
-  app.controller('NavCtrl', controller);
-  app.run(function ($cookies) {
-    alert($cookies.get('sessionToken'));
-  })
+  app.controller('NavigationController', controller);
 });

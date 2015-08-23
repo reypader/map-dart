@@ -24,7 +24,11 @@
     "angular-cookies": "~1.4.3",
     "requirejs-plugins": "~1.0.3",
     "angular-recaptcha": "~2.2.4",
-    "nprogress": "~0.2.0"
+    "nprogress": "~0.2.0",
+    "angular-google-maps": "~2.1.5",
+    "angular-rangeslider": "~0.0.14",
+    "angular-slimscroll": "~1.1.5",
+    "jquery-slimscroll": "~1.3.6"
   },
   "scripts": {
     "postinstall": "grunt init"

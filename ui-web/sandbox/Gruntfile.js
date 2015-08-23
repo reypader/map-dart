@@ -47,10 +47,14 @@ module.exports = function (grunt) {
         }
       },
       less: {
-        task: {
+        bootstrap: {
           src: '<%= customize_bootstrap.task.options.dest %>/bootstrap.less',
           dest: '<%= customize_bootstrap.task.options.dest %>/bootstrap.css'
-        }
+        }//,
+        //slider: {
+        //  src: '<%= customize_bootstrap.task.options.src %>/rzslider.less',
+        //  dest: '<%= customize_bootstrap.task.options.dest %>/rzslider.css'
+        //}
       },
       requirejs: {
         compile: {
@@ -230,7 +234,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-usemin');
 
 
-  grunt.registerTask('serve', ['test', 'connect', 'watch']);
+  grunt.registerTask('serve', ['test','connect', 'watch']);
   grunt.registerTask('test', ['init', 'karma']);
   grunt.registerTask('release', ['test', 'requirejs', 'copy:pages', 'copy:require', 'copy:statics', 'build-pages']);
   grunt.registerTask('compile-style', ['customize_bootstrap', 'less']);
