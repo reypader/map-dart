@@ -1,9 +1,11 @@
 <accordion close-others="true" id="create" anchor-smooth-scroll="create">
   <accordion-group is-open="vm.registrationOpened">
     <accordion-heading>
+      <div>
       <small><a href="#">Not yet a member? Create an account. <i class="pull-right glyphicon"
                                                                  ng-class="{'glyphicon-chevron-down': vm.registrationOpened, 'glyphicon-chevron-right': !vm.registrationOpened}"></i></a>
       </small>
+      </div>
     </accordion-heading>
     <div ng-switch="vm.registrationDone">
       <div ng-switch-default>
