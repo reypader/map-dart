@@ -51,8 +51,14 @@ require.config({
         'recaptcha.loader'
       ]
     },
+    facebook: {
+      exports: 'FB'
+    },
     nprogress: {
       exports: 'NProgress'
+    },
+    cryptojs: {
+      exports: 'CryptoJS'
     }
   },
 

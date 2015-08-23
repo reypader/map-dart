@@ -1,4 +1,4 @@
-define(['angular', 'login.controller', 'authentication/facebook/facebook.module', 'authentication/authentication.module'], function () {
+define(['angular', 'login/login.module', 'authentication/facebook/facebook.module', 'authentication/authentication.module'], function () {
   'use strict';
 
   describe("Login Controller", function () {

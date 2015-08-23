@@ -49,6 +49,9 @@ require.config({
     },
     nprogress: {
       exports: 'NProgress'
+    },
+    cryptojs: {
+      exports: 'CryptoJS'
     }
   },
   packages: []
@@ -61,7 +64,7 @@ require([
   'angular-ui-validate',
   'password-strength.directive',
   'anchor-smooth-scroll.directive',
-  'login.controller',
+  'login/login.module',
   'registration/registration.module'
 ], function (progress) {
   'use strict';
