@@ -75,8 +75,12 @@ require.config({
     'angular-slimscroll': {
       deps: [
         'angular',
-        'jquery',
         'jquery-slimscroll'
+      ]
+    },
+    'jquery-slimscroll': {
+      deps: [
+        'jquery'
       ]
     },
     facebook: {
@@ -107,5 +111,5 @@ require([
   progress.setScriptCount(2);
   progress.scriptLoad();
   console.log("Loading other dependencies...");
-  angular.bootstrap(document, ['ui.slimscroll', 'ui.bootstrap','ngAnimate', 'mapModule', 'navigationModule', 'homeModule']);
+  angular.bootstrap(document, ['ui.slimscroll', 'ui.bootstrap', 'ngAnimate', 'mapModule', 'navigationModule', 'homeModule']);
 });
