@@ -68,13 +68,19 @@ require.config({
 });
 require([
   'progressbar',
+  'ie10-fix',
+  'map/map.module',
+  //'bootstrap',
   'angular',
+  'angular-bootstrap',
   'angular-cookies',
+  'angular-slimscroll',
   'navigation/navigation.module', 'home/home.module'
 ], function (progress) {
   'use strict';
 
-  progress.increment();
+  progress.setScriptCount(2);
+  progress.scriptLoad();
   console.log("Loading other dependencies...");
-  angular.bootstrap(document, ['navigationModule', 'homeModule']);
+  angular.bootstrap(document, ['ui.slimscroll', 'ui.bootstrap','ngAnimate', 'mapModule', 'navigationModule', 'homeModule']);
 });

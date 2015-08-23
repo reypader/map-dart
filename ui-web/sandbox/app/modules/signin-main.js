@@ -58,6 +58,7 @@ require.config({
 });
 require([
   'progressbar',
+  'ie10-fix',
   'gapi.loader',
   'angular',
   'angular-bootstrap',
