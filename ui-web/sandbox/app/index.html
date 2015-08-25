@@ -21,7 +21,6 @@
 //      }
     })();
   </script>
-  <!--<link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.min.css"/>-->
 
   <!-- build:css styles/index.css -->
   <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css"/>
@@ -29,7 +28,6 @@
   <link rel="stylesheet" type="text/css" href="styles/raw/main.css"/>
   <link rel="stylesheet" type="text/css" href="styles/raw/nprogress.css"/>
   <link rel="stylesheet" type="text/css" href="../bower_components/angular-rangeslider/angular.rangeSlider.css">
-
   <!-- endbuild -->
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -40,8 +38,6 @@
   <script data-main="modules/main" src="require.js"></script>
 </head>
 <body>
-<!--<div class="navbar-sm">-->
-<!--<div class="navbar-primary">-->
 <nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavigationController as nav">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -53,51 +49,61 @@
       </button>
       <a class="navbar-brand" href="#">Wanderlust</a>
 
-
-
-      <p class="navbar-text">  <a class="navbar-link" href="#"><strong>blablagiggles</strong></a></p>
-    <!-- max 13 -->
-  </div>
-  <div id="navbar" class="navbar-collapse" collapse="nav.isCollapsed" style="overflow: hidden">
-    <!--<h3 class="nav article-title"><strong>Main article title</strong></h3>-->
-
-
-    <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown" dropdown>
-        <a href="#" class="dropdown-toggle" dropdown-toggle role="button">
-          About
-          <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Contact us</a></li>
-          <li><a href="#">About the site</a></li>
-          <!--<li role="separator" class="divider"></li>-->
-        </ul>
-      </li>
-      <li><a href="#">Logout</a></li>
-    </ul>
-    <form class="navbar-form navbar-right" role="search">
-      <div style="display:table;" class="form-group input-group">
-        <input type="text" autofocus="autofocus" autocomplete="off" placeholder="Search..." name="search" style=""
-               class="form-control">
-        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-      </div>
-    </form>
-    <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown" dropdown>
-        <a href="#" class="dropdown-toggle" dropdown-toggle role="button">
-          Types of markers
-          <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Nature</a></li>
-          <li><a href="#">Cities</a></li>
-          <li><a href="#">Food Joints</a></li>
-        </ul>
-      </li>
-    </ul>
-  </div>
+      <p class="navbar-text"><a class="navbar-link" href="#"><strong>blablagiggles</strong></a></p>
+      <!-- max 13 -->
+    </div>
+    <div id="navbar" class="navbar-collapse" collapse="nav.isCollapsed" style="overflow: hidden">
+      <!--<ul class="nav navbar-nav">-->
+        <!--<li>-->
+          <!--<div style="padding-left: 10px;padding-right: 10px">-->
+            <!--<button type="button" class="btn btn-primary navbar-btn form-control"><i class="fa fa-plus"></i> Ping-->
+            <!--</button>-->
+          <!--</div>-->
+        <!--</li>-->
+      <!--</ul>-->
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown text-center" dropdown>
+          <a href="#" class="dropdown-toggle" dropdown-toggle role="button">
+            About
+            <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="text-center"><a href="#">Contact us</a></li>
+            <li class="text-center"><a href="#">About the site</a></li>
+          </ul>
+        </li>
+        <li class="text-center"><a href="#">Logout</a></li>
+      </ul>
+      <form class="navbar-form navbar-right" role="search">
+        <div style="display:table;" class="form-group input-group">
+          <input type="text" autofocus="autofocus" autocomplete="off" placeholder="Search..." name="search" style=""
+                 class="form-control">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+        </div>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown text-center" dropdown>
+          <a href="#" class="dropdown-toggle" dropdown-toggle role="button">
+            Categories
+            <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="text-center"><a href="#">Nature</a></li>
+            <li class="text-center"><a href="#">Cities</a></li>
+            <li class="text-center"><a href="#">Food Joints</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 <div id="map-container" class="animate-slide" ng-show="mc.showMap" ng-controller="MapController as mc">
+  <button ng-cloak type="button" ng-click="mc.placingMarker=true" ng-disabled="mc.placingMarker"
+          class="btn btn-primary" style="background-color:#005a38;position:fixed; left:10px; top:10px; z-index: 1000"><span
+          class="glyphicon glyphicon-plus"></span> Place a marker
+  </button>
+  <button ng-cloak id="create-button" follow-pointer="!mc.showCreateButton" ng-hide="!mc.showCreateButton" type="button"
+          class="btn btn-primary triangle-isosceles" style="background-color:#005a38;position:fixed;margin-top:10px;margin-left:10px; z-index: 1000"><span
+          class="glyphicon glyphicon-flag"></span> Right here!
+  </button>
   <div id="map">
     <ui-gmap-google-map
             options="mc.map.options"

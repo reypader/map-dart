@@ -12,6 +12,7 @@ define([
     _this.map = undefined;
     _this.mapInstance = {};
     _this.showCreateButton = false;
+    _this.placingMarker = false;
     _this.demo = {
       min1: 20,
       max1: 40
@@ -35,22 +36,6 @@ define([
 
         _this.api.event.addListener(
           _this.mapInstance.map,
-          "rightclick",
-          function (event) {
-            contextMenu(false, event);
-            $timeout(contextMenu(true, event), 100);
-          }
-        );
-        _this.api.event.addListener(
-          _this.mapInstance.map,
-          "longpress",
-          function (event) {
-            contextMenu(false, event);
-            $timeout(contextMenu(true, event), 100);
-          }
-        );
-        _this.api.event.addListener(
-          _this.mapInstance.map,
           'drag',
           function (event) {
             _this.isDragging = true;
@@ -59,17 +44,16 @@ define([
           _this.mapInstance.map,
           'mousedown',
           function (event) {
-            _this.lastClick = +new Date;
             _this.isDragging = false;
-            contextMenu(false, event);
+            contextMenu(false);
           });
         _this.api.event.addListener(
           _this.mapInstance.map,
           'mouseup',
           function (event) {
-            var now = +new Date;
-            if (now - _this.lastClick > 1000 && !_this.isDragging) {
-              _this.api.event.trigger(_this.mapInstance.map, 'longpress', event);
+            if (_this.placingMarker && !_this.isDragging) {
+              _this.placingMarker = false;
+              contextMenu(true);
             }
           });
       });
@@ -104,7 +88,7 @@ define([
 
     }
 
-    function contextMenu(flag, event) {
+    function contextMenu(flag) {
       $scope.$apply(function () {
         _this.showCreateButton = flag;
       });

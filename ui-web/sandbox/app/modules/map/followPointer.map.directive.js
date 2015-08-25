@@ -4,38 +4,27 @@ define([], function () {
   directive.$inject = [];
 
   function directive() {
+    function setLocation(element, event) {
+      element.css({
+        top: (event.clientY - 115) + 'px',
+        left: (event.clientX - 37) + 'px'
+      });
+    }
+
     return {
       restrict: 'A',
       scope: {
         followPointer: '='
       },
       link: function (scope, element) {
-        $('body').mousemove(function (event) {
+        $('#map').mousemove(function (event) {
           if (scope.followPointer) {
-            element.css({
-              top: (event.clientY - 50) + 'px',
-              left: (event.clientX - 10) + 'px'
-            });
+            setLocation(element, event);
           }
         });
 
-        $('body').mousedown(function (event) {
-          switch (event.which) {
-            case 1:
-              if (scope.followPointer) {
-                element.css({
-                  top: (event.clientY - 50) + 'px',
-                  left: (event.clientX - 10) + 'px'
-                });
-              }
-              break;
-            case 3:
-              element.css({
-                top: (event.clientY - 50) + 'px',
-                left: (event.clientX - 10) + 'px'
-              });
-              break;
-          }
+        $('#map').mousedown(function (event) {
+          setLocation(element, event);
         });
 
       }
