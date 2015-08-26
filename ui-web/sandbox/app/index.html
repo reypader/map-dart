@@ -54,12 +54,12 @@
     </div>
     <div id="navbar" class="navbar-collapse" collapse="nav.isCollapsed" style="overflow: hidden">
       <!--<ul class="nav navbar-nav">-->
-        <!--<li>-->
-          <!--<div style="padding-left: 10px;padding-right: 10px">-->
-            <!--<button type="button" class="btn btn-primary navbar-btn form-control"><i class="fa fa-plus"></i> Ping-->
-            <!--</button>-->
-          <!--</div>-->
-        <!--</li>-->
+      <!--<li>-->
+      <!--<div style="padding-left: 10px;padding-right: 10px">-->
+      <!--<button type="button" class="btn btn-primary navbar-btn form-control"><i class="fa fa-plus"></i> Ping-->
+      <!--</button>-->
+      <!--</div>-->
+      <!--</li>-->
       <!--</ul>-->
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown text-center" dropdown>
@@ -96,19 +96,27 @@
   </div>
 </nav>
 <div id="map-container" class="animate-slide" ng-show="mc.showMap" ng-controller="MapController as mc">
-  <button ng-cloak type="button" ng-click="mc.placingMarker=true" ng-disabled="mc.placingMarker"
-          class="btn btn-primary" style="background-color:#005a38;position:fixed; left:10px; top:10px; z-index: 1000"><span
-          class="glyphicon glyphicon-plus"></span> Place a marker
-  </button>
-  <button ng-cloak id="create-button" follow-pointer="!mc.showCreateButton" ng-hide="!mc.showCreateButton" type="button"
-          class="btn btn-primary triangle-isosceles" style="background-color:#005a38;position:fixed;margin-top:10px;margin-left:10px; z-index: 1000"><span
+  <div>
+    <span ng-cloak ng-show="mc.placingMarker" class="map-tip">Click anywhere on the map</span>
+    <button id="add-marker-button" ng-cloak type="button" ng-click="mc.placingMarker=true" ng-disabled="mc.placingMarker"
+            class="btn btn-primary"
+            ><span
+            class="glyphicon glyphicon-plus"></span> Place a marker
+    </button>
+  </div>
+
+  <button ng-cloak id="place-marker-button" follow-pointer="!mc.showCreateButton" follow-pointer-canvas="'#map'"
+          ng-hide="!mc.showCreateButton" type="button"
+          class="btn btn-primary triangle-isosceles"
+          style="background-color:#005a38;position:fixed; z-index: 1000"
+          ><span
           class="glyphicon glyphicon-flag"></span> Right here!
   </button>
   <div id="map">
     <ui-gmap-google-map
-            options="mc.map.options"
-            center='mc.map.center'
-            zoom='mc.map.zoom'></ui-gmap-google-map>
+            options="mc.mapProperties.options"
+            center='mc.mapProperties.center'
+            zoom='mc.mapProperties.zoom'></ui-gmap-google-map>
   </div>
   <div>
     <div style="height:3px;width: 100%;background-color: #007448;" ng-show="mc.ready"></div>

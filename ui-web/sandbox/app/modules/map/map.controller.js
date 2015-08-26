@@ -3,22 +3,16 @@ define([
 ], function (progress) {
   'use strict';
 
-  controller.$inject = ['$scope', '$timeout', 'uiGmapIsReady', 'uiGmapGoogleMapApi'];
+  controller.$inject = ['$scope', 'uiGmapIsReady', 'uiGmapGoogleMapApi'];
 
-  function controller($scope, $timeout, uiGmapIsReady, uiGmapGoogleMapApi) {
+  function controller($scope, uiGmapIsReady, uiGmapGoogleMapApi) {
     var _this = this;
     _this.ready = false;
     _this.showMap = false;
-    _this.map = undefined;
+    _this.mapProperties = undefined;
     _this.mapInstance = {};
     _this.showCreateButton = false;
     _this.placingMarker = false;
-    _this.demo = {
-      min1: 20,
-      max1: 40
-    };
-
-    _this.lastClick = undefined;
     _this.isDragging = false;
 
     activate();
@@ -60,7 +54,7 @@ define([
 
       uiGmapGoogleMapApi.then(function (maps) {
         _this.api = maps;
-        _this.map = {
+        _this.mapProperties = {
           center: {latitude: 45, longitude: -73}, zoom: 10, options: {
             mapTypeId: _this.api.MapTypeId.TERRAIN, mapTypeControl: false,
             disableDefaultUI: true,

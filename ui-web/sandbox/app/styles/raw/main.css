@@ -205,9 +205,9 @@ html, body, .fill-height {
 
 /*bubble*/
 .triangle-isosceles {
-  position:relative;
+  position: relative;
   /*padding:15px;*/
-  margin:1em 0 3em;
+  margin: 1em 0 3em;
   /*color:#000;*/
   /*background:#f3961c; /!* default background for browsers without gradient support *!/*/
   /*/!* css3 *!/*/
@@ -215,24 +215,41 @@ html, body, .fill-height {
   /*background:-moz-linear-gradient(#f9d835, #f3961c);*/
   /*background:-o-linear-gradient(#f9d835, #f3961c);*/
   /*background:linear-gradient(#f9d835, #f3961c);*/
-  -webkit-border-radius:10px;
-  -moz-border-radius:10px;
-  border-radius:10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
 }
 
 .triangle-isosceles:after {
-  content:"";
-  position:absolute;
-  bottom:-15px; /* value = - border-top-width - border-bottom-width */
+  content: "";
+  position: absolute;
+  bottom: -15px; /* value = - border-top-width - border-bottom-width */
   /*left:50px; /!* controls horizontal position *!/*/
-  border-width:15px 15px 0; /* vary these values to change the angle of the vertex */
-  border-style:solid;
-  border-color:#005a38 transparent;
+  border-width: 15px 15px 0; /* vary these values to change the angle of the vertex */
+  border-style: solid;
+  border-color: #005a38 transparent;
   /* reduce the damage in FF3.0 */
-  display:block;
-  width:0;
+  display: block;
+  width: 0;
 }
 
-#create-button:hover {
+#place-marker-button:hover {
   border-color: #005a38 transparent;
+}
+
+#add-marker-button {
+  background-color: #005a38;
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  z-index: 900;
+}
+
+.map-tip {
+  position: absolute;
+  z-index: 1000;
+  padding: 3px;
+  left: calc(50% - 89px);
+  background-color: white;
+  border-radius: 5px;
 }
