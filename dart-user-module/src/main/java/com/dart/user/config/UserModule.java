@@ -60,66 +60,79 @@ public class UserModule extends AbstractModule {
     }
 
     @Provides
+    @Singleton
     public UserRepositoryImpl userRepositoryImpl() {
         return new UserRepositoryImpl();
     }
 
     @Provides
+    @Singleton
     public UserFactoryImpl userFactoryImpl() {
         return new UserFactoryImpl();
     }
 
     @Provides
+    @Singleton
     public RegistrationRepositoryImpl registrationRepositoryImpl() {
         return new RegistrationRepositoryImpl();
     }
 
     @Provides
+    @Singleton
     public RegistrationFactoryImpl registrationFactoryImpl() {
         return new RegistrationFactoryImpl();
     }
 
     @Provides
+    @Singleton
     public JwtHttpRequestAuthorizationService jwtSessionService(UserRepositoryImpl userRepositoryImpl, FilePropertiesProvider filePropertiesProvider) {
         return new JwtHttpRequestAuthorizationService(userRepositoryImpl, filePropertiesProvider);
     }
 
     @Provides
+    @Singleton
     public IdentityRepositoryImpl identityRepositoryImpl() {
         return new IdentityRepositoryImpl();
     }
 
     @Provides
+    @Singleton
     public IdentityFactoryImpl identityFactoryImpl() {
         return new IdentityFactoryImpl();
     }
 
     @Provides
+    @Singleton
     public FilePropertiesProvider filePropertiesProvider() {
         return new FilePropertiesProvider(getClass().getClassLoader().getResourceAsStream("application.properties"));
     }
 
     @Provides
+    @Singleton
     public FacebookTokenVerificationService facebookTokenVerificationService(CloseableHttpClient httpClient, FilePropertiesProvider filePropertiesProvider) {
         return new FacebookTokenVerificationService(httpClient, filePropertiesProvider);
     }
 
     @Provides
+    @Singleton
     public GoogleTokenVerificationService googleTokenVerificationService(FilePropertiesProvider filePropertiesProvider) {
         return new GoogleTokenVerificationService(filePropertiesProvider);
     }
 
     @Provides
+    @Singleton
     public RecaptchaTokenVerificationService recaptchaTokenVerificationService(CloseableHttpClient httpClient, FilePropertiesProvider filePropertiesProvider) {
         return new RecaptchaTokenVerificationService(httpClient, filePropertiesProvider);
     }
 
     @Provides
+    @Singleton
     public GenericMailSenderService genericMailSenderService() {
         return new GenericMailSenderService();
     }
 
     @Provides
+    @Singleton
     public CloseableHttpClient closeableHttpClient() {
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
         CloseableHttpClient httpClient = HttpClients.custom()
