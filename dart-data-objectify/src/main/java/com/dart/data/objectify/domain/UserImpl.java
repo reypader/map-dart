@@ -2,8 +2,10 @@ package com.dart.data.objectify.domain;
 
 import com.dart.data.domain.User;
 import com.google.appengine.repackaged.org.apache.commons.codec.digest.DigestUtils;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.OnSave;
 
 import java.util.Date;
@@ -16,8 +18,9 @@ import java.util.Objects;
 public class UserImpl implements User {
 
     @Id
-    private String id;
+    private Long id;
 
+    @Index
     private String email;
 
     private String displayName;
@@ -28,8 +31,11 @@ public class UserImpl implements User {
 
     private String description;
 
+    private String secret;
+
+    public UserImpl(){}
+
     public UserImpl(String email, String displayName) {
-        this.id = DigestUtils.sha256Hex(email);
         this.email = email;
         this.setDisplayName(displayName);
     }
@@ -44,7 +50,7 @@ public class UserImpl implements User {
 
     @Override
     public String getId() {
-        return id;
+        return Key.create(this).toWebSafeString();
     }
 
     @Override
@@ -85,6 +91,26 @@ public class UserImpl implements User {
     @Override
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
+    }
+
+    @Override
+    public String getSecret() {
+        return secret;
+    }
+
+    @Override
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    /**
+     * for checking since getId() will throw an error if the entity is new (i.e. not yet persisted and thus, no ID
+     * assigned yet)
+     *
+     * @return
+     */
+    public Long getRawId() {
+        return id;
     }
 
     @Override

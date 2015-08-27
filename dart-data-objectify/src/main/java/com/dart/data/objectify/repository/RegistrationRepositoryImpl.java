@@ -9,6 +9,8 @@ import com.dart.data.repository.RegistrationRepository;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 
+import java.util.List;
+
 import static com.dart.data.objectify.ObjectifyProvider.objectify;
 
 /**
@@ -31,8 +33,8 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 
     @Override
     public Registration retrieve(String id) {
-        Key key = Key.create(RegistrationImpl.class, id);
-        return getRegistrationByKey(key);
+        Key<RegistrationImpl> key = Key.create(RegistrationImpl.class, id);
+        return objectify().load().key(key).now();
     }
 
     private Registration getRegistrationByKey(Key<Registration> key) {
@@ -58,4 +60,9 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
         objectify().delete().entity(entity);
     }
 
+    @Override
+    public void deleteRegistrationForEmail(String email) {
+        List<RegistrationImpl> registrations = objectify().load().type(RegistrationImpl.class).filter("email", email).list();
+        objectify().delete().entities(registrations);
+    }
 }

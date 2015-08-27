@@ -2,6 +2,8 @@ package com.dart.common.test.repository;
 
 import com.dart.common.test.domain.DummyUser;
 import com.dart.data.domain.User;
+import com.dart.data.exception.EntityCollisionException;
+import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.repository.UserRepository;
 
 import java.util.HashMap;
@@ -20,6 +22,9 @@ public class DummyUserRepository implements UserRepository {
 
     @Override
     public User add(User entity) {
+        if (dummyStore.get(entity.getId()) != null) {
+            throw new EntityCollisionException("Entity already exists");
+        }
         DummyUser user = (DummyUser) entity;
         dummyStore.put(user.getId(), user);
         return user;
@@ -31,7 +36,10 @@ public class DummyUserRepository implements UserRepository {
     }
 
     @Override
-    public User update(User entity) {
+    public User update(User entity) throws EntityNotFoundException {
+        if (dummyStore.get(entity.getId()) == null) {
+            throw new EntityNotFoundException("Entity not found");
+        }
         dummyStore.remove(entity.getId());
         dummyStore.put(entity.getId(), entity);
         return entity;

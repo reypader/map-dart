@@ -1,15 +1,15 @@
 package com.dart.data.objectify.repository;
 
 import com.dart.common.test.TestDatastore;
+import com.dart.data.domain.Event;
+import com.dart.data.domain.Post;
+import com.dart.data.domain.User;
 import com.dart.data.exception.EntityCollisionException;
 import com.dart.data.exception.EntityNotFoundException;
-import com.dart.data.domain.Event;
+import com.dart.data.objectify.domain.PostImpl;
 import com.dart.data.objectify.domain.TestEvent;
 import com.dart.data.objectify.domain.TestUser;
-import com.dart.data.objectify.domain.PostImpl;
-import com.dart.data.domain.Post;
 import com.dart.data.repository.PostRepository;
-import com.dart.data.domain.User;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
@@ -121,6 +121,11 @@ public class PostRepositoryImplTest {
     }
 
     @Test
+    public void testRetrieveNull() throws Exception {
+        assertNull(repo.retrieve(Key.create(PostImpl.class, 1234L).toWebSafeString()));
+    }
+
+    @Test
     public void testUpdate() throws Exception {
         String content = "This is a test content";
         Post post = new PostImpl(eventKey, userKey, content);
@@ -152,6 +157,7 @@ public class PostRepositoryImplTest {
 
         repo.delete(savedPost);
 
+        Thread.sleep(1000);
         int entityCount = ofy().load().type(PostImpl.class).count();
         assertEquals(0, entityCount);
     }

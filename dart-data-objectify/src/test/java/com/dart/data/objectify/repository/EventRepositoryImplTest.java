@@ -146,6 +146,11 @@ public class EventRepositoryImplTest {
     }
 
     @Test
+    public void testRetrieveNull() throws Exception {
+        assertNull(repo.retrieve(Key.create(EventImpl.class, 1234L).toWebSafeString()));
+    }
+
+    @Test
     public void testDelayedRetrieve() throws Exception {
         Calendar later = Calendar.getInstance();
         later.add(Calendar.SECOND, 3);
@@ -167,6 +172,7 @@ public class EventRepositoryImplTest {
 
         repo.delete(savedEvent);
 
+        Thread.sleep(1000);
         int entityCount = ofy().load().type(EventImpl.class).count();
         assertEquals(0, entityCount);
     }

@@ -58,8 +58,10 @@ public class EventRepositoryImpl implements EventRepository {
     @Override
     public Event retrieve(String id) {
         Key<Event> key = Key.create(id);
-        EventImpl event = getEventByKey(key);
-        correctFinishedIndicator(event);
+        EventImpl event = (EventImpl) objectify().load().key(key).now();
+        if (event != null) {
+            correctFinishedIndicator(event);
+        }
         return event;
     }
 

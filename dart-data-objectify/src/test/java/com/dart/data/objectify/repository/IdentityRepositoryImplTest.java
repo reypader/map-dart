@@ -19,6 +19,7 @@ import java.util.List;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by RMPader on 7/27/15.
@@ -64,11 +65,13 @@ public class IdentityRepositoryImplTest {
         assertEquals(e1.getUser(), e2.getUser());
         assertEquals(e1.getProvidedIdentity(), e2.getProvidedIdentity());
         assertEquals(e1.getProvider(), e2.getProvider());
+        assertEquals(e1.getData(), e2.getData());
     }
 
     @Test
     public void testAdd() throws Exception {
         Identity identity = new IdentityImpl(userKey, "self", "id");
+        identity.addData("test", "DATA");
 
         Identity savedIdentity = repo.add(identity);
 
@@ -78,6 +81,7 @@ public class IdentityRepositoryImplTest {
         assertEquals("self", savedIdentity.getProvider());
         assertEquals("id", savedIdentity.getProvidedIdentity());
         assertEquals(userKey, Key.create(savedIdentity.getUser()));
+        assertEquals(identity.getData(), savedIdentity.getData());
         assertNotNull(savedIdentity.getDateCreated());
     }
 
@@ -99,6 +103,11 @@ public class IdentityRepositoryImplTest {
         int entityCount = ofy().load().type(IdentityImpl.class).count();
         assertEquals(1, entityCount);
         assertEverything(savedIdentity, foundIdentity);
+    }
+
+    @Test
+    public void testRetrieveNull() throws Exception {
+        assertNull(repo.retrieve("derp"));
     }
 
     @Test
@@ -130,6 +139,7 @@ public class IdentityRepositoryImplTest {
 
         repo.delete(savedIdentity);
 
+        Thread.sleep(1000);
         int entityCount = ofy().load().type(IdentityImpl.class).count();
         assertEquals(0, entityCount);
     }
@@ -137,7 +147,7 @@ public class IdentityRepositoryImplTest {
     @Test
     public void findIdentityFromProvider() throws Exception {
         Identity identity = new IdentityImpl(userKey, "self", "id");
-
+        identity.addData("test", "DATA");
         Identity savedIdentity = repo.add(identity);
 
         Identity foundIdentity = repo.findIdentityFromProvider("id", "self");

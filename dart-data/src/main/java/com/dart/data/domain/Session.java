@@ -1,5 +1,6 @@
 package com.dart.data.domain;
 
+import java.net.InetAddress;
 import java.util.Date;
 
 /**
@@ -12,6 +13,8 @@ public interface Session extends Entity {
     User getUser();
 
     Date getExpiry();
+
+    String getIPAddress();
 
     String getDevice();
 

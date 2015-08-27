@@ -6,6 +6,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.*;
 
+import java.net.InetAddress;
 import java.util.Date;
 import java.util.Objects;
 
@@ -24,6 +25,8 @@ public class SessionImpl implements Session {
 
     private Date expiry;
 
+    private String ipAddress;
+
     private String browser;
 
     private String device;
@@ -32,13 +35,16 @@ public class SessionImpl implements Session {
 
     private Date dateCreated;
 
-    public SessionImpl(String token, Key<User> user, Date expiry, String device, String browser, String location) {
+    public SessionImpl(){}
+
+    public SessionImpl(String token, Key<User> user, String ipAddress, Date expiry, String device, String browser, String location) {
         this.token = token;
         this.userRef = Ref.create(user);
         this.expiry = expiry;
         this.device = device;
         this.browser = browser;
         this.location = location;
+        this.ipAddress = ipAddress;
     }
 
     @OnSave
@@ -57,6 +63,11 @@ public class SessionImpl implements Session {
     @Override
     public Date getExpiry() {
         return expiry;
+    }
+
+    @Override
+    public String getIPAddress() {
+        return ipAddress;
     }
 
     @Override

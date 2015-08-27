@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>dart-common-service</module>
         <module>dart-common-test</module>
         <module>dart-data</module>
         <module>dart-data-objectify</module>
@@ -20,7 +21,7 @@
         <appengine.version>1.9.24</appengine.version>
         <guice.version>4.0</guice.version>
         <guava.version>18.0</guava.version>
-        <gcloud.plugin.version>0.9.65.v20150618</gcloud.plugin.version>
+        <gcloud.plugin.version>2.0.9.72.v20150804</gcloud.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -49,6 +50,11 @@
                 <artifactId>dart-common-test</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>dart-common-service</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.appengine</groupId>

@@ -37,8 +37,8 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override
     public Session retrieve(String id) {
-        Key key = Key.create(SessionImpl.class, id);
-        return getSessionByKey(key);
+        Key<SessionImpl> key = Key.create(SessionImpl.class, id);
+        return objectify().load().key(key).now();
     }
 
     private Session getSessionByKey(Key<Session> key) {
