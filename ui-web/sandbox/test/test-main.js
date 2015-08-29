@@ -18,7 +18,6 @@ require.config({
 
   paths: {
     facebook: '//connect.facebook.net/en_US/sdk',
-    cryptojs: '//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256',
     angular: '../../bower_components/angular/angular',
     async: '../../bower_components/requirejs-plugins/src/async',
     nprogress: '../../bower_components/nprogress/nprogress',
@@ -27,7 +26,11 @@ require.config({
     'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls',
     'angular-animate': '../../bower_components/angular-animate/angular-animate',
     'angular-cookies': '../../bower_components/angular-cookies/angular-cookies',
-    'angular-recaptcha': '../../bower_components/angular-recaptcha/release/angular-recaptcha'
+    'angular-recaptcha': '../../bower_components/angular-recaptcha/release/angular-recaptcha',
+    'cryptojs.core': "../../bower_components/cryptojslib/components/core",
+    'cryptojs.base64': "../../bower_components/cryptojslib/components/enc-base64",
+    'cryptojs.sha256': "../../bower_components/cryptojslib/components/sha256",
+    'cryptojs.md5': "../../bower_components/cryptojslib/components/md5"
   },
   shim: {
     angular: {
@@ -57,8 +60,20 @@ require.config({
     nprogress: {
       exports: 'NProgress'
     },
-    cryptojs: {
-      exports: 'CryptoJS'
+    'cryptojs.core': {
+      exports: "CryptoJS"
+    },
+    'cryptojs.sha256': {
+      deps: ['cryptojs.core'],
+      exports: "CryptoJS.SHA256"
+    },
+    'cryptojs.base64': {
+      deps: ['cryptojs.core'],
+      exports: "CryptoJS.enc.Base64"
+    },
+    'cryptojs.md5': {
+      deps: ['cryptojs.core'],
+      exports: "CryptoJS.MD5"
     }
   },
 

@@ -6,7 +6,6 @@ define([
   'angular',
   'angular-bootstrap',
   'angular-route',
-  'cryptojs',
   'angular-recaptcha',
   'rest-client/user/user.rest-client.module'
 ], function (config, controller, newEmailDirective, strictEmailDirective) {

@@ -1,7 +1,6 @@
 require.config({
   paths: {
     facebook: '//connect.facebook.net/en_US/sdk',
-    cryptojs: '//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256',
     async: '../../bower_components/requirejs-plugins/src/async',
     angular: '../../bower_components/angular/angular',
     bootstrap: '../../bower_components/bootstrap/dist/js/bootstrap',
@@ -14,7 +13,10 @@ require.config({
     'ng-password-strength': '../../bower_components/ng-password-strength/app/scripts/scripts/ng-password-strength',
     lodash: '../../bower_components/lodash/lodash',
     'angular-recaptcha': '../../bower_components/angular-recaptcha/release/angular-recaptcha',
-    nprogress: '../../bower_components/nprogress/nprogress'
+    nprogress: '../../bower_components/nprogress/nprogress',
+    'cryptojs.core': "../../bower_components/cryptojslib/components/core",
+    'cryptojs.base64': "../../bower_components/cryptojslib/components/enc-base64",
+    'cryptojs.sha256': "../../bower_components/cryptojslib/components/sha256"
   },
   shim: {
     bootstrap: {
@@ -50,8 +52,16 @@ require.config({
     nprogress: {
       exports: 'NProgress'
     },
-    cryptojs: {
-      exports: 'CryptoJS'
+    'cryptojs.core': {
+      exports: "CryptoJS"
+    },
+    'cryptojs.sha256': {
+      deps: ['cryptojs.core'],
+      exports: "CryptoJS.SHA256"
+    },
+    'cryptojs.base64': {
+      deps: ['cryptojs.core'],
+      exports: "CryptoJS.enc.Base64"
     }
   },
   packages: []

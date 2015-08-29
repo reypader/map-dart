@@ -22,7 +22,13 @@ require.config({
     'angularjs-slider': '../../bower_components/angularjs-slider/rzslider',
     'angular-slimscroll': '../../bower_components/angular-slimscroll/angular-slimscroll',
     slimScroll: '../../bower_components/slimScroll/jquery.slimscroll.min',
-    'jquery-slimscroll': '../../bower_components/jquery-slimscroll/jquery.slimscroll.min'
+    'jquery-slimscroll': '../../bower_components/jquery-slimscroll/jquery.slimscroll.min',
+    'angular-ui-uploader': '../../bower_components/angular-ui-uploader/dist/uploader',
+    'cryptojs.core': '../../bower_components/cryptojslib/components/core',
+    'cryptojs.md5': '../../bower_components/cryptojslib/components/md5',
+    'cryptojs.base64': '../../bower_components/cryptojslib/components/enc-base64',
+    'cryptojs.sha256': '../../bower_components/cryptojslib/components/sha256',
+    'cryptojs.lib': '../../bower_components/cryptojslib/components/lib-typedarrays-min'
   },
   shim: {
     bootstrap: {
@@ -88,6 +94,33 @@ require.config({
     },
     nprogress: {
       exports: 'NProgress'
+    },
+    'cryptojs.core': {
+      exports: 'CryptoJS'
+    },
+    'cryptojs.md5': {
+      deps: [
+        'cryptojs.core'
+      ],
+      exports: 'CryptoJS.MD5'
+    },
+    'cryptojs.lib': {
+      deps: [
+        'cryptojs.core'
+      ],
+      exports: 'CryptoJS.lib'
+    },
+    'cryptojs.sha256': {
+      deps: [
+        'cryptojs.core'
+      ],
+      exports: 'CryptoJS.SHA256'
+    },
+    'cryptojs.base64': {
+      deps: [
+        'cryptojs.core'
+      ],
+      exports: 'CryptoJS.enc.Base64'
     }
   },
   packages: [],

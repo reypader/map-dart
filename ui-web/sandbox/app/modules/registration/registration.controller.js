@@ -1,5 +1,7 @@
 define([
-  'progressbar'
+  'progressbar',
+  'cryptojs.sha256',
+  'cryptojs.base64'
 ], function (progress) {
   'use strict';
 

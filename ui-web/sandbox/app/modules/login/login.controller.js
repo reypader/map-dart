@@ -1,7 +1,8 @@
 define([
   'progressbar',
-  'cryptojs'
-], function (progress, CryptoJS) {
+  'cryptojs.sha256',
+  'cryptojs.base64'
+], function (progress) {
   'use strict';
 
   controller.$inject = [

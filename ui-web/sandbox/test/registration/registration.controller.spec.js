@@ -34,7 +34,7 @@ define(['angular', 'angular-mocks', 'registration/registration.module'], functio
           {
             email: 'test@email.com',
             name: 'John Doe',
-            password: 'bc276c3b995088c08cf933c43657bd73854864ae75168aa777159bcf3f882a6d'
+            password: 'vCdsO5lQiMCM+TPENle9c4VIZK51FoqndxWbzz+IKm0='
           }
         );
       })
