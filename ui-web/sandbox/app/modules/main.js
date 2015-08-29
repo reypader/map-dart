@@ -84,6 +84,11 @@ require.config({
         'jquery-slimscroll'
       ]
     },
+    'angular-ui-uploader': {
+      deps: [
+        'angular'
+      ]
+    },
     'jquery-slimscroll': {
       deps: [
         'jquery'
@@ -129,8 +134,10 @@ require.config({
 require([
   'progressbar',
   'ie10-fix',
+  'file-read.directive',
   'map/map.module',
   'authentication/authentication.module',
+  'blog/blog.module',
   //'bootstrap',
   'angular',
   'angular-bootstrap',
@@ -148,7 +155,9 @@ require([
     'ui.slimscroll',
     'ui.bootstrap',
     'ngAnimate',
+    'fileReadModule',
     'mapModule',
+    'blogModule',
     'navigationModule',
     'homeModule',
     'authenticationModule']);

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wanderlust</title>
+  <title>Travler</title>
   <script type="text/javascript" ng-if="false">
     (function () {
       var ca = document.cookie.split(';');
@@ -16,9 +16,9 @@
           found = true;
         }
       }
-//      if (!found) {
-//        window.location.href = "http://" + window.location.host + "/signin.html#/?next=" + window.location.hash.substr(1);
-//      }
+      if (!found) {
+        window.location.href = "https://" + window.location.host + "/signin.html#/?next=" + window.location.hash.substr(1);
+      }
     })();
   </script>
 
@@ -47,7 +47,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Wanderlust</a>
+      <a class="navbar-brand" href="#">Travler</a>
 
       <p class="navbar-text"><a class="navbar-link" href="#"><strong>blablagiggles</strong></a></p>
       <!-- max 13 -->
@@ -109,6 +109,7 @@
           ng-hide="!mc.showCreateButton" type="button"
           class="btn btn-primary triangle-isosceles"
           style="background-color:#005a38;position:fixed; z-index: 1000"
+          ng-click="mc.createMicroBlog()"
           ><span
           class="glyphicon glyphicon-flag"></span> Right here!
   </button>

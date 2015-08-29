@@ -1,11 +1,12 @@
 define([
-  'progressbar'
-], function (progress) {
+  'progressbar',
+  'require'
+], function (progress, require) {
   'use strict';
 
-  controller.$inject = ['$scope', 'uiGmapIsReady', 'uiGmapGoogleMapApi'];
+  controller.$inject = ['$scope', 'uiGmapIsReady', 'uiGmapGoogleMapApi', '$modal'];
 
-  function controller($scope, uiGmapIsReady, uiGmapGoogleMapApi) {
+  function controller($scope, uiGmapIsReady, uiGmapGoogleMapApi, $modal) {
     var _this = this;
     _this.ready = false;
     _this.showMap = false;
@@ -14,6 +15,9 @@ define([
     _this.showCreateButton = false;
     _this.placingMarker = false;
     _this.isDragging = false;
+    _this.markerLocation = {};
+
+    _this.createMicroBlog = createMicroBlog;
 
     activate();
 
@@ -36,10 +40,16 @@ define([
           });
         _this.api.event.addListener(
           _this.mapInstance.map,
+          'zoom_changed',
+          function (event) {
+            contextMenu(false, event);
+          });
+        _this.api.event.addListener(
+          _this.mapInstance.map,
           'mousedown',
           function (event) {
             _this.isDragging = false;
-            contextMenu(false);
+            contextMenu(false, event);
           });
         _this.api.event.addListener(
           _this.mapInstance.map,
@@ -47,7 +57,7 @@ define([
           function (event) {
             if (_this.placingMarker && !_this.isDragging) {
               _this.placingMarker = false;
-              contextMenu(true);
+              contextMenu(true, event);
             }
           });
       });
@@ -82,10 +92,39 @@ define([
 
     }
 
-    function contextMenu(flag) {
+    function contextMenu(flag, event) {
       $scope.$apply(function () {
         _this.showCreateButton = flag;
+        if (flag) {
+          _this.markerLocation.latitude = event.latLng.lat();
+          _this.markerLocation.longitude = event.latLng.lng();
+        }
       });
+    }
+
+    function createMicroBlog() {
+      //_this.markerLocation
+      var modalInstance = $modal.open({
+        animation: true,
+        templateUrl: require.toUrl('blog/create/create.blog.partial.html'),
+        controller: 'CreateBlogController',
+        controllerAs: 'cbc',
+        size: 'lg',
+        resolve: {
+          location: function () {
+            return _this.markerLocation;
+          }
+        }
+      });
+
+      modalInstance.result.then(function () {
+        alert("success");
+        //$scope.selected = selectedItem;
+      }, function () {
+        alert("dismiss");
+        //$log.info('Modal dismissed at: ' + new Date());
+      });
+
     }
   }
 

@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pings</title>
+  <title>Travler</title>
   <script type="text/javascript" ng-if="false">
     (function () {
       var ca = document.cookie.split(';');
       for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0) == ' ') c = c.substring(1);
-        if (c.indexOf("sessionToken=") == 0)  window.location.href = "http://" + window.location.host;
+        if (c.indexOf("sessionToken=") == 0)  window.location.href = "https://" + window.location.host;
       }
     })();
   </script>
@@ -37,7 +37,7 @@
 <div id="fb-root"></div>
 <div class="container" ng-controller="LoginController as vm" ng-cloak>
   <form class="form-signin" ng-submit="vm.basicLogin()">
-    <h2 class="form-signin-heading">Sign in to Pings</h2>
+    <h2 class="form-signin-heading">Sign in to Travler</h2>
     <span ng-show="vm.loginFailed" style="color:red">Invalid username or password.</span>&nbsp;
     <label for="inputEmail" class="sr-only">Email address</label>
     <input position="top" type="email" id="inputEmail" ng-model="vm.email" class="form-control"
