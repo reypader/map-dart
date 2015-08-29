@@ -44,8 +44,8 @@ define(['angular', 'login/login.module', 'authentication/facebook/facebook.modul
       controller.basicLogin();
 
       expect(authenticationService.authenticate).toHaveBeenCalledWith('test@email', {
-        provider: 'self',
         token: 'bc276c3b995088c08cf933c43657bd73854864ae75168aa777159bcf3f882a6d'
+        provider: 'basic',
       }, controller.redirectToHome, controller.authFail);
     }));
 

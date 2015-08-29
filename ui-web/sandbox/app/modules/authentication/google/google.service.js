@@ -20,7 +20,11 @@ define([
         var mode = {
           provider: 'google',
           token: response.id_token,
-          data: 'id=' + encodeURIComponent(email) + ';name=' + encodeURIComponent(name) + ';photoUrl=' + encodeURIComponent(photoUrl)
+          data: {
+            id: email,
+            name: name,
+            photoUrl: photoUrl
+          }
         };
         authenticationService.authenticate(email, mode, _this.secondaryCallback, _this.failCallback);
       } else {

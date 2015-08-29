@@ -1,6 +1,6 @@
 define([
-  'rest-client/user/user.rest-client.config',
-  'rest-client/user/user.rest-client.service',
+  './user.rest-client.config',
+  './user.rest-client.service',
   'angular'
 ], function (config, service) {
   'use strict';

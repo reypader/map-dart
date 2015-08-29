@@ -63,7 +63,7 @@ define(['gapi.loader', 'angular', 'angular-mocks', 'authentication/google/google
         expect(authenticationService.authenticate).toHaveBeenCalledWith('test@email', {
           provider: 'google',
           token: 'token',
-          data: 'id=test%40email;name=John%20Doe;photoUrl=url'
+          data: {id: 'test@email', name: 'John Doe', photoUrl: 'url'}
         }, googleService.secondaryCallback, googleService.failCallback);
         expect(googleService.failCallback).not.toHaveBeenCalled();
       }

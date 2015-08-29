@@ -35,7 +35,7 @@ define(['angular', 'angular-mocks', 'authentication/facebook/facebook.module', '
         expect(authenticationService.authenticate).toHaveBeenCalledWith('test@email', {
           provider: 'facebook',
           token: 'token',
-          data: 'id=user_id;name=John%20Doe;photoUrl=url'
+          data: {id: 'user_id', name: 'John Doe', photoUrl: 'url'}
         }, facebookService.secondaryCallback, facebookService.failCallback);
         expect(facebookService.failCallback).not.toHaveBeenCalled();
       }

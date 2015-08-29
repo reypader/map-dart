@@ -34,7 +34,7 @@ define([
       progress.increment();
       var hash = CryptoJS.SHA256(_this.password);
       var mode = {
-        provider: "self",
+        provider: "basic",
         token: hash.toString(CryptoJS.enc.Base64)
       }
       authenticationService.authenticate(_this.email, mode, _this.redirectToHome, _this.authFail);

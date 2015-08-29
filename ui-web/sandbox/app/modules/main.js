@@ -90,26 +90,33 @@ require.config({
       exports: 'NProgress'
     }
   },
-  packages: [
-
-  ],
+  packages: [],
   waitSeconds: 60
 });
 require([
   'progressbar',
   'ie10-fix',
   'map/map.module',
+  'authentication/authentication.module',
   //'bootstrap',
   'angular',
   'angular-bootstrap',
   'angular-cookies',
   'angular-slimscroll',
-  'navigation/navigation.module', 'home/home.module'
+  'navigation/navigation.module',
+  'home/home.module'
 ], function (progress) {
   'use strict';
 
   progress.setScriptCount(2);
   progress.scriptLoad();
   console.log("Loading other dependencies...");
-  angular.bootstrap(document, ['ui.slimscroll', 'ui.bootstrap', 'ngAnimate', 'mapModule', 'navigationModule', 'homeModule']);
+  angular.bootstrap(document, [
+    'ui.slimscroll',
+    'ui.bootstrap',
+    'ngAnimate',
+    'mapModule',
+    'navigationModule',
+    'homeModule',
+    'authenticationModule']);
 });

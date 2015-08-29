@@ -27,7 +27,7 @@ define([
 
     this.registerUser = function registerUser() {
       progress.increment();
-      userRestClientService.validateRecaptcha(_this.response).then(function (response) {
+      userRestClientService.validateRecaptcha({recaptchaResult: _this.response}).then(function (response) {
         if (response.userIsHuman) {
           _this.recaptcha = 'pass';
           var hash = CryptoJS.SHA256(_this.npassword);

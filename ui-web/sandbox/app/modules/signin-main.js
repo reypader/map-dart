@@ -70,7 +70,7 @@ require([
 ], function (progress) {
   'use strict';
 
-  progress.setScriptCount(4);
+  progress.setScriptCount(3);
   progress.scriptLoad();
   console.log("Loading other dependencies...");
   angular.bootstrap(document, [
