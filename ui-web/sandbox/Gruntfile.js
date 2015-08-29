@@ -96,7 +96,8 @@ module.exports = function (grunt) {
           options: {
             transitive: true,
             exclude: [
-              'requirejs-plugins'
+              'requirejs-plugins',
+              'cryptojslib'
             ]
           }
         }
@@ -198,13 +199,13 @@ module.exports = function (grunt) {
         },
         livereload: {
           options: {
-            //open: true,
+            //open: 'https://www.wanderlust.com:9000',
             keepAlive: true,
             base: 'dist',
-            protocol: 'http',
-            //key: grunt.file.read('dev_keys/server.key').toString(),
-            //cert: grunt.file.read('dev_keys/server.crt').toString(),
-            //ca: grunt.file.read('dev_keys/ca.crt').toString(),
+            protocol: 'https',
+            key: grunt.file.read('dev_keys/server.key').toString(),
+            cert: grunt.file.read('dev_keys/server.crt').toString(),
+            ca: grunt.file.read('dev_keys/ca.crt').toString(),
             middleware: function (connect) {
               return [
                 connect().use(
@@ -222,9 +223,9 @@ module.exports = function (grunt) {
           options: {
             livereload: {
               port: '<%= connect.options.livereload %>',
-              //key: grunt.file.read('dev_keys/server.key').toString(),
-              //cert: grunt.file.read('dev_keys/server.crt').toString(),
-              //ca: grunt.file.read('dev_keys/ca.crt').toString(),
+              key: grunt.file.read('dev_keys/server.key').toString(),
+              cert: grunt.file.read('dev_keys/server.crt').toString(),
+              ca: grunt.file.read('dev_keys/ca.crt').toString()
             }
           },
           files: [
