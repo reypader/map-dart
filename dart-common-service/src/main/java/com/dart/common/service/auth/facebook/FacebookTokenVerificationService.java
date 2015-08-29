@@ -57,7 +57,7 @@ public class FacebookTokenVerificationService implements TokenVerificationServic
             getTokenInfo = new HttpGet(properties.getFacebookEndpoint() + "/debug_token?input_token=" + token + "&access_token=" + appAccessToken);
             String receivedToken = httpClient.execute(getTokenInfo, responseHandler);
             FacebookToken fbToken = gson.fromJson(receivedToken, FacebookData.class).getData();
-            return weAreTheAudienceOf(fbToken) && identity.equals(fbToken.getUserId()) && fbToken.getExpiration().after(new Date());
+            return weAreTheAudienceOf(fbToken) && identity.equals(fbToken.getUserId()) && fbToken.getExpiration().after(new Date()) && fbToken.isValid();
         } catch (Exception e) {
             e.printStackTrace();
             return false;

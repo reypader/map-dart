@@ -75,8 +75,9 @@ public class JwtHttpRequestAuthorizationService implements HttpRequestAuthorizat
     @Override
     public User verifyToken(HttpServletRequest request) {
         try {
-            User user = userRepository.retrieve(request.getHeader("FROM"));
-            String authHeaderValue = request.getHeader("AUTHORIZATION");
+            String[] authHeader = request.getHeader("AUTHORIZATION").split(" ");
+            User user = userRepository.retrieve(authHeader[0]);
+            String authHeaderValue = authHeader[1];
             if (user != null) {
                 Verifier hmacVerifier = new HmacSHA256Verifier(user.getSecret().getBytes());
                 VerifierProvider hmacLocator = new VerifierProviderImpl(hmacVerifier);

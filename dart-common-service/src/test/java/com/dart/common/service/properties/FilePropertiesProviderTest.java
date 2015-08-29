@@ -22,10 +22,6 @@ public class FilePropertiesProviderTest {
         assertEquals("gaeid", props.getGoogleAppId());
     }
 
-    @Test
-    public void testGetGoogleAppSecret() throws Exception {
-        assertEquals("gaesecret", props.getGoogleAppSecret());
-    }
 
     @Test
     public void testGetGplusAppId() throws Exception {
@@ -85,5 +81,20 @@ public class FilePropertiesProviderTest {
     @Test
     public void testGetRecaptchaSecret() throws Exception {
         assertEquals("recaptchasecret", props.getRecaptchaSecret());
+    }
+
+    @Test
+    public void testGetGoogleServiceAccount() throws Exception {
+        assertEquals("serviceacct", props.getGoogleServiceAccount());
+    }
+
+    @Test
+    public void testGetGoogleCloudStorageURL() throws Exception {
+        assertEquals("gcsurl",props.getGoogleCloudStorageURL());
+    }
+
+    @Test
+    public void testGetGoogleCloudStorageBucket() throws Exception {
+        assertEquals("gcsbuck",props.getGoogleCloudStorageBucket());
     }
 }

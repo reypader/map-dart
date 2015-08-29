@@ -6,9 +6,14 @@ import com.google.inject.servlet.GuiceServletContextListener;
 
 public class ApplicationGuiceServletContextListener extends GuiceServletContextListener {
 
+//    @Override
+//    protected Injector getInjector() {
+//        return Guice.createInjector(new ApplicationGuiceSystemServiceServletModule(), new UserModule());
+//    }
+
     @Override
     protected Injector getInjector() {
-        return Guice.createInjector(new ApplicationGuiceSystemServiceServletModule(), new UserModule());
+        return Guice.createInjector( new ApplicationGuiceJerseyServletModule(),new UserModule() );
     }
 
 }

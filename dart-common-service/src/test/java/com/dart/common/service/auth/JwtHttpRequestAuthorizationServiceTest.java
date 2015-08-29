@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.util.Calendar;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
 /**
@@ -49,11 +50,10 @@ public class JwtHttpRequestAuthorizationServiceTest {
         Calendar later = Calendar.getInstance();
         later.add(Calendar.DAY_OF_YEAR, 30);
         when(mockHttpRequest.getHeader("X-FORWARDED-FOR")).thenReturn("192.168.0.1,127.0.0.1");
-        when(mockHttpRequest.getHeader("FROM")).thenReturn(user.getId());
 
         String token = service.generateToken(later.getTime(), user, mockHttpRequest);
 
-        when(mockHttpRequest.getHeader("AUTHORIZATION")).thenReturn(token);
+        when(mockHttpRequest.getHeader("AUTHORIZATION")).thenReturn(user.getId() + " " + token);
         assertEquals(user, service.verifyToken(mockHttpRequest));
         verify(userRepoSpy, times(1)).retrieve(user.getId());
     }
@@ -63,12 +63,11 @@ public class JwtHttpRequestAuthorizationServiceTest {
         Calendar later = Calendar.getInstance();
         later.add(Calendar.DAY_OF_YEAR, 30);
         when(mockHttpRequest.getHeader("X-FORWARDED-FOR")).thenReturn("192.168.0.1,127.0.0.1");
-        when(mockHttpRequest.getHeader("FROM")).thenReturn(user.getId());
 
         String token = service.generateToken(later.getTime(), user, mockHttpRequest);
         when(mockHttpRequest.getHeader("X-FORWARDED-FOR")).thenReturn("127.0.0.1");
 
-        when(mockHttpRequest.getHeader("AUTHORIZATION")).thenReturn(token);
+        when(mockHttpRequest.getHeader("AUTHORIZATION")).thenReturn(user.getId() + " " + token);
         assertNull(service.verifyToken(mockHttpRequest));
         verify(userRepoSpy, times(1)).retrieve(user.getId());
     }
@@ -79,11 +78,10 @@ public class JwtHttpRequestAuthorizationServiceTest {
         Calendar later = Calendar.getInstance();
         later.add(Calendar.DAY_OF_YEAR, 30);
         when(mockHttpRequest.getHeader("X-FORWARDED-FOR")).thenReturn("192.168.0.1,127.0.0.1");
-        when(mockHttpRequest.getHeader("FROM")).thenReturn("test2@email");
 
         String token = service.generateToken(later.getTime(), user, mockHttpRequest);
 
-        when(mockHttpRequest.getHeader("AUTHORIZATION")).thenReturn(token);
+        when(mockHttpRequest.getHeader("AUTHORIZATION")).thenReturn("test2@email " + token);
         assertNull(service.verifyToken(mockHttpRequest));
         verify(userRepoSpy, times(1)).retrieve("test2@email");
     }
@@ -93,11 +91,10 @@ public class JwtHttpRequestAuthorizationServiceTest {
         Calendar later = Calendar.getInstance();
         later.add(Calendar.DAY_OF_YEAR, 30);
         when(mockHttpRequest.getHeader("X-FORWARDED-FOR")).thenReturn("192.168.0.1,127.0.0.1");
-        when(mockHttpRequest.getHeader("FROM")).thenReturn("test2@email");
 
         String token = service.generateToken(later.getTime(), user, mockHttpRequest);
 
-        when(mockHttpRequest.getHeader("AUTHORIZATION")).thenReturn(token);
+        when(mockHttpRequest.getHeader("AUTHORIZATION")).thenReturn("test2@email " + token);
         assertNull(service.verifyToken(mockHttpRequest));
         verify(userRepoSpy, times(1)).retrieve("test2@email");
     }

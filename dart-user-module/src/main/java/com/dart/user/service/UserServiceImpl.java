@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
             if (registration != null && !checkEmailUsage(registration.getEmail()).isEmailUsed()) {
                 User user = userFactory.createUser(registration.getEmail(), registration.getDisplayName());
                 user = userRepository.add(user);
-                Identity identity = identityFactory.createIdentity(user, "self", registration.getEmail());
+                Identity identity = identityFactory.createIdentity(user, "basic", registration.getEmail());
                 identity.addData("password", registration.getPassword());
                 identityRepository.add(identity);
                 response.setError(false);
@@ -133,9 +133,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthenticationResponse authenticateBasicUser(AuthenticationRequest request, HttpServletRequest httpRequest) {
-        Identity identity = identityRepository.findIdentityFromProvider(request.getEmail(), "self");
+        Identity identity = identityRepository.findIdentityFromProvider(request.getEmail(), "basic");
         AuthenticationResponse response = new AuthenticationResponse();
-        response.setIdentityProvider("self");
+        response.setIdentityProvider("basic");
         if (identity != null && BCrypt.checkpw(request.getToken(), identity.getData().get("password").toString())) {
             Calendar now = Calendar.getInstance();
             now.add(Calendar.DAY_OF_YEAR, propertiesProvider.getDefaultTokenValidityDays());
@@ -184,8 +184,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public RecaptchaResponse validateRecaptchaResult(String recaptchaResult, HttpServletRequest httpRequest) {
-        boolean result = recaptchaTokenVerificationService.verifyToken(recaptchaResult, IPAddressHelper.getIPAddress(httpRequest));
+    public RecaptchaResponse validateRecaptchaResult(RecaptchaRequest request, HttpServletRequest httpRequest) {
+        boolean result = recaptchaTokenVerificationService.verifyToken(request.getRecaptchaResult(), IPAddressHelper.getIPAddress(httpRequest));
         RecaptchaResponse response = new RecaptchaResponse();
         response.setUserIsHuman(result);
         return response;

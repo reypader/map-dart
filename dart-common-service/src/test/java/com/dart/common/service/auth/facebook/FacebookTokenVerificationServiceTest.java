@@ -33,7 +33,7 @@ public class FacebookTokenVerificationServiceTest {
         Calendar now = Calendar.getInstance();
         now.add(Calendar.HOUR, 1);
         long later = now.getTimeInMillis()/1000;
-        when(mockHttpClient.execute(any(HttpGet.class), any(ResponseHandler.class))).thenReturn("token=TOKEN", "{data:{application:'Pings',expires_at:" + later + ",user_id:123}}");
+        when(mockHttpClient.execute(any(HttpGet.class), any(ResponseHandler.class))).thenReturn("token=TOKEN", "{data:{application:'Pings',expires_at:" + later + ",user_id:123,is_valid:true}}");
         when(mockProperties.getFacebookAppId()).thenReturn("FB_APP_ID");
         when(mockProperties.getFacebookSecret()).thenReturn("FB_SECRET");
         when(mockProperties.getFacebookEndpoint()).thenReturn("http://www.derp");

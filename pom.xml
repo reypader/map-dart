@@ -18,7 +18,9 @@
 
     <properties>
         <app.version>1</app.version>
-        <appengine.version>1.9.24</appengine.version>
+        <appengine.version>1.9.25</appengine.version>
+        <jersey.version>1.19</jersey.version>
+        <swagger.version>1.5.3</swagger.version>
         <guice.version>4.0</guice.version>
         <guava.version>18.0</guava.version>
         <gcloud.plugin.version>2.0.9.72.v20150804</gcloud.plugin.version>
@@ -35,6 +37,32 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-jersey-jaxrs</artifactId>
+                <version>${swagger.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.jersey</groupId>
+                        <artifactId>jersey-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey.contribs</groupId>
+                <artifactId>jersey-guice</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-json</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>dart-data</artifactId>
@@ -55,11 +83,6 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>dart-common-service</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.appengine</groupId>
-                <artifactId>appengine-endpoints</artifactId>
-                <version>${appengine.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
@@ -114,25 +137,6 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>2.6</version>
-                    <configuration>
-                        <webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml
-                        </webXml>
-                        <webResources>
-                            <resource><!-- this is relative to the pom.xml directory -->
-                                <directory>${project.build.directory}/generated-sources/appengine-endpoints</directory>
-                                <!-- the list has a default value of ** -->
-                                <includes>
-                                    <include>WEB-INF/*.discovery</include>
-                                    <include>WEB-INF/*.api</include>
-                                </includes>
-                            </resource>
-                        </webResources>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <groupId>com.google.appengine</groupId>
                     <artifactId>appengine-maven-plugin</artifactId>
                     <version>${appengine.version}</version>
@@ -143,17 +147,12 @@
                         <!--<address>0.0.0.0</address>-->
                         <!--<port>8080</port>-->
                         <!-- Comment in the below snippet to enable local debugging with a remote debugger like those included with Eclipse or IntelliJ-->
-                        <!--<jvmFlags>-->
+                        <jvmFlags>
+                            <jvmFlag>-Dcom.google.appengine.devappserver_module.user-module.port=8080</jvmFlag>
+                            <jvmFlag>-Dcom.google.appengine.devappserver_module.photo-module.port=8081</jvmFlag>
                         <!--<jvmFlag>-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n</jvmFlag>-->
-                        <!--</jvmFlags>-->
+                        </jvmFlags>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>endpoints_get_discovery_doc</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>com.google.appengine</groupId>

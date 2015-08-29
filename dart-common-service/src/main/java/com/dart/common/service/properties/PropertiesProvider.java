@@ -7,7 +7,10 @@ public interface PropertiesProvider {
 
     //GAE Properties
     String getGoogleAppId();
-    String getGoogleAppSecret();
+    String getGoogleServiceAccount();
+    String getGoogleCloudStorageURL();
+    String getGoogleCloudStorageBucket();
+
 
     //Login Properties
     String getGplusAppId();
@@ -20,11 +23,10 @@ public interface PropertiesProvider {
 
     String getRecaptchaEndpoint();
     String getRecaptchaSecret();
+
     //Other stuff
     String getUserWebsiteURL();
     String getSignupEmailTemplate();
-
     String getAppName();
-
     int getDefaultTokenValidityDays();
 }

@@ -1,8 +1,11 @@
 package com.dart.user.config;
 
+import com.dart.common.service.aop.Authenticated;
+import com.dart.common.service.aop.AuthenticationMethodInterceptor;
 import com.dart.common.service.auth.HttpRequestAuthorizationService;
 import com.dart.common.service.auth.JwtHttpRequestAuthorizationService;
 import com.dart.common.service.auth.TokenVerificationService;
+import com.dart.common.service.http.UserAuthorizationFilter;
 import com.dart.common.service.auth.facebook.Facebook;
 import com.dart.common.service.auth.facebook.FacebookTokenVerificationService;
 import com.dart.common.service.auth.google.Google;
@@ -29,6 +32,7 @@ import com.dart.user.service.UserService;
 import com.dart.user.service.UserServiceImpl;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.matcher.Matchers;
 import com.googlecode.objectify.ObjectifyFilter;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -41,6 +45,7 @@ public class UserModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(ObjectifyFilter.class).in(Singleton.class);
+        bind(UserAuthorizationFilter.class).in(Singleton.class);
 
         bind(UserService.class).to(UserServiceImpl.class);
 
@@ -57,6 +62,9 @@ public class UserModule extends AbstractModule {
         bind(TokenVerificationService.class).annotatedWith(Google.class).to(GoogleTokenVerificationService.class);
         bind(TokenVerificationService.class).annotatedWith(Recaptcha.class).to(RecaptchaTokenVerificationService.class);
         bind(MailSenderService.class).to(GenericMailSenderService.class);
+
+        bindInterceptor(Matchers.any(), Matchers.annotatedWith(Authenticated.class),
+                new AuthenticationMethodInterceptor());
     }
 
     @Provides

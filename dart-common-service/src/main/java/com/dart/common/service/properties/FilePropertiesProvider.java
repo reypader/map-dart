@@ -11,8 +11,10 @@ import java.util.Properties;
  */
 public class FilePropertiesProvider implements PropertiesProvider {
 
+    private String serviceAccount;
+    private String bucket;
+    private String gcsURL;
     private String googleAppId;
-    private String googleAppSecret;
     private String gplusAppId;
     private String gplusAppSecret;
     private String gplusLoginEndpoint;
@@ -31,7 +33,6 @@ public class FilePropertiesProvider implements PropertiesProvider {
         try {
             prop.load(stream);
             this.googleAppId = prop.getProperty("google.app.id");
-            this.googleAppSecret = prop.getProperty("google.app.secret");
             this.gplusAppId = prop.getProperty("gplus.app.id");
             this.gplusAppSecret = prop.getProperty("gplus.app.secret");
             this.gplusLoginEndpoint = prop.getProperty("gplus.endpoint");
@@ -53,6 +54,10 @@ public class FilePropertiesProvider implements PropertiesProvider {
             this.appName = prop.getProperty("sys.name");
             this.recaptchaEndpoint = prop.getProperty("recaptcha.endpoint");
             this.recaptchaSecret = prop.getProperty("recaptcha.secret");
+
+            this.serviceAccount = prop.getProperty("google.app.service-account");
+            this.bucket = prop.getProperty("google.app.gcs.bucket");
+            this.gcsURL = prop.getProperty("google.app.gcs.url");
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -69,9 +74,20 @@ public class FilePropertiesProvider implements PropertiesProvider {
         return googleAppId;
     }
 
+
     @Override
-    public String getGoogleAppSecret() {
-        return googleAppSecret;
+    public String getGoogleServiceAccount() {
+        return serviceAccount;
+    }
+
+    @Override
+    public String getGoogleCloudStorageURL() {
+        return gcsURL;
+    }
+
+    @Override
+    public String getGoogleCloudStorageBucket() {
+        return bucket;
     }
 
     @Override

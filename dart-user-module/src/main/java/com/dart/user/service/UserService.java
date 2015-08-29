@@ -22,6 +22,6 @@ public interface UserService {
 
     AuthenticationResponse authenticateGoogleUser(AuthenticationRequest request, HttpServletRequest httpRequest);
 
-    RecaptchaResponse validateRecaptchaResult(String recaptchaResult, HttpServletRequest httpRequest);
+    RecaptchaResponse validateRecaptchaResult(RecaptchaRequest request, HttpServletRequest httpRequest);
 
 }

@@ -141,14 +141,14 @@ public class UserServiceImplTest {
         verify(userFactorySpy, times(1)).createUser("test@email", "John Doe");
         verify(userRepoSpy, times(1)).add(userCaptor.capture());
         User userCaptured = userCaptor.getValue();
-        verify(identityFactorySpy, times(1)).createIdentity(isA(User.class), eq("self"), eq("test@email"));
+        verify(identityFactorySpy, times(1)).createIdentity(isA(User.class), eq("basic"), eq("test@email"));
         verify(identityRepoSpy, times(1)).add(identityCaptor.capture());
         Identity identityCaptured = identityCaptor.getValue();
         verify(registrationRepoSpy, times(1)).deleteRegistrationForEmail("test@email");
 
         assertEquals("John Doe", userCaptured.getDisplayName());
         assertEquals("test@email", userCaptured.getEmail());
-        assertEquals("self", identityCaptured.getProvider());
+        assertEquals("basic", identityCaptured.getProvider());
         assertEquals("test@email", identityCaptured.getProvidedIdentity());
         assertEquals(data, identityCaptured.getData());
         assertEquals(userCaptured, identityCaptured.getUser());
@@ -192,11 +192,11 @@ public class UserServiceImplTest {
     public void testAuthenticateBasicUser() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest();
         request.setEmail("test@email");
-        request.setProvider("self");
+        request.setProvider("basic");
         request.setToken("password");
 
         User user = dummyUserRepo.add(dummyUserFactory.createUser(request.getEmail(), "John Doe"));
-        Identity identity = dummyIdentityFactory.createIdentity(user, "self", "test@email");
+        Identity identity = dummyIdentityFactory.createIdentity(user, "basic", "test@email");
         identity.addData("password", BCrypt.hashpw("password", BCrypt.gensalt()));
         dummyIdentityRepo.add(identity);
         when(httpRequestAuthorizationService.generateToken(any(Date.class), eq(user), same(mockHttpRequest))).thenReturn("token");
@@ -206,7 +206,7 @@ public class UserServiceImplTest {
         verify(identityRepoSpy, times(1)).findIdentityFromProvider("test@email", request.getProvider());
         verify(httpRequestAuthorizationService, times(1)).generateToken(any(Date.class), eq(user), same(mockHttpRequest));
         assertEquals("token", response.getToken());
-        assertEquals("self", response.getIdentityProvider());
+        assertEquals("basic", response.getIdentityProvider());
         assertEquals(user.getId(), response.getUser());
     }
 
@@ -214,7 +214,7 @@ public class UserServiceImplTest {
     public void testAuthenticateBasicNonExistentUser() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest();
         request.setEmail("test@email");
-        request.setProvider("self");
+        request.setProvider("basic");
         request.setToken("password");
 
         AuthenticationResponse response = service.authenticateBasicUser(request, mockHttpRequest);
@@ -222,7 +222,7 @@ public class UserServiceImplTest {
         verify(identityRepoSpy, times(1)).findIdentityFromProvider("test@email", request.getProvider());
         verify(httpRequestAuthorizationService, times(0)).generateToken(any(Date.class), any(User.class), any(HttpServletRequest.class));
         assertNull(response.getToken());
-        assertEquals("self", response.getIdentityProvider());
+        assertEquals("basic", response.getIdentityProvider());
         assertNull(response.getUser());
     }
 
@@ -230,11 +230,11 @@ public class UserServiceImplTest {
     public void testAuthenticateBasicUserFailure() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest();
         request.setEmail("test@email");
-        request.setProvider("self");
+        request.setProvider("basic");
         request.setToken("derpword");
 
         User user = dummyUserRepo.add(dummyUserFactory.createUser(request.getEmail(), "John Doe"));
-        Identity identity = dummyIdentityFactory.createIdentity(user, "self", "test@email");
+        Identity identity = dummyIdentityFactory.createIdentity(user, "basic", "test@email");
         identity.addData("password", BCrypt.hashpw("password", BCrypt.gensalt()));
         dummyIdentityRepo.add(identity);
 
@@ -510,8 +510,10 @@ public class UserServiceImplTest {
     public void testValidateRecaptchaResult() throws Exception {
         when(mockRecaptchaVerifier.verifyToken("recaptcha", "127.0.0.1")).thenReturn(true);
         when(mockHttpRequest.getRemoteAddr()).thenReturn("127.0.0.1");
+        RecaptchaRequest request = new RecaptchaRequest();
+        request.setRecaptchaResult("recaptcha");
 
-        RecaptchaResponse response = service.validateRecaptchaResult("recaptcha", mockHttpRequest);
+        RecaptchaResponse response = service.validateRecaptchaResult(request, mockHttpRequest);
 
         verify(mockRecaptchaVerifier, times(1)).verifyToken("recaptcha", "127.0.0.1");
         assertTrue(response.isUserIsHuman());
@@ -521,8 +523,10 @@ public class UserServiceImplTest {
     public void testValidateRecaptchaResultFail() throws Exception {
         when(mockRecaptchaVerifier.verifyToken("recaptcha", "127.0.0.1")).thenReturn(false);
         when(mockHttpRequest.getRemoteAddr()).thenReturn("127.0.0.1");
+        RecaptchaRequest request = new RecaptchaRequest();
+        request.setRecaptchaResult("recaptcha");
 
-        RecaptchaResponse response = service.validateRecaptchaResult("recaptcha", mockHttpRequest);
+        RecaptchaResponse response = service.validateRecaptchaResult(request, mockHttpRequest);
 
         verify(mockRecaptchaVerifier, times(1)).verifyToken("recaptcha", "127.0.0.1");
         assertFalse(response.isUserIsHuman());
