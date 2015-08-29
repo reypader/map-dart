@@ -22,7 +22,7 @@ define(['angular', 'angular-mocks', 'registration/registration.module'], functio
     });
 
     it('should redirect to the /login path on non-existent route', function () {
-      $httpBackend.expectGET('modules/registration/main.registration.partial.html').respond(200, '');
+      $httpBackend.expectGET('/base/app/modules/registration/registration.partial.html').respond(200, '');
       expect($location.path()).toBe('');
 
       $location.path('/derp');

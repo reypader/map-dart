@@ -1,4 +1,4 @@
-define([], function () {
+define(['require'], function (require) {
   'use strict';
 
   config.$inject = [
@@ -7,7 +7,7 @@ define([], function () {
 
   function config($routeProvider) {
     $routeProvider.when('/', {
-      templateUrl: 'modules/registration/main.registration.partial.html',
+      templateUrl: require.toUrl('./registration.partial.html'),
       controller: 'RegistrationController',
       controllerAs: 'vm'
     }).otherwise({redirectTo: '/'});
