@@ -19,10 +19,6 @@
             <artifactId>dart-data</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-endpoints</artifactId>
-        </dependency>
-        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
         </dependency>

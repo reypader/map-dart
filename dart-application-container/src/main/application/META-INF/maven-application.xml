@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_5.xsd"
+             version="5">
+    <display-name>pings-application-container</display-name>
+    <module>
+        <web>
+            <web-uri>dart-user-module.war</web-uri>
+            <context-root>/dart-user-module</context-root>
+        </web>
+    </module>
+    <module>
+        <web>
+            <web-uri>dart-photo-module.war</web-uri>
+            <context-root>/dart-photo-module</context-root>
+        </web>
+    </module>
+    <library-directory>lib</library-directory>
+</application>

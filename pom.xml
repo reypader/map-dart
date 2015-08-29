@@ -15,6 +15,7 @@
         <module>dart-event-module</module>
         <module>dart-user-module</module>
         <module>dart-photo-module</module>
+        <module>dart-application-container</module>
     </modules>
 
     <properties>
