@@ -15,7 +15,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
 
 /**
  * @author RMPader
@@ -77,7 +76,7 @@ public class UserEndpoint {
     @ApiOperation(value = "Authenticate using the email and access token provided by Facebook.",
             notes = "The access token will still be verified in the backend before processing. If the email is not yet associated with a user, a new User will be created. Otherwise, this Facebook Identity will be associated.",
             response = AuthenticationResponse.class)
-    public AuthenticationResponse fbAuth(@Context HttpServletRequest httpRequest, AuthenticationRequest request) throws UnsupportedEncodingException {
+    public AuthenticationResponse fbAuth(@Context HttpServletRequest httpRequest, AuthenticationRequest request) {
         return service.authenticateFacebookUser(request, httpRequest);
     }
 
@@ -88,7 +87,7 @@ public class UserEndpoint {
     @ApiOperation(value = "Authenticate using the email and access token provided by Google.",
             notes = "The access token will still be verified in the backend before processing. If the email is not yet associated with a user, a new User will be created. Otherwise, this Google Identity will be associated.",
             response = AuthenticationResponse.class)
-    public AuthenticationResponse gpAuth(@Context HttpServletRequest httpRequest, AuthenticationRequest request) throws UnsupportedEncodingException {
+    public AuthenticationResponse gpAuth(@Context HttpServletRequest httpRequest, AuthenticationRequest request) {
         return service.authenticateGoogleUser(request, httpRequest);
     }
 
@@ -97,7 +96,7 @@ public class UserEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Validate the Recaptcha Token with Google.",
             response = RecaptchaResponse.class)
-    public RecaptchaResponse recaptcha(@Context HttpServletRequest httpRequest, RecaptchaRequest request) throws UnsupportedEncodingException {
+    public RecaptchaResponse recaptcha(@Context HttpServletRequest httpRequest, RecaptchaRequest request) {
         return service.validateRecaptchaResult(request, httpRequest);
     }
 
@@ -106,7 +105,7 @@ public class UserEndpoint {
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Update the user's information.")
-    public void updateUser(HttpServletRequest httpRequest, UpdateUserRequest request) {
+    public void updateUser(@Context HttpServletRequest httpRequest, UpdateUserRequest request) {
         try {
             UserPrincipal principal = (UserPrincipal) httpRequest.getUserPrincipal();
             User user = principal.getUser();
