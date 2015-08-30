@@ -1,4 +1,5 @@
 *.iml
 */target/
 *.idea/
-*.properties
+**/application.properties
+**/key.p12
