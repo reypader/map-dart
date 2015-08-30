@@ -144,6 +144,7 @@ public class UserServiceImpl implements UserService {
             String token = httpRequestAuthorizationService.generateToken(later, user, httpRequest);
             response.setToken(token);
             response.setUser(user.getId());
+            response.setDisplayName(user.getDisplayName());
         }
         return response;
     }
@@ -179,6 +180,7 @@ public class UserServiceImpl implements UserService {
             String token = httpRequestAuthorizationService.generateToken(later, user, httpRequest);
             response.setToken(token);
             response.setUser(user.getId());
+            response.setDisplayName(user.getDisplayName());
         }
         return response;
     }
