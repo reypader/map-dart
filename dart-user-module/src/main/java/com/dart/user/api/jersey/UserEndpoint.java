@@ -1,5 +1,9 @@
 package com.dart.user.api.jersey;
 
+import com.dart.common.service.aop.Authenticated;
+import com.dart.common.service.exception.IllegalTransactionException;
+import com.dart.common.service.http.UserPrincipal;
+import com.dart.data.domain.User;
 import com.dart.user.api.*;
 import com.dart.user.service.UserService;
 import com.google.inject.Inject;
@@ -10,16 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author RMPader
  */
 @Path("/user")
-@Api(value = "/user", description = "API for doing user-related actions such as CRUD, and authentication")
+@Api(value = "/user", description = "API for doing user-related actions such as CRUD, and authentication.")
 public class UserEndpoint {
 
     private UserService service;
@@ -50,8 +52,8 @@ public class UserEndpoint {
     @GET
     @Path("/verify")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Verify the corresponding registration entry and register the user",
-            notes = "At this point, the User will be given a record and is now truly registered",
+    @ApiOperation(value = "Verify the corresponding registration entry and register the user.",
+            notes = "At this point, the User will be given a record and is now truly registered.",
             response = VerificationResponse.class)
     public VerificationResponse verify(@QueryParam("creation_code") String creationCode) {
         return service.verifyUser(creationCode);
@@ -61,8 +63,8 @@ public class UserEndpoint {
     @Path("/auth/basic")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Authenticate using the email and password",
-            notes = "The password must be Hashed and Base64 encoded",
+    @ApiOperation(value = "Authenticate using the email and password.",
+            notes = "The password must be Hashed and Base64 encoded.",
             response = AuthenticationResponse.class)
     public AuthenticationResponse basicAuth(@Context HttpServletRequest httpRequest, AuthenticationRequest request) {
         return service.authenticateBasicUser(request, httpRequest);
@@ -72,7 +74,7 @@ public class UserEndpoint {
     @Path("/auth/facebook")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Authenticate using the email and access token provided by Facebook",
+    @ApiOperation(value = "Authenticate using the email and access token provided by Facebook.",
             notes = "The access token will still be verified in the backend before processing. If the email is not yet associated with a user, a new User will be created. Otherwise, this Facebook Identity will be associated.",
             response = AuthenticationResponse.class)
     public AuthenticationResponse fbAuth(@Context HttpServletRequest httpRequest, AuthenticationRequest request) throws UnsupportedEncodingException {
@@ -83,7 +85,7 @@ public class UserEndpoint {
     @Path("/auth/google")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Authenticate using the email and access token provided by Google",
+    @ApiOperation(value = "Authenticate using the email and access token provided by Google.",
             notes = "The access token will still be verified in the backend before processing. If the email is not yet associated with a user, a new User will be created. Otherwise, this Google Identity will be associated.",
             response = AuthenticationResponse.class)
     public AuthenticationResponse gpAuth(@Context HttpServletRequest httpRequest, AuthenticationRequest request) throws UnsupportedEncodingException {
@@ -93,9 +95,24 @@ public class UserEndpoint {
     @POST
     @Path("/recaptcha")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Validate the Recaptcha Token with Google",
+    @ApiOperation(value = "Validate the Recaptcha Token with Google.",
             response = RecaptchaResponse.class)
     public RecaptchaResponse recaptcha(@Context HttpServletRequest httpRequest, RecaptchaRequest request) throws UnsupportedEncodingException {
         return service.validateRecaptchaResult(request, httpRequest);
+    }
+
+    @Authenticated
+    @POST
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Update the user's information.")
+    public void updateUser(HttpServletRequest httpRequest, UpdateUserRequest request) {
+        try {
+            UserPrincipal principal = (UserPrincipal) httpRequest.getUserPrincipal();
+            User user = principal.getUser();
+            service.updateUser(request, user);
+        } catch (IllegalTransactionException e) {
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.auth.facebook.Facebook;
 import com.dart.common.service.auth.google.Google;
 import com.dart.common.service.auth.google.Recaptcha;
+import com.dart.common.service.exception.IllegalTransactionException;
 import com.dart.common.service.mail.MailSenderService;
 import com.dart.common.service.properties.PropertiesProvider;
 import com.dart.common.service.util.IPAddressHelper;
@@ -13,6 +14,7 @@ import com.dart.data.domain.Identity;
 import com.dart.data.domain.Registration;
 import com.dart.data.domain.User;
 import com.dart.data.exception.EntityCollisionException;
+import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.factory.IdentityFactory;
 import com.dart.data.factory.RegistrationFactory;
 import com.dart.data.factory.UserFactory;
@@ -191,5 +193,22 @@ public class UserServiceImpl implements UserService {
         RecaptchaResponse response = new RecaptchaResponse();
         response.setUserIsHuman(result);
         return response;
+    }
+
+    @Override
+    public void updateUser(UpdateUserRequest request, User user) throws IllegalTransactionException {
+        try {
+            if (user.getId().equals(request.getId())) {
+                user.setPhotoURL(request.getPhotoURL());
+                user.setDescription(request.getDescription());
+                user.setDisplayName(request.getDisplayName());
+                userRepository.update(user);
+            } else {
+                throw new IllegalTransactionException("User being updated is not the same as the identified user");
+            }
+        } catch (EntityNotFoundException e) {
+            throw new IllegalTransactionException("User being updated does not exist");
+        }
+
     }
 }
