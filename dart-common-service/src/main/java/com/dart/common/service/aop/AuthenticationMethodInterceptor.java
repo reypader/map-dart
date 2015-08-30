@@ -18,19 +18,23 @@ public class AuthenticationMethodInterceptor implements MethodInterceptor {
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Class<?>[] params = invocation.getMethod().getParameterTypes();
         int requestIndex = getIndex(HttpServletRequest.class, params);
-        Object[] args = invocation.getArguments();
-        HttpServletRequest request = (HttpServletRequest) args[requestIndex];
-        Principal p = request.getUserPrincipal();
-        if (p instanceof UserPrincipal) {
-            UserPrincipal principal = (UserPrincipal) p;
-            User user = principal.getUser();
-            if (user == null) {
-                throw new UnauthorizedException("Authorization may have failed.");
+        if (requestIndex >= 0) {
+            Object[] args = invocation.getArguments();
+            HttpServletRequest request = (HttpServletRequest) args[requestIndex];
+            Principal p = request.getUserPrincipal();
+            if (p instanceof UserPrincipal) {
+                UserPrincipal principal = (UserPrincipal) p;
+                User user = principal.getUser();
+                if (user == null) {
+                    throw new UnauthorizedException("Authorization may have failed.");
+                } else {
+                    return invocation.proceed();
+                }
             } else {
-                return invocation.proceed();
+                throw new UnauthorizedException("User was not authorized. Authorization header is not present or UserAuthorizationFilter in the filter chain");
             }
         } else {
-            throw new UnauthorizedException("User was not authorized. Authorization header is not present or UserAuthorizationFilter in the filter chain");
+            throw new IllegalStateException("Method annotated with @Authenticated needs to have one HttpServletRequest parameter");
         }
     }
 
