@@ -5,12 +5,13 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Travler</title>
+  <base href="https://www.travler.com">
   <script type="text/javascript" ng-if="false">
     (function () {
       var ca = document.cookie.split(';');
+      var found = false;
       for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        var found = false;
         while (c.charAt(0) == ' ') c = c.substring(1);
         if (c.indexOf("sessionToken=") == 0) {
           found = true;
@@ -71,7 +72,7 @@
             <li class="text-center"><a href="#">About the site</a></li>
           </ul>
         </li>
-        <li class="text-center"><a href="#">Logout</a></li>
+        <li class="text-center"><a href="#" ng-click="nav.logout()">Logout</a></li>
       </ul>
       <form class="navbar-form navbar-right" role="search">
         <div style="display:table;" class="form-group input-group">
@@ -129,149 +130,7 @@
 </div>
 <div id="content" class="container" style="padding-top:51px;">
   <hr/>
-  <div class="row">
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>New York City skyline</strong></h5>
-        <img src="images/samples/newyork-n.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        <p>
-          Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-          repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum
-          ut.
-          Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec.
-        </p>
-      </div>
-    </div>
-    <div class="item">
-
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>Camping in the wild</strong></h5>
-        <img src="images/samples/camping.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
-        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
-        philosophia id eam, tantas latine laoreet his ne.
-      </div>
-    </div>
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>St. Peter Square</strong></h5>
-        <img src="images/samples/vatican.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
-        Mea affert fabulas forensibus eu.
-      </div>
-    </div>
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>Niagra falls</strong></h5>
-        <img src="images/samples/niagra1.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
-        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
-        philosophia id eam, tantas latine laoreet his ne.
-      </div>
-    </div>
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>Old Faithful in Yellowstone</strong></h5>
-        <img src="images/samples/yellowstone.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
-        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
-        philosophia id eam, tantas latine laoreet his ne.
-      </div>
-    </div>
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>Swiss Alps</strong></h5>
-        <img src="images/samples/alps.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
-        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
-        philosophia id eam, tantas latine laoreet his ne.Ullum putent mea ex, pri fabellas tacimates complectitur at. Et
-        quo duis congue. Eam ut cibo debitis. Vix dolorum expetendis ullamcorper ex.
-      </div>
-    </div>
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>Viewing Deck in Niagra Falls</strong></h5>
-        <img src="images/samples/niagra2.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset.
-      </div>
-    </div>
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>Mt. Pulag</strong></h5>
-        <img src="images/samples/banner.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
-        Mea affert fabulas forensibus eu. Virtute dissentiunt philosophia id eam, tantas latine laoreet his ne.
-      </div>
-    </div>
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>I love NYC</strong></h5>
-        <img src="images/samples/newyork.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
-        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
-        philosophia id eam.
-      </div>
-    </div>
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>Fine dining in Miami</strong></h5>
-        <img src="images/samples/resto.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
-        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
-        philosophia id eam, tantas latine laoreet his ne.
-      </div>
-    </div>
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>Half Dome in Yosemite</strong></h5>
-        <img src="images/samples/yosemite.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-        repudiare elaboraret comprehensam, ea iuvaret maluisset sed.
-      </div>
-    </div>
-    <div class="item">
-      <div class="panel panel-default">
-        <h5 class="item-header"><strong>Angkor Wat</strong></h5>
-        <img src="images/samples/wat.jpg" class="img-rounded">
-        <h6><i>by: <a href="#">traveller</a></i></h6>
-        <hr/>
-        Lorem ipsum dolor sit amet, ex habemus commune volutpat his, sed ei falli noluisse deterruisset. In eum
-        repudiare elaboraret comprehensam, ea iuvaret maluisset sed. Id paulo legere sea, animal aliquip labitur cum ut.
-        Mea affert fabulas forensibus eu. Cu magna tincidunt sed, id audire interesset nec. Virtute dissentiunt
-        philosophia id eam, tantas latine laoreet his ne.
-      </div>
-    </div>
-  </div>
+  <div ng-view></div>
 </div>
 </body>
 </html>
