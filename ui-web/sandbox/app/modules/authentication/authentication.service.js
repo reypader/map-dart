@@ -34,18 +34,18 @@ define([
     }
 
     _this.setSession = function (response) {
-      console.log("store: " + response.identityProvider);
-      $cookies.put('provider', response.identityProvider, {secure: false});
-      console.log("store: " + response.user);
-      $cookies.put('user', response.user, {secure: false});
-      console.log("store: " + response.token);
-      $cookies.put('sessionToken', response.token, {secure: false});
+      $cookies.put('provider', response.identityProvider, {secure: true});
+      $cookies.put('user', response.user, {secure: true});
+      $cookies.put('sessionToken', response.token, {secure: true});
+      $cookies.put('displayName', response.displayName, {secure: true});
     }
 
     _this.clearSession = function () {
-      $cookies.remove('provider', {secure: false});
-      $cookies.remove('user', {secure: false});
-      $cookies.remove('sessionToken', {secure: false});
+      $cookies.remove('provider', {secure: true});
+      $cookies.remove('user', {secure: true});
+      $cookies.remove('sessionToken', {secure: true});
+      $cookies.remove('displayName', {secure: true});
+
     }
   }
 
