@@ -1,12 +1,20 @@
 define([], function () {
   'use strict';
 
-  function controller() {
-    var _this = this;
-    _this.isCollapsed = true;
-  }
+  controller.$inject = ['authenticationService'];
 
-  controller.$inject = [];
+  function controller(authenticationService) {
+    var _this = this;
+
+    _this.isCollapsed = true;
+
+    _this.logout = logout;
+
+    function logout(){
+      authenticationService.clearSession();
+      window.location.href = 'https://' + window.location.host + '/signin.html';
+    }
+  }
 
   return controller;
 });

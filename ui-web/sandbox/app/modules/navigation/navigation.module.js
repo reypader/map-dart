@@ -1,13 +1,13 @@
 define([
-  'navigation/navigation.config',
-  'navigation/navigation.controller',
+  './navigation.config',
+  './navigation.controller',
   'angular',
   'angular-route',
-  'angular-cookies'
+  'authentication/authentication.module'
 ], function (config, controller) {
   'use strict';
 
-  var app = angular.module('navigationModule', ['ngRoute', 'ngCookies']);
+  var app = angular.module('navigationModule', ['ngRoute', 'authenticationModule']);
   app.config(config);
   app.controller('NavigationController', controller);
 });
