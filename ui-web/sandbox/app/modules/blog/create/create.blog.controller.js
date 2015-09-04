@@ -6,7 +6,7 @@ define([],function(){
   function controller(location,$scope){
     var _this = this;
     _this.location = location;
-    _this.files = undefined;
+    _this.files = [];
 
   }
 

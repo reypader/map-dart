@@ -23,12 +23,12 @@ require.config({
     'angular-slimscroll': '../../bower_components/angular-slimscroll/angular-slimscroll',
     slimScroll: '../../bower_components/slimScroll/jquery.slimscroll.min',
     'jquery-slimscroll': '../../bower_components/jquery-slimscroll/jquery.slimscroll.min',
-    'angular-ui-uploader': '../../bower_components/angular-ui-uploader/dist/uploader',
     'cryptojs.core': '../../bower_components/cryptojslib/components/core',
     'cryptojs.md5': '../../bower_components/cryptojslib/components/md5',
     'cryptojs.base64': '../../bower_components/cryptojslib/components/enc-base64',
     'cryptojs.sha256': '../../bower_components/cryptojslib/components/sha256',
-    'cryptojs.lib': '../../bower_components/cryptojslib/components/lib-typedarrays-min'
+    'cryptojs.lib': '../../bower_components/cryptojslib/components/lib-typedarrays-min',
+    'angular-ui-uploader': '../../bower_components/angular-ui-uploader/dist/uploader'
   },
   shim: {
     bootstrap: {
@@ -128,7 +128,9 @@ require.config({
       exports: 'CryptoJS.enc.Base64'
     }
   },
-  packages: [],
+  packages: [
+
+  ],
   waitSeconds: 60
 });
 require([
@@ -137,6 +139,7 @@ require([
   'file-read.directive',
   'map/map.module',
   'authentication/authentication.module',
+  'profile/profile.module',
   'blog/blog.module',
   //'bootstrap',
   'angular',
@@ -156,6 +159,7 @@ require([
     'ui.bootstrap',
     'ngAnimate',
     'fileReadModule',
+    'profileModule',
     'mapModule',
     'blogModule',
     'navigationModule',
