@@ -5,13 +5,14 @@ import com.dart.common.service.aop.AuthenticationMethodInterceptor;
 import com.dart.common.service.auth.HttpRequestAuthorizationService;
 import com.dart.common.service.auth.JwtHttpRequestAuthorizationService;
 import com.dart.common.service.auth.TokenVerificationService;
-import com.dart.common.service.http.UserAuthorizationFilter;
 import com.dart.common.service.auth.facebook.Facebook;
 import com.dart.common.service.auth.facebook.FacebookTokenVerificationService;
 import com.dart.common.service.auth.google.Google;
 import com.dart.common.service.auth.google.GoogleTokenVerificationService;
 import com.dart.common.service.auth.google.Recaptcha;
 import com.dart.common.service.auth.google.RecaptchaTokenVerificationService;
+import com.dart.common.service.http.CORSFilter;
+import com.dart.common.service.http.UserAuthorizationFilter;
 import com.dart.common.service.mail.GenericMailSenderService;
 import com.dart.common.service.mail.MailSenderService;
 import com.dart.common.service.properties.FilePropertiesProvider;
@@ -44,6 +45,7 @@ public class UserModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        bind(CORSFilter.class).in(Singleton.class);
         bind(ObjectifyFilter.class).in(Singleton.class);
         bind(UserAuthorizationFilter.class).in(Singleton.class);
 

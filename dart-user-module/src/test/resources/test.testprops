@@ -1,3 +1,4 @@
+sys.upload.byte.max=5000000
 google.app.id=gaeid
 google.app.secret=gaesecret
 gplus.app.id=gplusid

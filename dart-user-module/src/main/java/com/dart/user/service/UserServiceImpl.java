@@ -5,6 +5,7 @@ import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.auth.facebook.Facebook;
 import com.dart.common.service.auth.google.Google;
 import com.dart.common.service.auth.google.Recaptcha;
+import com.dart.common.service.exception.IllegalTransactionException;
 import com.dart.common.service.mail.MailSenderService;
 import com.dart.common.service.properties.PropertiesProvider;
 import com.dart.common.service.util.IPAddressHelper;
@@ -13,6 +14,7 @@ import com.dart.data.domain.Identity;
 import com.dart.data.domain.Registration;
 import com.dart.data.domain.User;
 import com.dart.data.exception.EntityCollisionException;
+import com.dart.data.exception.EntityNotFoundException;
 import com.dart.data.factory.IdentityFactory;
 import com.dart.data.factory.RegistrationFactory;
 import com.dart.data.factory.UserFactory;
@@ -37,7 +39,7 @@ import java.util.logging.Logger;
  */
 @Singleton
 public class UserServiceImpl implements UserService {
-    private static Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
+    private static Logger LOGGER = Logger.getLogger(UserServiceImpl.class.getName());
 
     private final UserRepository userRepository;
     private final UserFactory userFactory;
@@ -78,8 +80,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CheckEmailResponse checkEmailUsage(String email) {
+        LOGGER.info("Checking usage of email: " + email);
         User user = userRepository.retrieveByEmail(email);
-
         CheckEmailResponse response = new CheckEmailResponse();
         response.setEmailUsed(user != null);
         return response;
@@ -88,6 +90,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createRegistration(RegistrationRequest request) {
         try {
+            LOGGER.info("Creating registration for: " + request.getEmail());
             String hashed = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
             Registration registration = registrationFactory.createRegistration(request.getEmail(), request.getDisplayName(), hashed);
             Registration newRegistration = registrationRepository.add(registration);
@@ -97,13 +100,14 @@ public class UserServiceImpl implements UserService {
             String body = TemplateHelper.render(emailTemplate, data);
             mailSender.sendMail(registration.getEmail(), registration.getDisplayName(), "Registration Confirmation", body);
         } catch (MessagingException e) {
-            logger.log(Level.WARNING, "Failed to send email to " + request.getEmail());
+            LOGGER.log(Level.WARNING, "Failed to send email to " + request.getEmail());
             registrationRepository.deleteRegistrationForEmail(request.getEmail());
         }
     }
 
     @Override
     public VerificationResponse verifyUser(String creationCode) {
+        LOGGER.info("Attempting to verify registration:" + creationCode);
         VerificationResponse response = new VerificationResponse();
         Registration registration = registrationRepository.retrieve(creationCode);
         try {
@@ -115,13 +119,13 @@ public class UserServiceImpl implements UserService {
                 identityRepository.add(identity);
                 response.setError(false);
             } else {
-                logger.log(Level.WARNING, "Tried to verify a non-existent registration: " + creationCode);
+                LOGGER.log(Level.WARNING, "Tried to verify a non-existent registration: " + creationCode);
                 response.setError(true);
             }
             return response;
         } catch (EntityCollisionException e) {
             registrationRepository.delete(registration);
-            logger.log(Level.WARNING, "Tried to verify a registration but the user was already known to us: " + registration.getEmail());
+            LOGGER.log(Level.WARNING, "Tried to verify a registration but the user was already known to us: " + registration.getEmail());
             response.setError(true);
             return response;
         } finally {
@@ -133,6 +137,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthenticationResponse authenticateBasicUser(AuthenticationRequest request, HttpServletRequest httpRequest) {
+        LOGGER.info("Doing a basic authentication for user: " + request.getEmail());
         Identity identity = identityRepository.findIdentityFromProvider(request.getEmail(), "basic");
         AuthenticationResponse response = new AuthenticationResponse();
         response.setIdentityProvider("basic");
@@ -144,6 +149,10 @@ public class UserServiceImpl implements UserService {
             String token = httpRequestAuthorizationService.generateToken(later, user, httpRequest);
             response.setToken(token);
             response.setUser(user.getId());
+            response.setDisplayName(user.getDisplayName());
+            LOGGER.info("Authentication successful for user: " + request.getEmail());
+        } else {
+            LOGGER.info("Authentication failed for user: " + request.getEmail());
         }
         return response;
     }
@@ -159,6 +168,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private AuthenticationResponse getAuthenticationResponse(AuthenticationRequest request, HttpServletRequest httpRequest, String providerName, TokenVerificationService tokenVerificationService) {
+        LOGGER.info("Doing a " + providerName + " authentication for user: " + request.getEmail());
         AuthenticationResponse response = new AuthenticationResponse();
         response.setIdentityProvider(providerName);
         if (tokenVerificationService.verifyToken(request.getToken(), request.getData().get("id"))) {
@@ -179,15 +189,38 @@ public class UserServiceImpl implements UserService {
             String token = httpRequestAuthorizationService.generateToken(later, user, httpRequest);
             response.setToken(token);
             response.setUser(user.getId());
+            response.setDisplayName(user.getDisplayName());
+            LOGGER.info("Authentication successful for user: " + request.getEmail());
+        } else {
+            LOGGER.info("Authentication failed for user: " + request.getEmail());
+
         }
         return response;
     }
 
     @Override
     public RecaptchaResponse validateRecaptchaResult(RecaptchaRequest request, HttpServletRequest httpRequest) {
+        LOGGER.info("Attempting to validate recaptcha code: " + request.getRecaptchaResult());
         boolean result = recaptchaTokenVerificationService.verifyToken(request.getRecaptchaResult(), IPAddressHelper.getIPAddress(httpRequest));
         RecaptchaResponse response = new RecaptchaResponse();
         response.setUserIsHuman(result);
         return response;
+    }
+
+    @Override
+    public void updateUser(UpdateUserRequest request, User user) throws IllegalTransactionException {
+        try {
+            if (user.getId().equals(request.getId())) {
+                user.setPhotoURL(request.getPhotoURL());
+                user.setDescription(request.getDescription());
+                user.setDisplayName(request.getDisplayName());
+                userRepository.update(user);
+            } else {
+                throw new IllegalTransactionException("User being updated is not the same as the identified user");
+            }
+        } catch (EntityNotFoundException e) {
+            throw new IllegalTransactionException("User being updated does not exist");
+        }
+
     }
 }

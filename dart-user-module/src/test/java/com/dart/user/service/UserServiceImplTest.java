@@ -2,6 +2,8 @@ package com.dart.user.service;
 
 import com.dart.common.service.auth.HttpRequestAuthorizationService;
 import com.dart.common.service.auth.TokenVerificationService;
+import com.dart.common.service.exception.IllegalTransactionException;
+import com.dart.common.service.http.UserPrincipal;
 import com.dart.common.service.mail.MailSenderService;
 import com.dart.common.service.properties.FilePropertiesProvider;
 import com.dart.common.test.factory.DummyIdentityFactory;
@@ -531,4 +533,57 @@ public class UserServiceImplTest {
         verify(mockRecaptchaVerifier, times(1)).verifyToken("recaptcha", "127.0.0.1");
         assertFalse(response.isUserIsHuman());
     }
+
+    @Test
+    public void testUpdateUser() throws Exception {
+        User user = dummyUserFactory.createUser("test@email", "John Doe");
+        dummyUserRepo.add(user);
+        when(mockHttpRequest.getUserPrincipal()).thenReturn(new UserPrincipal(user));
+        UpdateUserRequest request = new UpdateUserRequest();
+        request.setDisplayName("Derp");
+        request.setDescription("Describe me");
+        request.setPhotoURL("http://url.com");
+        request.setId(user.getId());
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+
+        service.updateUser(request, user);
+
+        verify(userRepoSpy, times(1)).update(userCaptor.capture());
+        User userCaptured = userCaptor.getValue();
+        assertEquals(user.getId(), userCaptured.getId());
+        assertEquals(user.getEmail(), userCaptured.getEmail());
+        assertEquals("Derp", userCaptured.getDisplayName());
+        assertEquals("Describe me", userCaptured.getDescription());
+        assertEquals("http://url.com", userCaptured.getPhotoURL());
+        assertEquals(user.getSecret(), userCaptured.getSecret());
+    }
+
+    @Test(expected = IllegalTransactionException.class)
+    public void testUpdateUserFraud() throws Exception {
+        User user = dummyUserFactory.createUser("test@email", "John Doe");
+        when(mockHttpRequest.getUserPrincipal()).thenReturn(new UserPrincipal(user));
+        UpdateUserRequest request = new UpdateUserRequest();
+        request.setDisplayName("Derp");
+        request.setDescription("Describe me");
+        request.setPhotoURL("http://url.com");
+        request.setId("412341");
+
+        service.updateUser(request, user);
+        verify(userRepoSpy, times(0)).update(any(User.class));
+    }
+
+    @Test(expected = IllegalTransactionException.class)
+    public void testUpdateNonExistentUser() throws Exception {
+        User user = dummyUserFactory.createUser("test@email", "John Doe");
+        when(mockHttpRequest.getUserPrincipal()).thenReturn(new UserPrincipal(user));
+        UpdateUserRequest request = new UpdateUserRequest();
+        request.setDisplayName("Derp");
+        request.setDescription("Describe me");
+        request.setPhotoURL("http://url.com");
+        request.setId(user.getId());
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+
+        service.updateUser(request, user);
+    }
+
 }

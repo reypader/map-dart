@@ -6,6 +6,7 @@ package com.dart.user.api;
 public class AuthenticationResponse {
     private String token;
     private String user;
+    private String displayName;
     private String identityProvider;
 
     public String getToken() {
@@ -30,5 +31,13 @@ public class AuthenticationResponse {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }
