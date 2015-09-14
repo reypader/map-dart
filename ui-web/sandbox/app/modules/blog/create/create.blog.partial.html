@@ -4,39 +4,38 @@
 <div class="modal-body">
   <form>
     <div class="form-group">
-      <label for="files">Pictures</label>
-
-      <div id="files" class="well">
-        <div>
-          <div style="float:right;">
-            <button ng-click="btn_clean()">Remove all</button>
-          </div>
-          <input type="file" name="file" file-read="cbc.files" multiple/>
-        </div>
-        <div ng-repeat="upload in cbc.files"
-             style="margin-top: 20px;border-bottom-color: antiquewhite;border-bottom-style: double;">
-          <div><span ng-bind="upload.file.name"></span>
-
-            <div style="float:right;"><span ng-bind="upload.file.humanSize"></span><a ng-click="btn_remove(file)"
-                                                                                      title="Remove from list to be uploaded"><i
-                    class="icon-remove"></i></a></div>
-          </div>
-          <progress style="width:400px;" value="{{upload.file.loaded}}" max="upload.file.size"></progress>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
       <label for="title">Title</label>
       <input id="title" class="form-control" placeholder="Title" autofocus>
     </div>
     <div class="form-group">
       <label for="summary">Summary</label>
-    <textarea id="summary" class="form-control" placeholder="Title" autofocus>
+    <textarea id="summary" class="form-control" rows="6">
       </textarea>
     </div>
     <div class="form-group">
       <label for="link">Link to your blog</label>
-      <input id="link" class="form-control" placeholder="http://" autofocus>
+      <input id="link" class="form-control" placeholder="http://">
+    </div>
+    <div class="form-group">
+      <label for="files">Pictures</label>
+
+      <span class="btn btn-default btn-file">
+    Browse <input type="file" name="file"
+                  class="btn btn-default"
+                  file-read="cbc.files"
+                  multiple/>
+</span>
+
+      <div id="files" class="well">
+
+        <div ng-repeat="upload in cbc.files">
+          <div>
+            <div style="float:right;"><a ng-click="btn_remove(file)" title="Remove from list to be uploaded"><i
+                    class="fa fa-times"></i></a></div>
+          </div>
+          <img class="img-responsive" ng-src="{{upload.servingUrl}}">
+        </div>
+      </div>
     </div>
   </form>
 </div>

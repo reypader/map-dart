@@ -3,40 +3,23 @@ define([], function () {
 
   service.$inject = [
     '$q',
-    '$http',
-    '$cookies'
+    '$http'
   ];
 
-  function service($q, $http, $cookies) {
+  function service($q, $http) {
     var _this = this;
-    _this.executors = 3;
 
-    this.upload = function upload(files) {
+    this.upload = function upload(queue) {
       var index = 0;
-      var queue = [];
 
-      return execute();
-      ///
-
-      function execute() {
-        for (var i = 0; i < files.length; i++) {
-          queue.push({
-            servingUrl: URL.createObjectURL(files[i]),
-            file: files[i]
-          });
-        }
-        for (var i = 0; i < _this.executors; i++) {
-          doUpload(nextUpload());
-        }
-        return queue;
-      }
+      doUpload(nextUpload());
 
       function nextUpload() {
         return queue[index++];
       }
 
       function doUpload(file) {
-        if (file.file) {
+        if (file) {
           $http.get('http://photo-api.travler.com/api/photo/upload/gcs/create').then(function (response) {
             file.file.active = true;
             $http({
@@ -58,8 +41,10 @@ define([], function () {
             }).then(function (response) {
               file.file.active = false;
               file.file.done = true;
-              file.servingUrl = response.servingURL;
-              doUpload(nextUpload);
+              file.servingUrl = response.data.servingUrl;
+              doUpload(nextUpload());
+            }, function (error) {
+              console.log(JSON.stringify(error));
             });
           });
         }
