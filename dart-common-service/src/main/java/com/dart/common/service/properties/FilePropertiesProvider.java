@@ -27,6 +27,7 @@ public class FilePropertiesProvider implements PropertiesProvider {
     private String recaptchaEndpoint;
     private String recaptchaSecret;
     private int defaultTokenValidityDays;
+    private int maxFileByteSize;
 
     public FilePropertiesProvider(InputStream stream) {
         Properties prop = new Properties();
@@ -46,6 +47,7 @@ public class FilePropertiesProvider implements PropertiesProvider {
                 this.facebookLoginEndpoint = facebookLoginEndpoint.substring(0, facebookLoginEndpoint.length() - 1);
             }
             this.defaultTokenValidityDays = Integer.valueOf(prop.getProperty("sys.token.validity.days"));
+            this.maxFileByteSize = Integer.valueOf(prop.getProperty("sys.upload.byte.max"));
             this.signupEmailTemplate = prop.getProperty("sys.signup.email");
             this.userWebsite = prop.getProperty("sys.ui.web");
             if (userWebsite.endsWith("/")) {
@@ -88,6 +90,11 @@ public class FilePropertiesProvider implements PropertiesProvider {
     @Override
     public String getGoogleCloudStorageBucket() {
         return bucket;
+    }
+
+    @Override
+    public int getMaxFileUploadByteSize() {
+        return maxFileByteSize;
     }
 
     @Override

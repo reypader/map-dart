@@ -4,6 +4,7 @@ import com.dart.common.service.aop.Authenticated;
 import com.dart.common.service.aop.AuthenticationMethodInterceptor;
 import com.dart.common.service.auth.HttpRequestAuthorizationService;
 import com.dart.common.service.auth.JwtHttpRequestAuthorizationService;
+import com.dart.common.service.http.CORSFilter;
 import com.dart.common.service.http.UserAuthorizationFilter;
 import com.dart.common.service.properties.FilePropertiesProvider;
 import com.dart.common.service.properties.PropertiesProvider;
@@ -21,6 +22,7 @@ public class PhotoModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        bind(CORSFilter.class).in(Singleton.class);
         bind(ObjectifyFilter.class).in(Singleton.class);
         bind(UserAuthorizationFilter.class).in(Singleton.class);
 

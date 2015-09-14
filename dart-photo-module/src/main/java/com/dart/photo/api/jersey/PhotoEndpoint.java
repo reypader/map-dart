@@ -1,8 +1,6 @@
 package com.dart.photo.api.jersey;
 
 import com.dart.common.service.aop.Authenticated;
-import com.dart.common.service.http.UserPrincipal;
-import com.dart.data.domain.User;
 import com.dart.photo.api.CreateUploadURLResponse;
 import com.dart.photo.service.UploadService;
 import io.swagger.annotations.Api;
@@ -13,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -32,15 +29,22 @@ public class PhotoEndpoint {
 
     @Authenticated
     @GET
-    @Path("/upload/create")
+    @Path("/upload/gcs/create")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Generate URL that can be used for uploading files",
-            notes = "The URL can only be used to upload one file within 5 mins.",
+    @ApiOperation(value = "Generate URL that can be used for uploading a file to Google Cloud Storage.",
             response = CreateUploadURLResponse.class)
-    public CreateUploadURLResponse createUploadURL(@Context HttpServletRequest httpRequest, @QueryParam("md5") String md5, @QueryParam("type") String type) {
-        UserPrincipal principal = (UserPrincipal) httpRequest.getUserPrincipal();
-        User user = principal.getUser();
-        return service.getUploadURL(md5, type, user.getId());
+    public CreateUploadURLResponse createGCSUploadURL(@Context HttpServletRequest httpRequest) {
+        return service.getGoogleCloudStorageUploadURL("/upload");
     }
+
+//    @Authenticated
+//    @POST
+//    @Path("/upload/gcs/handle")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @ApiOperation(value = "Handle the upload response from GCS and create the serving URL for the file.",
+//            response = CreateUploadURLResponse.class)
+//    public UploadResponse handleGCSUpload(@Context HttpServletRequest httpRequest) {
+//        return service.handleGoogleCloudStorageUpload(httpRequest);
+//    }
 
 }

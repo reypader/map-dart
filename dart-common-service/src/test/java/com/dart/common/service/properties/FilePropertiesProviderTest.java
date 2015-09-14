@@ -90,11 +90,16 @@ public class FilePropertiesProviderTest {
 
     @Test
     public void testGetGoogleCloudStorageURL() throws Exception {
-        assertEquals("gcsurl",props.getGoogleCloudStorageURL());
+        assertEquals("gcsurl", props.getGoogleCloudStorageURL());
     }
 
     @Test
     public void testGetGoogleCloudStorageBucket() throws Exception {
-        assertEquals("gcsbuck",props.getGoogleCloudStorageBucket());
+        assertEquals("gcsbuck", props.getGoogleCloudStorageBucket());
+    }
+
+    @Test
+    public void testGetMaxUploadSize() throws Exception {
+        assertEquals(5000000, props.getMaxFileUploadByteSize());
     }
 }

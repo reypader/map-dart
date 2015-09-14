@@ -2,13 +2,20 @@ package com.dart.photo.service.google;
 
 import com.dart.common.service.properties.PropertiesProvider;
 import com.dart.photo.api.CreateUploadURLResponse;
+import com.dart.photo.api.UploadResponse;
 import com.dart.photo.service.UploadService;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.blobstore.UploadOptions;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.inject.Inject;
 
 import javax.inject.Singleton;
-import java.net.URLEncoder;
-import java.util.Calendar;
-import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author RMPader
@@ -17,34 +24,36 @@ import java.util.UUID;
 public class CloudStorageUploadService implements UploadService {
 
     private final PropertiesProvider propertiesProvider;
-    private final CloudStorageSigner signer;
+    private final BlobstoreService blobstoreService;
 
     @Inject
-    public CloudStorageUploadService(PropertiesProvider propertiesProvider, CloudStorageSigner signer) {
+    public CloudStorageUploadService(PropertiesProvider propertiesProvider) {
         this.propertiesProvider = propertiesProvider;
-        this.signer = signer;
+        this.blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     }
 
     @Override
-    public CreateUploadURLResponse getUploadURL(String md5, String type, String identifier) {
-        try {
-            Calendar later = Calendar.getInstance();
-            later.add(Calendar.SECOND, 300);
-            String expiration = String.valueOf(later.getTimeInMillis() * 1000);
-            String filename = identifier + "_" + UUID.randomUUID().toString();
-            String path = "/" + propertiesProvider.getGoogleCloudStorageBucket() + "/" + filename;
-            String url_signature = signer.signString("PUT", md5, type, expiration, "x-goog-usr:" + identifier, path);
+    public CreateUploadURLResponse getGoogleCloudStorageUploadURL(String handlerURL) {
+        UploadOptions options = UploadOptions.Builder
+                .withGoogleStorageBucketName(propertiesProvider.getGoogleCloudStorageBucket())
+                .maxUploadSizeBytes(propertiesProvider.getMaxFileUploadByteSize());
+        String s = blobstoreService.createUploadUrl(handlerURL, options);
+        CreateUploadURLResponse response = new CreateUploadURLResponse();
+        response.setUploadURL(s);
+        return response;
+    }
 
-            String signed_url = propertiesProvider.getGoogleCloudStorageURL() + path +
-                    "?GoogleAccessId=" + propertiesProvider.getGoogleServiceAccount() +
-                    "&Expires=" + expiration +
-                    "&Signature=" + URLEncoder.encode(url_signature, "UTF-8");
-            CreateUploadURLResponse response = new CreateUploadURLResponse();
-            response.setUploadURL(signed_url);
-            return response;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    @Override
+    public UploadResponse handleGoogleCloudStorageUpload(HttpServletRequest request) {
+        List<BlobKey> blobs = blobstoreService.getUploads(request).get("file");
+        BlobKey blobKey = blobs.get(0);
+
+        ImagesService imagesService = ImagesServiceFactory.getImagesService();
+        ServingUrlOptions servingOptions = ServingUrlOptions.Builder.withBlobKey(blobKey);
+
+        UploadResponse response = new UploadResponse();
+        response.setServingURL(imagesService.getServingUrl(servingOptions));
+
+        return response;
     }
 }
