@@ -1,4 +1,3 @@
-/*global module:false*/
 module.exports = function (grunt) {
 
   var globalConfig = {
@@ -9,7 +8,7 @@ module.exports = function (grunt) {
     bower_path: 'bower_components',
     distribution: 'dist',
   };
-  // Project configuration.
+
   grunt.initConfig({
       globalConfig: globalConfig,
       clean: [
@@ -62,11 +61,7 @@ module.exports = function (grunt) {
         bootstrap: {
           src: '<%= customize_bootstrap.task.options.dest %>/bootstrap.less',
           dest: '<%= customize_bootstrap.task.options.dest %>/bootstrap.css'
-        }//,
-        //slider: {
-        //  src: '<%= customize_bootstrap.task.options.src %>/rzslider.less',
-        //  dest: '<%= customize_bootstrap.task.options.dest %>/rzslider.css'
-        //}
+        }
       },
       requirejs: {
         main: {
@@ -145,13 +140,6 @@ module.exports = function (grunt) {
               dest: 'app/',
               filter: 'isFile'
             },
-            //{
-            //  expand: true,
-            //  flatten: true,
-            //  src: ['bower_components/bootstrap/dist/css/bootstrap-theme.min.css'],
-            //  dest: '<%= globalConfig.css %>/raw',
-            //  filter: 'isFile'
-            //},
             {
               expand: true,
               flatten: true,
@@ -199,7 +187,7 @@ module.exports = function (grunt) {
         },
         livereload: {
           options: {
-            //open: 'https://www.wanderlust.com:9000',
+            open: 'https://www.travler.com:9000',
             keepAlive: true,
             base: 'dist',
             protocol: 'https',
@@ -234,7 +222,7 @@ module.exports = function (grunt) {
             'app/styles/customized-bootstrap-less/*.less',
             'bower.json'
           ],
-          tasks: ['bowerRequirejs', 'test', 'compile-style']
+          tasks: ['bowerRequirejs', 'test', 'compile-style', 'build-pages']
         }
       }
     }
@@ -257,11 +245,36 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-usemin');
 
 
-  grunt.registerTask('serve', ['test', 'connect', 'watch']);
-  grunt.registerTask('test', ['init', 'karma']);
-  grunt.registerTask('release', ['test', 'requirejs', 'copy:pages', 'copy:require', 'copy:statics', 'build-pages']);
-  grunt.registerTask('compile-style', ['customize_bootstrap', 'less']);
-  grunt.registerTask('init', ['clean', 'copy:init', 'bowerRequirejs', 'compile-style']);
+  grunt.registerTask('serve', [
+    'test',
+    'connect',
+    'watch'
+  ]);
+
+  grunt.registerTask('test', [
+    'init',
+    'karma'
+  ]);
+
+  grunt.registerTask('release', [
+    'test',
+    'requirejs',
+    'copy:pages',
+    'copy:require',
+    'copy:statics',
+    'build-pages'
+  ]);
+
+  grunt.registerTask('compile-style', [
+    'customize_bootstrap',
+    'less'
+  ]);
+  grunt.registerTask('init', [
+    'clean',
+    'copy:init',
+    'bowerRequirejs',
+    'compile-style'
+  ]);
 
   grunt.registerTask('build-pages', [
     'useminPrepare',
