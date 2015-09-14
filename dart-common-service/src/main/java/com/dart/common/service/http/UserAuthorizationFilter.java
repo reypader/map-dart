@@ -8,13 +8,14 @@ import javax.inject.Singleton;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * @author RMPader
  */
 @Singleton
 public class UserAuthorizationFilter implements Filter {
-
+    private static final Logger LOGGER = Logger.getLogger(UserAuthorizationFilter.class.getName());
     private final HttpRequestAuthorizationService authorizationService;
 
     @Inject
@@ -33,9 +34,11 @@ public class UserAuthorizationFilter implements Filter {
         User user;
         String authHeader = request.getHeader("authorization");
         if (authHeader != null && !authHeader.equals("")) {
+            LOGGER.info("Validating AUTHORIZATION header.");
             user = authorizationService.verifyToken(request);
             next.doFilter(new UserRequestWrapper(user, request), response);
         } else {
+            LOGGER.info("Request has no AUTHORIZATION header.");
             next.doFilter(request, response);
         }
     }
