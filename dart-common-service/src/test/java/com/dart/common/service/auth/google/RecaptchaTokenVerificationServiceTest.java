@@ -45,7 +45,7 @@ public class RecaptchaTokenVerificationServiceTest {
         verify(mockHttpClient, times(1)).execute(getCaptor.capture(), any(ResponseHandler.class));
         List<HttpPost> caughtValues = getCaptor.getAllValues();
         HttpPost recaptcha = caughtValues.get(0);
-        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        List<NameValuePair> nvps = new ArrayList<>();
         nvps.add(new BasicNameValuePair("secret", "recaptcha_secret"));
         nvps.add(new BasicNameValuePair("response", "test"));
         nvps.add(new BasicNameValuePair("remoteip", "123"));

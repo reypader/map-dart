@@ -10,6 +10,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -21,6 +22,8 @@ import java.util.List;
 /**
  * @author RMPader
  */
+@Service
+@Facebook
 public class FacebookTokenVerificationService implements TokenVerificationService {
 
     private HttpClient httpClient;

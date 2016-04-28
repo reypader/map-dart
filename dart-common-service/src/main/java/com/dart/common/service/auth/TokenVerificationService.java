@@ -15,5 +15,5 @@ public interface TokenVerificationService {
      * @param identity the user's identity as it is known by the provider.
      * @return true if all the token is verified by the provider and the identities match.
      */
-    boolean verifyToken(String token, String identity);
+    boolean verifyToken(String token, String identity) throws Exception;
 }

@@ -13,6 +13,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import java.util.List;
 /**
  * @author RMPader
  */
+@Service
+@Recaptcha
 public class RecaptchaTokenVerificationService implements TokenVerificationService {
 
     private HttpClient httpClient;
@@ -30,7 +33,8 @@ public class RecaptchaTokenVerificationService implements TokenVerificationServi
         @Override
         public String handleResponse(
                 final HttpResponse response) throws ClientProtocolException, IOException {
-            int status = response.getStatusLine().getStatusCode();
+            int status = response.getStatusLine()
+                                 .getStatusCode();
             if (status >= 200 && status < 300) {
                 HttpEntity entity = response.getEntity();
                 return entity != null ? EntityUtils.toString(entity) : null;
@@ -70,6 +74,7 @@ public class RecaptchaTokenVerificationService implements TokenVerificationServi
     }
 
     public static class RecaptchaResult {
+
         private boolean success;
 
         public boolean isSuccess() {
