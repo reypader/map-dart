@@ -22,8 +22,6 @@ import java.util.List;
 /**
  * @author RMPader
  */
-@Service
-@Facebook
 public class FacebookTokenVerificationService implements TokenVerificationService {
 
     private HttpClient httpClient;

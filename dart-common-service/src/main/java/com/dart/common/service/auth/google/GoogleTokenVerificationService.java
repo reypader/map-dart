@@ -13,8 +13,6 @@ import java.util.Arrays;
 /**
  * @author RMPader
  */
-@Service
-@Google
 public class GoogleTokenVerificationService implements TokenVerificationService {
 
     private GoogleIdTokenVerifier verifier;

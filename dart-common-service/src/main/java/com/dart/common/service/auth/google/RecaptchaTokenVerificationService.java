@@ -22,8 +22,6 @@ import java.util.List;
 /**
  * @author RMPader
  */
-@Service
-@Recaptcha
 public class RecaptchaTokenVerificationService implements TokenVerificationService {
 
     private HttpClient httpClient;
