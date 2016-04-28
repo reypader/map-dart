@@ -1,93 +1,79 @@
 package com.dart.common.service.auth.facebook;
 
 import com.dart.common.service.auth.TokenVerificationService;
+import com.dart.common.service.http.WebClient;
 import com.dart.common.service.properties.PropertiesProvider;
-import com.google.gson.Gson;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
-import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author RMPader
  */
 public class FacebookTokenVerificationService implements TokenVerificationService {
 
-    private HttpClient httpClient;
+    private static final Logger logger = Logger.getLogger(FacebookTokenVerificationService.class.getName());
+    private WebClient webClient;
     private PropertiesProvider properties;
-    private Gson gson = new Gson();
-    private ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-        @Override
-        public String handleResponse(
-                final HttpResponse response) throws ClientProtocolException, IOException {
-            int status = response.getStatusLine().getStatusCode();
-            if (status >= 200 && status < 300) {
-                HttpEntity entity = response.getEntity();
-                return entity != null ? EntityUtils.toString(entity) : null;
-            } else {
-                throw new ClientProtocolException("Unexpected response status: " + status);
-            }
-        }
+    private ObjectMapper mapper = new ObjectMapper();
 
-    };
-
-    public FacebookTokenVerificationService(HttpClient httpClient, PropertiesProvider properties) {
+    public FacebookTokenVerificationService(WebClient webClient, PropertiesProvider properties) {
         this.properties = properties;
-        this.httpClient = httpClient;
+        this.webClient = webClient;
+        mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+        mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+
     }
 
     @Override
-    public boolean verifyToken(String token, String identity) {
-        HttpGet getAppAccessToken = null;
-        HttpGet getTokenInfo = null;
+    public boolean verifyToken(String token, String identity) throws Exception {
         try {
-            getAppAccessToken = new HttpGet(properties.getFacebookEndpoint() + "/oauth/access_token?client_id=" + properties.getFacebookAppId() + "&client_secret=" + properties.getFacebookSecret() + "&grant_type=client_credentials");
-            String responseBody = httpClient.execute(getAppAccessToken, responseHandler);
-            String appAccessToken = URLEncoder.encode(responseBody.split("=")[1], "UTF-8");
-            getTokenInfo = new HttpGet(properties.getFacebookEndpoint() + "/debug_token?input_token=" + token + "&access_token=" + appAccessToken);
-            String receivedToken = httpClient.execute(getTokenInfo, responseHandler);
-            FacebookToken fbToken = gson.fromJson(receivedToken, FacebookData.class).getData();
-            return weAreTheAudienceOf(fbToken) && identity.equals(fbToken.getUserId()) && fbToken.getExpiration().after(new Date()) && fbToken.isValid();
+            InputStream tokenResponse = webClient.get(
+                    properties.getFacebookEndpoint() + "/oauth/access_token?client_id=" + properties.getFacebookAppId() + "&client_secret=" + properties.getFacebookSecret() + "&grant_type=client_credentials",
+                    Collections.<String, Object>emptyMap());
+            String tokenResponseBody = IOUtils.toString(tokenResponse, "UTF-8");
+            String appAccessToken = URLEncoder.encode(tokenResponseBody.split("=")[1],
+                                                      "UTF-8");
+
+            InputStream infoResponse = webClient.get(
+                    properties.getFacebookEndpoint() + "/debug_token?input_token=" + token + "&access_token=" + appAccessToken,
+                    Collections.<String, Object>emptyMap());
+            FacebookToken fbToken = mapper.readValue(infoResponse, FacebookData.class).getData();
+            return weAreTheAudienceOf(fbToken) && identity.equals(fbToken.getUserId()) && fbToken.getExpiration()
+                                                                                                 .after(new Date()) && fbToken.isValid();
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (getAppAccessToken != null) {
-                getAppAccessToken.releaseConnection();
-            }
-            if (getTokenInfo != null) {
-                getTokenInfo.releaseConnection();
-            }
+            logger.log(Level.SEVERE, "Error while connecting to Facebook server: ", e);
+            throw e;
         }
     }
 
     private boolean weAreTheAudienceOf(FacebookToken fbToken) {
-        return fbToken.getApplication().equals(properties.getAppName());
+        return fbToken.getApplication()
+                      .equals(properties.getAppName());
     }
 
     /**
      * @author RMPader
      */
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FacebookData {
+
         private FacebookToken data;
 
         public FacebookToken getData() {
             return data;
         }
     }
-
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FacebookToken {
+
         private String app_id;
         private String application;
         private Long expires_at;
@@ -109,12 +95,28 @@ public class FacebookTokenVerificationService implements TokenVerificationServic
             return now.getTime();
         }
 
+        public Long getExpires_at() {
+            return expires_at;
+        }
+
+        public void setExpires_at(Long expires_at) {
+            this.expires_at = expires_at;
+        }
+
         public List<String> getScopes() {
             return scopes;
         }
 
         public String getUserId() {
             return user_id;
+        }
+
+        public String getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
         }
 
         public boolean isValid() {
