@@ -16,10 +16,8 @@ import java.util.Arrays;
 public class GoogleTokenVerificationService implements TokenVerificationService {
 
     private GoogleIdTokenVerifier verifier;
-    private PropertiesProvider propertiesProvider;
 
     public GoogleTokenVerificationService(PropertiesProvider propertiesProvider) {
-        this.propertiesProvider = propertiesProvider;
         verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 .setAudience(Arrays.asList(propertiesProvider.getGplusAppId()))
                 .build();
