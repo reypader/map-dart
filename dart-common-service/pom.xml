@@ -26,9 +26,14 @@
             <version>0.3m</version>
         </dependency>
         <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client-appengine</artifactId>
+            <version>1.21.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client-gson</artifactId>
-            <version>1.20.0</version>
+            <version>1.21.0</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.jsontoken</groupId>
@@ -58,6 +63,11 @@
             <artifactId>httpclient</artifactId>
             <version>4.5</version>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
