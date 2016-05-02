@@ -10,6 +10,7 @@ import com.dart.data.repository.SessionRepository;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.Ref;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +21,7 @@ import static com.dart.data.objectify.ObjectifyProvider.objectify;
 /**
  * Created by RMPader on 7/25/15.
  */
+@Component
 public class SessionRepositoryImpl implements SessionRepository {
     static {
         ObjectifyProvider.register(SessionImpl.class);

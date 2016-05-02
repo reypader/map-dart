@@ -1,5 +1,7 @@
 package com.dart.common.service.mail;
 
+import org.springframework.stereotype.Service;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -13,6 +15,7 @@ import java.util.logging.Logger;
 /**
  * A mail sender service that purely uses the classes in javax.mail
  */
+@Service
 public class GenericMailSenderService implements MailSenderService {
 
     private static Logger logger = Logger.getLogger(GenericMailSenderService.class.getName());

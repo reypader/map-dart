@@ -3,9 +3,9 @@ package com.dart.photo.service.google;
 import com.dart.common.service.properties.PropertiesProvider;
 import com.dart.photo.api.CreateUploadURLResponse;
 import com.dart.photo.service.UploadService;
-import com.google.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Singleton;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.UUID;
@@ -13,17 +13,13 @@ import java.util.UUID;
 /**
  * @author RMPader
  */
-@Singleton
+@Service
 public class CloudStorageUploadService implements UploadService {
 
-    private final PropertiesProvider propertiesProvider;
-    private final CloudStorageSigner signer;
-
-    @Inject
-    public CloudStorageUploadService(PropertiesProvider propertiesProvider, CloudStorageSigner signer) {
-        this.propertiesProvider = propertiesProvider;
-        this.signer = signer;
-    }
+    @Autowired
+    private PropertiesProvider propertiesProvider;
+    @Autowired
+    private CloudStorageSigner signer;
 
     @Override
     public CreateUploadURLResponse getUploadURL(String md5, String type, String identifier) {

@@ -6,10 +6,12 @@ import com.dart.data.domain.User;
 import com.dart.data.factory.PostFactory;
 import com.dart.data.objectify.domain.PostImpl;
 import com.googlecode.objectify.Key;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by RMPader on 7/27/15.
  */
+@Component
 public class PostFactoryImpl implements PostFactory {
 
     @Override

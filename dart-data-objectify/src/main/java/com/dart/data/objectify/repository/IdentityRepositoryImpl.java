@@ -8,12 +8,14 @@ import com.dart.data.objectify.domain.IdentityImpl;
 import com.dart.data.repository.IdentityRepository;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
+import org.springframework.stereotype.Component;
 
 import static com.dart.data.objectify.ObjectifyProvider.objectify;
 
 /**
  * Created by RMPader on 7/25/15.
  */
+@Component
 public class IdentityRepositoryImpl implements IdentityRepository {
     static {
         ObjectifyProvider.register(IdentityImpl.class);

@@ -8,6 +8,7 @@ import com.dart.data.objectify.domain.RegistrationImpl;
 import com.dart.data.repository.RegistrationRepository;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import static com.dart.data.objectify.ObjectifyProvider.objectify;
 /**
  * Created by RMPader on 7/25/15.
  */
+@Component
 public class RegistrationRepositoryImpl implements RegistrationRepository {
     static {
         ObjectifyProvider.register(RegistrationImpl.class);

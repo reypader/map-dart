@@ -5,8 +5,11 @@ import com.dart.common.service.http.WebClient;
 import com.dart.common.service.properties.PropertiesProvider;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.net.URLEncoder;
@@ -17,6 +20,8 @@ import java.util.logging.Logger;
 /**
  * @author RMPader
  */
+@Service
+@Facebook
 public class FacebookTokenVerificationService implements TokenVerificationService {
 
     private static final Logger logger = Logger.getLogger(FacebookTokenVerificationService.class.getName());
@@ -24,12 +29,13 @@ public class FacebookTokenVerificationService implements TokenVerificationServic
     private PropertiesProvider properties;
     private ObjectMapper mapper = new ObjectMapper();
 
+    @Autowired
     public FacebookTokenVerificationService(WebClient webClient, PropertiesProvider properties) {
         this.properties = properties;
         this.webClient = webClient;
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @Override
@@ -62,16 +68,13 @@ public class FacebookTokenVerificationService implements TokenVerificationServic
     /**
      * @author RMPader
      */
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FacebookData {
-
         private FacebookToken data;
 
         public FacebookToken getData() {
             return data;
         }
     }
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FacebookToken {
 
         private String app_id;

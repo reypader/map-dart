@@ -1,8 +1,8 @@
 package com.dart.photo.service.google;
 
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Singleton;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.Signature;
@@ -10,7 +10,7 @@ import java.security.Signature;
 /**
  * @author RMPader
  */
-@Singleton
+@Service
 public class CloudStorageSigner {
 
     private final PrivateKey key;
@@ -30,7 +30,8 @@ public class CloudStorageSigner {
         }
     }
 
-    public String signString(String method, String md5, String contentType, String expiration, String canonicalHeaders, String path) {
+    public String signString(String method, String md5, String contentType, String expiration, String canonicalHeaders,
+                             String path) {
         try {
             String stringToSign = method + "\n" + md5 + "\n" + contentType + "\n" + expiration + "\n" + canonicalHeaders;
             if (stringToSign.endsWith("\n")) {

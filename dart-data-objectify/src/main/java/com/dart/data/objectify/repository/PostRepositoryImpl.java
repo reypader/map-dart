@@ -12,6 +12,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.cmd.LoadType;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,6 +24,7 @@ import static com.dart.data.objectify.ObjectifyProvider.objectify;
 /**
  * Created by RMPader on 7/25/15.
  */
+@Component
 public class PostRepositoryImpl implements PostRepository {
 
     static {

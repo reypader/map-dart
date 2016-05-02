@@ -18,12 +18,6 @@ public interface UserService {
 
     VerificationResponse verifyUser(String creationCode);
 
-    AuthenticationResponse authenticateBasicUser(AuthenticationRequest request, HttpServletRequest httpRequest);
-
-    AuthenticationResponse authenticateFacebookUser(AuthenticationRequest request, HttpServletRequest httpRequest);
-
-    AuthenticationResponse authenticateGoogleUser(AuthenticationRequest request, HttpServletRequest httpRequest);
-
     RecaptchaResponse validateRecaptchaResult(RecaptchaRequest request, HttpServletRequest httpRequest);
 
     void updateUser(UpdateUserRequest request, User user) throws IllegalTransactionException;

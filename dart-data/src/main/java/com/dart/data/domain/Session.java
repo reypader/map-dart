@@ -1,6 +1,7 @@
 package com.dart.data.domain;
 
-import java.net.InetAddress;
+import org.springframework.session.ExpiringSession;
+
 import java.util.Date;
 
 /**
@@ -8,11 +9,11 @@ import java.util.Date;
  *
  * @author RMPader
  */
-public interface Session extends Entity {
+public interface Session extends Entity, ExpiringSession {
+
+    void setUser(User user);
 
     User getUser();
-
-    Date getExpiry();
 
     String getIPAddress();
 

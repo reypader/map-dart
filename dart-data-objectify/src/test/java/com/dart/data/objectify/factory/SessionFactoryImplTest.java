@@ -1,7 +1,6 @@
 package com.dart.data.objectify.factory;
 
 import com.dart.common.test.TestDatastore;
-import com.dart.data.domain.Session;
 import com.dart.data.domain.User;
 import com.dart.data.factory.SessionFactory;
 import com.dart.data.objectify.domain.SessionImpl;
@@ -10,8 +9,6 @@ import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.Closeable;
 import org.junit.*;
-
-import java.util.Date;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import static org.junit.Assert.assertEquals;
@@ -48,7 +45,8 @@ public class SessionFactoryImplTest {
     public void testPersistableSession() throws Exception {
         SessionFactory factory = new SessionFactoryImpl();
         User user = new TestUser("username");
-        Session session = factory.createSession("generated-token", user, "127.0.0.1", new Date(), "device", "browser", "location");
+        SessionImpl session = (SessionImpl) factory.createSession();
+        session.setUser(user);
 
         ofy().save().entity(session);
         Thread.sleep(2000);

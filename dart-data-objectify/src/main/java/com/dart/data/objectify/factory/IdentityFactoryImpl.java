@@ -5,10 +5,12 @@ import com.dart.data.domain.User;
 import com.dart.data.factory.IdentityFactory;
 import com.dart.data.objectify.domain.IdentityImpl;
 import com.googlecode.objectify.Key;
+import org.springframework.stereotype.Component;
 
 /**
  * @author RMPader
  */
+@Component
 public class IdentityFactoryImpl implements IdentityFactory {
     @Override
     public Identity createIdentity(User user, String provider, String providedIdentity) {

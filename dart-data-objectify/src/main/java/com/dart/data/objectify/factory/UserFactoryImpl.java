@@ -4,12 +4,14 @@ import com.dart.data.domain.User;
 import com.dart.data.factory.UserFactory;
 import com.dart.data.objectify.domain.UserImpl;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 /**
  * Created by RMPader on 7/27/15.
  */
+@Component
 public class UserFactoryImpl implements UserFactory {
 
     @Override

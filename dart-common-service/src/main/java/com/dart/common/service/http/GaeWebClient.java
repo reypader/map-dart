@@ -4,6 +4,7 @@ import com.dart.common.service.http.exception.WebClientException;
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.http.*;
 import com.google.common.net.MediaType;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 /**
  * Created by rpader on 4/5/16.
  */
+@Service
 public class GaeWebClient implements WebClient {
 
     private static final Logger logger = Logger.getLogger(GaeWebClient.class.getName());

@@ -15,6 +15,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.cmd.LoadType;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +27,7 @@ import static com.dart.data.objectify.ObjectifyProvider.objectify;
 /**
  * {@inheritDoc}
  */
+@Component
 public class EventRepositoryImpl implements EventRepository {
 
     static {

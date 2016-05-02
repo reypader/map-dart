@@ -68,31 +68,26 @@ public class SessionRepositoryImplTest {
         assertEquals(e1.getBrowser(), e2.getBrowser());
         assertEquals(e1.getIPAddress(), e2.getIPAddress());
         assertEquals(e1.getDevice(), e2.getDevice());
-        assertEquals(e1.getExpiry(), e2.getExpiry());
     }
 
     @Test
     public void testAdd() throws Exception {
-        Date now = new Date();
-        Session session = new SessionImpl("generated-token", userKey, "127.0.0.1", now, "device", "browser", "location");
+        SessionImpl session = new SessionImpl();
+        session.setUser(userKey);
 
         Session savedSession = repo.add(session);
 
         int entityCount = ofy().load().type(SessionImpl.class).count();
         assertEquals(1, entityCount);
-        assertEquals("generated-token", savedSession.getId());
-        assertEquals("location", savedSession.getLocation());
-        assertEquals("browser", savedSession.getBrowser());
-        assertEquals("device", savedSession.getDevice());
-        assertEquals("127.0.0.1", savedSession.getIPAddress());
-        assertEquals(now, savedSession.getExpiry());
+        assertNotNull(savedSession.getId());
         assertEquals(userKey, Key.create(savedSession.getUser()));
         assertNotNull(savedSession.getDateCreated());
     }
 
     @Test(expected = EntityCollisionException.class)
     public void testEntityCollision() throws Exception {
-        Session session = new SessionImpl("generated-token", userKey, "127.0.0.1", new Date(), "device", "browser", "location");
+        SessionImpl session = new SessionImpl();
+        session.setUser(userKey);
 
         Session savedSession = repo.add(session);
         repo.add(savedSession);
@@ -100,7 +95,8 @@ public class SessionRepositoryImplTest {
 
     @Test
     public void testRetrieve() throws Exception {
-        Session session = new SessionImpl("generated-token", userKey, "127.0.0.1", new Date(), "device", "browser", "location");
+        SessionImpl session = new SessionImpl();
+        session.setUser(userKey);
 
         Session savedSession = repo.add(session);
 
@@ -118,7 +114,8 @@ public class SessionRepositoryImplTest {
 
     @Test
     public void testUpdate() throws Exception {
-        Session session = new SessionImpl("generated-token", userKey, "127.0.0.1", new Date(), "device", "browser", "location");
+        SessionImpl session = new SessionImpl();
+        session.setUser(userKey);
 
         Session savedSession = repo.add(session);
 
@@ -131,7 +128,8 @@ public class SessionRepositoryImplTest {
 
     @Test(expected = EntityNotFoundException.class)
     public void testUpdateBad() throws Exception {
-        Session session = new SessionImpl("generated-token", userKey, "127.0.0.1", new Date(), "device", "browser", "location");
+        SessionImpl session = new SessionImpl();
+        session.setUser(userKey);
 
         repo.update(session);
     }
@@ -139,7 +137,8 @@ public class SessionRepositoryImplTest {
 
     @Test
     public void testDelete() throws Exception {
-        Session session = new SessionImpl("generated-token", userKey, "127.0.0.1", new Date(), "device", "browser", "location");
+        SessionImpl session = new SessionImpl();
+        session.setUser(userKey);
         Session savedSession = repo.add(session);
 
         repo.delete(savedSession);
@@ -154,9 +153,12 @@ public class SessionRepositoryImplTest {
         TestUser user2 = new TestUser("username2");
         Key userKey2 = ofy().save().entity(user2).now();
 
-        Session session1 = new SessionImpl("generated-token1", userKey, "127.0.0.1", new Date(), "device", "browser", "location");
-        Session session2 = new SessionImpl("generated-token2", userKey, "127.0.0.1", new Date(), "device", "browser", "location");
-        Session session3 = new SessionImpl("generated-token3", userKey2, "127.0.0.1", new Date(), "device", "browser", "location");
+        SessionImpl session1 = new SessionImpl();
+        session1.setUser(userKey);
+        SessionImpl session2 = new SessionImpl();
+        session2.setUser(userKey);
+        SessionImpl session3 = new SessionImpl();
+        session3.setUser(userKey2);
 
         Session savedSession1 = repo.add(session1);
         Session savedSession2 = repo.add(session2);

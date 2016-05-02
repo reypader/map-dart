@@ -8,6 +8,7 @@ import com.dart.data.objectify.domain.UserImpl;
 import com.dart.data.repository.UserRepository;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.NotFoundException;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ import static com.dart.data.objectify.ObjectifyProvider.objectify;
 /**
  * Created by RMPader on 7/25/15.
  */
+@Component
 public class UserRepositoryImpl implements UserRepository {
     Logger logger = Logger.getLogger(UserRepositoryImpl.class.getName());
 

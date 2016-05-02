@@ -5,16 +5,18 @@ import com.dart.data.domain.User;
 import com.dart.data.factory.SessionFactory;
 import com.dart.data.objectify.domain.SessionImpl;
 import com.googlecode.objectify.Key;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 /**
  * @author RMPader
  */
+@Component
 public class SessionFactoryImpl implements SessionFactory {
     @Override
-    public Session createSession(String token, User user, String ipAddress, Date expiry, String device, String browser, String location) {
-        Session instance = new SessionImpl(token, Key.create(user), ipAddress, expiry, device, browser, location);
+    public Session createSession() {
+        Session instance = new SessionImpl();
         return instance;
     }
 }
