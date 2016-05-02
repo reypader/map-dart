@@ -51,6 +51,7 @@ define([
     };
 
     _this.authFail = function () {
+      _this.loginFailed = true;
       progress.done();
     }
 

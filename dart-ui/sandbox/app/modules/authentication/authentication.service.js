@@ -17,7 +17,9 @@ define([
         email: email,
         provider: mode.provider,
         token: mode.token,
-        data: mode.data
+        identity: mode.data.id,
+        name: mode.data.name,
+        photo: mode.data.photoUrl
       }).then(function (response) {
         progress.done();
         if (response.token) {
