@@ -132,6 +132,11 @@ public class DummySession implements Session {
     }
 
     @Override
+    public void setLastAccessedTime(long lastAccessedTime) {
+
+    }
+
+    @Override
     public long getLastAccessedTime() {
         return 0;
     }

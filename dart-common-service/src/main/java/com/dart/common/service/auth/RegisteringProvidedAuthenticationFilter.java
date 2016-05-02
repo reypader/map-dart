@@ -40,6 +40,7 @@ public class RegisteringProvidedAuthenticationFilter extends AbstractProvidedAut
             if (user == null) {
                 user = userFactory.createUser(email, name);
                 user = userRepository.add(user);
+                user.setPhotoURL(request.getParameter("photo"));
             }
             identity = identityFactory.createIdentity(user, provider, providedIdentity);
             identityRepository.add(identity);

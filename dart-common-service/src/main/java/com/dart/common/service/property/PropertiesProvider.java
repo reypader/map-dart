@@ -20,6 +20,7 @@ public class PropertiesProvider {
     private ThirdPartyApi recaptcha;
     private String userWebsiteURL;
     private String signupEmailTemplate;
+    private String domain;
 
     public String getName() {
         return name;
@@ -99,6 +100,14 @@ public class PropertiesProvider {
 
     public void setSignupEmailTemplate(String signupEmailTemplate) {
         this.signupEmailTemplate = signupEmailTemplate;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
     public static class ThirdPartyApi {

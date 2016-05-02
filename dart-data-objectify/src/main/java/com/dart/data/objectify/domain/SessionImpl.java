@@ -2,6 +2,7 @@ package com.dart.data.objectify.domain;
 
 import com.dart.data.domain.Session;
 import com.dart.data.domain.User;
+import com.dart.data.objectify.ObjectifyProvider;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.*;
@@ -32,6 +33,8 @@ public class SessionImpl implements Session {
 
     private Date dateCreated;
 
+    private Date lastAccessed;
+
     private MapSession mapSession;
 
     public SessionImpl() {
@@ -42,7 +45,7 @@ public class SessionImpl implements Session {
         this.mapSession = mapSession;
         this.dateCreated = new Date(mapSession.getCreationTime());
         this.id = mapSession.getId();
-        if(id == null){
+        if (id == null) {
             id = UUID.randomUUID().toString();
             mapSession.setId(id);
         }
@@ -53,6 +56,12 @@ public class SessionImpl implements Session {
         if (userRef == null) {
             throw new IllegalStateException("Cannot save session without associated user");
         }
+    }
+
+    @OnLoad
+    public void onLoad() {
+        setLastAccessedTime(new Date().getTime());
+        ObjectifyProvider.objectify().save().entity(this);
     }
 
 
@@ -101,22 +110,22 @@ public class SessionImpl implements Session {
 
     @Override
     public <T> T getAttribute(String attributeName) {
-        return null;
+        return mapSession.getAttribute(attributeName);
     }
 
     @Override
     public Set<String> getAttributeNames() {
-        return null;
+        return mapSession.getAttributeNames();
     }
 
     @Override
     public void setAttribute(String attributeName, Object attributeValue) {
-
+        mapSession.setAttribute(attributeName, attributeValue);
     }
 
     @Override
     public void removeAttribute(String attributeName) {
-
+        mapSession.removeAttribute(attributeName);
     }
 
     @Override
@@ -144,6 +153,12 @@ public class SessionImpl implements Session {
     @Override
     public long getLastAccessedTime() {
         return mapSession.getLastAccessedTime();
+    }
+
+    @Override
+    public void setLastAccessedTime(long lastAccessedTime) {
+        mapSession.setLastAccessedTime(lastAccessedTime);
+        ObjectifyProvider.objectify().save().entity(this);
     }
 
     @Override
