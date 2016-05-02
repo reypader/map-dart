@@ -11,13 +11,13 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 @SpringBootApplication(scanBasePackages = {"com.dart.ui", "com.dart.data", "com.dart.common.service"})
 public class Application extends SpringBootServletInitializer {
 
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(Application.class, args);
+    }
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(Application.class);
-    }
-
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(Application.class, args);
     }
 
 }

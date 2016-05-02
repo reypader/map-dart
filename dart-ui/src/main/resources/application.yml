@@ -1,29 +1,30 @@
 app:
-    name: Travler
+  name: Travler
+  domain: travler.com
+  appId:
+  serviceAccount:
+  cloudStorageURL: https://localhost:8080/_ah/gcs
+  cloudStorageBucket: travler
+  signupEmailTemplate: emailVerification.html
+  userWebsiteURL: https://www.travler.com
+  gplus:
     appId:
-    serviceAccount:
-    cloudStorageURL: https://localhost:8080/_ah/gcs
-    cloudStorageBucket: travler
-    signupEmailTemplate: emailVerification.html
-    userWebsiteURL: https://www.travler.com
-    gplus:
-        appId: 
-        secret:
-        endpoint:
-    facebook:
-        appId:
-        secret:
-        endpoint: https://graph.facebook.com
-    recaptcha:
-        appId:
-        secret:
-        endpoint: https://www.google.com/recaptcha/api/siteverify
+    secret:
+    endpoint:
+  facebook:
+    appId:
+    secret:
+    endpoint: https://graph.facebook.com
+  recaptcha:
+    appId:
+    secret:
+    endpoint: https://www.google.com/recaptcha/api/siteverify
 
 zuul:
   routes:
     user:
       path: /user/**
-      url: http://localhost:8080
+      url: http://localhost:8081
     photo:
-         path: /photo/**
-         url: http://localhost:8081
+      path: /photo/**
+      url: http://localhost:8082
