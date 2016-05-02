@@ -1,0 +1,98 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], .ng-cloak, .data-ng-cloak {
+  display: none !important;
+}
+
+body {
+  min-width: 370px;
+  width: auto !important;
+  width: 370px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #eee;
+  overflow-y: scroll;
+}
+
+.form-signin, .signin-options {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+#rc-imageselect {
+  transform: scale(0.25);
+  transform-origin: 0;
+  -webkit-transform: scale(0.25);
+  transform: scale(0.25);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+
+.g-recaptcha {
+  transform: scale(0.885);
+  transform-origin: 0;
+  -webkit-transform: scale(0.885);
+  transform: scale(0.885);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+
+.signin-options {
+  padding-top: 0;
+}
+
+.form-signin .form-signin-heading,
+.form-signin .checkbox, .form-register input {
+  margin-bottom: 10px;
+}
+
+.form-signin .checkbox {
+  font-weight: normal;
+}
+
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+
+.form-signin input[position="top"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[position="mid"] {
+  margin-bottom: -1px;
+  border-radius: 0 0 0 0;
+}
+
+.form-signin input[position="bottom"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+input.ng-invalid-used-email, input.ng-invalid-validator {
+  background-color: #ffe2d9;
+}
+
+input.ng-valid-used-email, .signin-options input.ng-valid {
+  background-color: #78FA89;
+}

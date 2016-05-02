@@ -2,9 +2,7 @@ package com.dart.common.service.auth.facebook;
 
 import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.http.WebClient;
-import com.dart.common.service.properties.PropertiesProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.http.HttpResponse;
+import com.dart.common.service.property.PropertiesProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -35,13 +33,16 @@ public class FacebookTokenVerificationServiceTest {
         now.add(Calendar.HOUR, 1);
         long later = now.getTimeInMillis() / 1000;
 
-        when(mockWebClient.get(anyString(), eq(Collections.<String, Object>emptyMap()))).thenReturn(new ByteArrayInputStream("token=TOKEN".getBytes()),
-                                                                                                    new ByteArrayInputStream(
-                                                                                                            ("{data:{application:'Pings',expires_at:" + later + ",user_id:123,is_valid:true}}").getBytes()));
-        when(mockProperties.getFacebookAppId()).thenReturn("FB_APP_ID");
-        when(mockProperties.getFacebookSecret()).thenReturn("FB_SECRET");
-        when(mockProperties.getFacebookEndpoint()).thenReturn("http://www.derp");
-        when(mockProperties.getAppName()).thenReturn("Pings");
+        when(mockWebClient.get(anyString(), eq(Collections.<String, Object>emptyMap()))).thenReturn(
+                new ByteArrayInputStream("token=TOKEN".getBytes()),
+                new ByteArrayInputStream(
+                        ("{data:{application:'Pings',expires_at:" + later + ",user_id:123,is_valid:true}}").getBytes()));
+        PropertiesProvider.ThirdPartyApi mockFb = mock(PropertiesProvider.ThirdPartyApi.class);
+        when(mockProperties.getFacebook()).thenReturn(mockFb);
+        when(mockFb.getAppId()).thenReturn("FB_APP_ID");
+        when(mockFb.getSecret()).thenReturn("FB_SECRET");
+        when(mockFb.getEndpoint()).thenReturn("http://www.derp");
+        when(mockProperties.getName()).thenReturn("Pings");
     }
 
     @Test

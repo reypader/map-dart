@@ -5,6 +5,12 @@
     <display-name>pings-application-container</display-name>
     <module>
         <web>
+            <web-uri>dart-ui.war</web-uri>
+            <context-root>/dart-ui</context-root>
+        </web>
+    </module>
+    <module>
+        <web>
             <web-uri>dart-user-module.war</web-uri>
             <context-root>/dart-user-module</context-root>
         </web>

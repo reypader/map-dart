@@ -3,10 +3,11 @@ package com.dart.user.service;
 import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.exception.IllegalTransactionException;
 import com.dart.common.service.mail.MailSenderService;
+import com.dart.common.service.property.PropertiesProvider;
 import com.dart.common.test.factory.DummyIdentityFactory;
 import com.dart.common.test.factory.DummyRegistrationFactory;
 import com.dart.common.test.factory.DummyUserFactory;
-import com.dart.common.service.properties.FilePropertiesProvider;
+import com.dart.user.service.property.TestPropertiesProvider;
 import com.dart.common.test.repository.DummyIdentityRepository;
 import com.dart.common.test.repository.DummyRegistrationRepository;
 import com.dart.common.test.repository.DummyUserRepository;
@@ -20,6 +21,8 @@ import com.dart.data.repository.IdentityRepository;
 import com.dart.data.repository.RegistrationRepository;
 import com.dart.data.repository.UserRepository;
 import com.dart.user.api.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +63,7 @@ public class UserServiceImplTest {
 
     private UserServiceImpl service;
 
-    private String emailBody = "Hi <b>John Doe</b>,<br/><br/>Thank you for registering to Pings! To complete your registration, please verify your email by clicking on the following link:<br/>https://pings.com/signin.html?registration=";
+    private String emailBody = "Hi <b>John Doe</b>,<br/><br/>Thank you for registering to Pings! To complete your registration, please verify your email by clicking on the following link:<br/>https://www.travler.com/signin.html?registration=";
     private Date later;
 
     private InputStream getFileStream(String fileName) {
@@ -80,10 +83,12 @@ public class UserServiceImplTest {
         later = now.getTime();
         User user = dummyUserFactory.createUser("pre-exist@email.com", "Existing user");
         dummyUserRepo.add(user);
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        PropertiesProvider props = mapper.readValue(getFileStream("test.yml"), TestPropertiesProvider.class);
         service = new UserServiceImpl(mockRecaptchaVerifier, userRepoSpy,
                                       userFactorySpy, registrationRepoSpy, registrationFactorySpy, identityRepoSpy,
                                       identityFactorySpy,
-                                      new FilePropertiesProvider(getFileStream("test.testprops")), mailSenderService);
+                                      props, mailSenderService);
     }
 
     @Test

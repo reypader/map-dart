@@ -1,6 +1,6 @@
 package com.dart.photo.service.google;
 
-import com.dart.common.service.properties.PropertiesProvider;
+import com.dart.common.service.property.PropertiesProvider;
 import com.dart.photo.api.CreateUploadURLResponse;
 import com.dart.photo.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +28,11 @@ public class CloudStorageUploadService implements UploadService {
             later.add(Calendar.SECOND, 300);
             String expiration = String.valueOf(later.getTimeInMillis() * 1000);
             String filename = identifier + "_" + UUID.randomUUID().toString();
-            String path = "/" + propertiesProvider.getGoogleCloudStorageBucket() + "/" + filename;
+            String path = "/" + propertiesProvider.getCloudStorageBucket() + "/" + filename;
             String url_signature = signer.signString("PUT", md5, type, expiration, "x-goog-usr:" + identifier, path);
 
-            String signed_url = propertiesProvider.getGoogleCloudStorageURL() + path +
-                    "?GoogleAccessId=" + propertiesProvider.getGoogleServiceAccount() +
+            String signed_url = propertiesProvider.getCloudStorageURL() + path +
+                    "?GoogleAccessId=" + propertiesProvider.getServiceAccount() +
                     "&Expires=" + expiration +
                     "&Signature=" + URLEncoder.encode(url_signature, "UTF-8");
             CreateUploadURLResponse response = new CreateUploadURLResponse();

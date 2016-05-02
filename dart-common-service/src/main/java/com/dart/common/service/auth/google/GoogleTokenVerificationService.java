@@ -1,7 +1,7 @@
 package com.dart.common.service.auth.google;
 
 import com.dart.common.service.auth.TokenVerificationService;
-import com.dart.common.service.properties.PropertiesProvider;
+import com.dart.common.service.property.PropertiesProvider;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -23,7 +23,7 @@ public class GoogleTokenVerificationService implements TokenVerificationService 
     @Autowired
     public GoogleTokenVerificationService(PropertiesProvider propertiesProvider) {
         verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
-                .setAudience(Arrays.asList(propertiesProvider.getGplusAppId()))
+                .setAudience(Arrays.asList(propertiesProvider.getGplus().getAppId()))
                 .build();
     }
 

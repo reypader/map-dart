@@ -20,6 +20,7 @@
         <module>dart-common-service</module>
         <module>dart-user-module</module>
         <module>dart-photo-module</module>
+        <module>dart-ui</module>
         <module>dart-application-container</module>
     </modules>
 
@@ -90,8 +91,9 @@
                         <!--<port>8080</port>-->
                         <!-- Comment in the below snippet to enable local debugging with a remote debugger like those included with Eclipse or IntelliJ-->
                         <jvmFlags>
-                            <jvmFlag>-Dcom.google.appengine.devappserver_module.user-module.port=8080</jvmFlag>
-                            <jvmFlag>-Dcom.google.appengine.devappserver_module.photo-module.port=8081</jvmFlag>
+                            <jvmFlag>-Dcom.google.appengine.devappserver_module.ui-module.port=8080</jvmFlag>
+                            <jvmFlag>-Dcom.google.appengine.devappserver_module.user-module.port=8081</jvmFlag>
+                            <jvmFlag>-Dcom.google.appengine.devappserver_module.photo-module.port=8082</jvmFlag>
                         <!--<jvmFlag>-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n</jvmFlag>-->
                         </jvmFlags>
                     </configuration>

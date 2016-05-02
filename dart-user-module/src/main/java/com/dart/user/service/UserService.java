@@ -4,7 +4,6 @@ import com.dart.common.service.exception.IllegalTransactionException;
 import com.dart.data.domain.User;
 import com.dart.user.api.*;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**

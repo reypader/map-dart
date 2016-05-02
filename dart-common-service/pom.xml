@@ -80,6 +80,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>dart-common-test</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

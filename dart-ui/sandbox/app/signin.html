@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Travler</title>
+  <base href="https://www.travler.com">
+  <script type="text/javascript" ng-if="false">
+    (function () {
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1);
+        if (c.indexOf("sessionToken=") == 0)  window.location.href = "https://" + window.location.host;
+      }
+    })();
+  </script>
+
+  <!--<link rel="stylesheet" type="text/css" href="styles/bootstrap-theme.min.css"/>-->
+
+  <!-- build:css styles/sign-in.css -->
+  <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css"/>
+  <link rel="stylesheet" type="text/css" href="styles/compiled-bootstrap/bootstrap.css"/>
+  <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap-social/bootstrap-social.css"/>
+  <link rel="stylesheet" type="text/css" href="styles/raw/signin.css"/>
+  <link rel="stylesheet" type="text/css" href="styles/raw/nprogress.css"/>
+  <!-- endbuild -->
+
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <script data-main="modules/signin-main" src="require.js"></script>
+</head>
+<body>
+<div id="fb-root"></div>
+<div class="container" ng-controller="LoginController as vm" ng-cloak>
+  <form class="form-signin" ng-submit="vm.basicLogin()">
+    <h2 class="form-signin-heading">Sign in to Travler</h2>
+    <span ng-show="vm.loginFailed" style="color:red">Invalid username or password.</span>&nbsp;
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input position="top" type="email" id="inputEmail" ng-model="vm.email" class="form-control"
+           placeholder="Email address" required
+           autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input position="bottom" type="password" id="inputPassword" ng-model="vm.password" class="form-control"
+           placeholder="Password" required>
+
+    <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+  </form>
+  <div class="signin-options">
+    <div id="signin-button"></div>
+    <p><span> Or you could:</span></p>
+    <a class="btn btn-block btn-social btn-facebook" ng-click="vm.fbLogin()">
+      <i class="fa fa-facebook"></i> Sign in with Facebook
+    </a>
+    <a class="btn btn-block btn-social btn-google" ng-click="vm.gpLogin()">
+      <i class="fa fa-google"></i> Sign in with Google
+    </a>
+    <a class="btn btn-block btn-social btn-twitter disabled">
+      <i class="fa fa-twitter"></i> Sign in with Twitter (coming... soon?)
+    </a>
+    <br/>
+    <ng-view></ng-view>
+  </div>
+</div>
+</body>
+</html>

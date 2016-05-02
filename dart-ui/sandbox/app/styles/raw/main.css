@@ -1,0 +1,285 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], .ng-cloak, .data-ng-cloak {
+  display: none !important;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box !important;
+}
+
+html, body, .fill-height {
+  height: 100%;
+}
+
+.no-scroll {
+  overflow-y: hidden;
+}
+
+.shadow-bottom {
+  -webkit-box-shadow: 0px 10px 20px -10px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 10px 20px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 10px 20px -10px rgba(0, 0, 0, 0.75);
+}
+
+.brand-color {
+  background: #00b13c;
+}
+
+.navbar {
+  margin: 0;
+  border-width: 0px 1px 1px 0px;
+}
+
+.article-title {
+  margin-top: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#map-container {
+  width: 100%;
+  position: fixed;
+  margin: 51px 0 auto;
+  text-align: center;
+  z-index: 1000;
+}
+
+#show-map-btn:hover {
+  background-color: #007448;
+  border-color: #005a38;
+}
+
+.btn-show-map {
+  float: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.angular-google-map-container, .angular-google-map {
+  min-height: calc(100vh - 90px);
+}
+
+.item {
+  display: inline-block;
+  width: 100%;
+  padding: .25rem;
+}
+
+.item > div > img {
+  width: 100%;
+}
+
+.item > div {
+  display: block;
+  position: relative;
+  padding: 10px;
+}
+
+.row {
+  -moz-column-width: 18em;
+  -webkit-column-width: 18em;
+  -moz-column-gap: 1em;
+  -webkit-column-gap: 1em;
+}
+
+/* navbar */
+.navbar-primary .navbar {
+  border-bottom: none;
+}
+
+.navbar-primary .navbar .nav > li.dropdown.open.active > a:hover {
+}
+
+.navbar-primary .navbar .nav.pull-right {
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+.navbar-xs .navbar-primary .navbar {
+  min-height: 28px;
+  height: 28px;
+}
+
+.navbar-xs .navbar-primary .navbar .navbar-brand {
+  padding: 0px 12px;
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.navbar-xs .navbar-primary .navbar .navbar-nav > li > a {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  line-height: 28px;
+}
+
+.navbar-sm .navbar-primary .navbar {
+  min-height: 40px;
+  height: 40px;
+}
+
+.navbar-sm .navbar-primary .navbar .navbar-brand {
+  padding: 0px 12px;
+  font-size: 16px;
+  line-height: 40px;
+}
+
+.navbar-sm .navbar-primary .navbar .navbar-nav > li > a {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  line-height: 40px;
+}
+
+/* slide */
+.animate-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  -webkit-transform: translate3d(0, 0, 0); /* Chrome, Safari, Opera */
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+}
+
+.animate-slide.ng-hide-add,
+.animate-slide.ng-hide-remove {
+  display: block !important;
+}
+
+.animate-slide.ng-hide-remove.ng-hide-remove-active {
+  -webkit-animation: 0.5s slide-down;
+  animation: 0.5s slide-down;
+}
+
+.animate-slide.ng-hide-add.ng-hide-add-active {
+  -webkit-animation: 0.5s slide-up;
+  animation: 0.5s slide-up;
+}
+
+.animate-slide.ng-hide {
+  top: calc(1px - 100% + 88px);
+  display: block !important;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes slide-down {
+  0% {
+    top: calc(1px - 100% + 88px);
+  }
+  100% {
+    top: 0;
+  }
+}
+
+/* Standard syntax */
+@keyframes slide-down {
+  0% {
+    top: calc(1px - 100% + 88px);
+  }
+  100% {
+    top: 0;
+  }
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes slide-up {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: calc(1px - 100% + 88px);
+  }
+}
+
+/* Standard syntax */
+@keyframes slide-up {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: calc(1px - 100% + 88px);
+  }
+}
+
+/*bubble*/
+.triangle-isosceles {
+  position: relative;
+  /*padding:15px;*/
+  margin: 1em 0 3em;
+  /*color:#000;*/
+  /*background:#f3961c; /!* default background for browsers without gradient support *!/*/
+  /*/!* css3 *!/*/
+  /*background:-webkit-gradient(linear, 0 0, 0 100%, from(#f9d835), to(#f3961c));*/
+  /*background:-moz-linear-gradient(#f9d835, #f3961c);*/
+  /*background:-o-linear-gradient(#f9d835, #f3961c);*/
+  /*background:linear-gradient(#f9d835, #f3961c);*/
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.triangle-isosceles:after {
+  content: "";
+  position: absolute;
+  bottom: -15px; /* value = - border-top-width - border-bottom-width */
+  /*left:50px; /!* controls horizontal position *!/*/
+  border-width: 15px 15px 0; /* vary these values to change the angle of the vertex */
+  border-style: solid;
+  border-color: #005a38 transparent;
+  /* reduce the damage in FF3.0 */
+  display: block;
+  width: 0;
+}
+
+#place-marker-button:hover {
+  border-color: #005a38 transparent;
+}
+
+#add-marker-button {
+  background-color: #005a38;
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  z-index: 900;
+}
+
+.map-tip {
+  position: absolute;
+  z-index: 1000;
+  padding: 3px;
+  left: calc(50% - 89px);
+  background-color: white;
+  border-radius: 5px;
+}
+
+img.upload {
+  width: 100%;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  margin-left:15px;
+}
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+
+#files{
+  margin-top:15px;
+}

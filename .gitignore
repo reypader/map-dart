@@ -1,5 +1,15 @@
 *.iml
-*/target/
 *.idea/
 **/application.properties
 **/key.p12
+*.properties
+**/target/
+**/bower_components/
+**/node_modules/
+*.*~
+/ui-web/sandbox/dist/
+/ui-web/sandbox/app/require.js
+/ui-web/sandbox/app/styles/compiled-bootstrap/
+/ui-web/sandbox/app/fonts/*.*
+/ui-web/sandbox/app/styles/*.*
+/ui-web/sandbox/.tmp/

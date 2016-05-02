@@ -1,0 +1,20 @@
+app:
+    name: Travler
+    appId: gaeid
+    serviceAccount: gaesa
+    cloudStorageURL: https://localhost:8080/_ah/gcs
+    cloudStorageBucket: travler
+    signupEmailTemplate: emailVerification.html
+    userWebsiteURL: https://www.travler.com
+    gplus:
+        appId: gplusid
+        secret: gplusecret
+        endpoint:
+    facebook:
+        appId: fbid
+        secret: fbsecret
+        endpoint: https://graph.facebook.com
+    recaptcha:
+        appId:
+        secret: recaptchasecret
+        endpoint: https://www.google.com/recaptcha/api/siteverify

@@ -5,7 +5,7 @@ import com.dart.common.service.auth.google.Recaptcha;
 import com.dart.common.service.exception.IllegalTransactionException;
 import com.dart.common.service.http.exception.InternalServerException;
 import com.dart.common.service.mail.MailSenderService;
-import com.dart.common.service.properties.PropertiesProvider;
+import com.dart.common.service.property.PropertiesProvider;
 import com.dart.common.service.util.IPAddressHelper;
 import com.dart.common.service.util.TemplateHelper;
 import com.dart.data.domain.Identity;

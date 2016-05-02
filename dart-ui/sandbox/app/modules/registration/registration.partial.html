@@ -1,0 +1,82 @@
+<accordion close-others="true" id="create" anchor-smooth-scroll="create">
+  <accordion-group is-open="vm.registrationOpened">
+    <accordion-heading>
+      <div>
+      <small><a href="#">Not yet a member? Create an account. <i class="pull-right glyphicon"
+                                                                 ng-class="{'glyphicon-chevron-down': vm.registrationOpened, 'glyphicon-chevron-right': !vm.registrationOpened}"></i></a>
+      </small>
+      </div>
+    </accordion-heading>
+    <div ng-switch="vm.registrationDone">
+      <div ng-switch-default>
+        <span class="help-block">Fill out the form below. We'll send a verification link to your email. Click on it and you're good to go!</span>
+
+        <form name="createUser" class="form-register" ng-submit="vm.registerUser()">
+
+          <div class="form-group has-feedback" ng-class="createUser.$error.usedEmail && 'has-error'">
+            <label for="newEmail" class="control-label">Email address<span
+                    ng-show="createUser.$error.usedEmail"> already used</span></label>
+            <input type="email" id="newEmail" class="form-control" placeholder="Email address" new-email
+                   strict-email ng-model="vm.newUser.email" name="newEmail" required
+                   ng-model-options="{ updateOn: 'default blur', debounce: { default: 1000, blur: 0 } }"
+                   aria-describedby="emailCheck"
+                    >
+            <i ng-show="createUser.$pending.usedEmail || createUser.$error.usedEmail" class="form-control-feedback fa"
+               ng-class="createUser.$pending.usedEmail &&'fa-spinner fa-pulse' || 'fa-times'"></i>
+            <span id="emailCheck" class="sr-only"></span>
+          </div>
+          <div class="form-group has-feedback" ng-class="createUser.newName.$error.validator && 'has-error'">
+            <label for="newName" class="control-label">Name<span
+                    ng-show="createUser.newName.$error.validator"> too short</span></label>
+            <input id="newName" name="newName" ng-model="vm.newUser.displayName" class="form-control" placeholder="Name"
+                   ui-validate=" '$value.length >=3 || !$value' "
+                   aria-describedby="nameLength" required>
+            <i ng-show="createUser.newName.$error.validator"
+               class="form-control-feedback fa fa-times"></i>
+            <span id="nameLength" class="sr-only"></span>
+          </div>
+
+          <label for="newPassword">Password</label>
+          <input type="password" id="newPassword" name="newPassword" ng-model="vm.npassword" class="form-control"
+                 placeholder="Password"
+                 required>
+          <span class="help-block">Password strength</span>
+          <password-strength ng-model="vm.npassword" val="strength"></password-strength>
+          <div class="form-group has-feedback" ng-class="createUser.repeatNewPassword.$error.validator && 'has-error'">
+            <label for="repeatNewPassword" class="control-label">Repeat password<span
+                    ng-show="createUser.repeatNewPassword.$error.validator"> didn't match</span></label>
+            <input type="password" id="repeatNewPassword" name="repeatNewPassword" ng-model="repeatNewPassword"
+                   class="form-control" placeholder="Re-type your password"
+                   ui-validate=" '$value==vm.npassword' "
+                   ui-validate-watch=" 'vm.npassword' "
+                   aria-describedby="passwordMatch"
+                   required>
+            <i ng-show="createUser.repeatNewPassword.$error.validator"
+               class="form-control-feedback fa fa-times"></i>
+            <span id="passwordMatch" class="sr-only"></span>
+          </div>
+          <div class="form-group has-feedback" ng-class="vm.recaptcha ==='fail' && 'has-error'">
+            <label for="recaptcha" class="control-label">Are you human?<span
+                    ng-show="vm.recaptcha ==='fail'">...hmm.. try again</span></label>
+            <div id="recaptcha" class="g-recaptcha" vc-recaptcha
+                 key="'6LfHAgwTAAAAAMSzSsVX2VIiQn2iygM4q_yP-7WG'"
+                 on-create="vm.setWidgetId(widgetId)"
+                 on-success="vm.setResponse(response)"
+                 on-expire="vm.cbExpiration()"></div>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit"
+                  ng-disabled="strength < 2 || !createUser.$valid||createUser.$error.usedEmail || createUser.$error.email || createUser.$pending.usedEmail">
+            Create account
+          </button>
+        </form>
+      </div>
+      <div ng-switch-when="true" style="text-align: center">
+        <h4>A confirmation email has been sent. Please check your email and click on the verification link.</h4>
+        <br/>
+
+        <h4>Happy browsing!</h4>
+      </div>
+    </div>
+  </accordion-group>
+</accordion>
+

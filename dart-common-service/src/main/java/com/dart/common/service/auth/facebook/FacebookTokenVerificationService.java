@@ -2,8 +2,7 @@ package com.dart.common.service.auth.facebook;
 
 import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.http.WebClient;
-import com.dart.common.service.properties.PropertiesProvider;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.dart.common.service.property.PropertiesProvider;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,12 +25,14 @@ public class FacebookTokenVerificationService implements TokenVerificationServic
 
     private static final Logger logger = Logger.getLogger(FacebookTokenVerificationService.class.getName());
     private WebClient webClient;
-    private PropertiesProvider properties;
+    private PropertiesProvider.ThirdPartyApi facebook;
+    private String appName;
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     public FacebookTokenVerificationService(WebClient webClient, PropertiesProvider properties) {
-        this.properties = properties;
+        this.facebook = properties.getFacebook();
+        this.appName = properties.getName();
         this.webClient = webClient;
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
@@ -42,14 +43,14 @@ public class FacebookTokenVerificationService implements TokenVerificationServic
     public boolean verifyToken(String token, String identity) throws Exception {
         try {
             InputStream tokenResponse = webClient.get(
-                    properties.getFacebookEndpoint() + "/oauth/access_token?client_id=" + properties.getFacebookAppId() + "&client_secret=" + properties.getFacebookSecret() + "&grant_type=client_credentials",
+                    facebook.getEndpoint() + "/oauth/access_token?client_id=" + facebook.getAppId() + "&client_secret=" + facebook.getSecret() + "&grant_type=client_credentials",
                     Collections.<String, Object>emptyMap());
             String tokenResponseBody = IOUtils.toString(tokenResponse, "UTF-8");
             String appAccessToken = URLEncoder.encode(tokenResponseBody.split("=")[1],
                                                       "UTF-8");
 
             InputStream infoResponse = webClient.get(
-                    properties.getFacebookEndpoint() + "/debug_token?input_token=" + token + "&access_token=" + appAccessToken,
+                    facebook.getEndpoint() + "/debug_token?input_token=" + token + "&access_token=" + appAccessToken,
                     Collections.<String, Object>emptyMap());
             FacebookToken fbToken = mapper.readValue(infoResponse, FacebookData.class).getData();
             return weAreTheAudienceOf(fbToken) && identity.equals(fbToken.getUserId()) && fbToken.getExpiration()
@@ -62,19 +63,21 @@ public class FacebookTokenVerificationService implements TokenVerificationServic
 
     private boolean weAreTheAudienceOf(FacebookToken fbToken) {
         return fbToken.getApplication()
-                      .equals(properties.getAppName());
+                      .equals(appName);
     }
 
     /**
      * @author RMPader
      */
     public static class FacebookData {
+
         private FacebookToken data;
 
         public FacebookToken getData() {
             return data;
         }
     }
+
     public static class FacebookToken {
 
         private String app_id;

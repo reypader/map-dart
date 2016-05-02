@@ -2,7 +2,7 @@ package com.dart.common.service.auth.google;
 
 import com.dart.common.service.auth.TokenVerificationService;
 import com.dart.common.service.http.WebClient;
-import com.dart.common.service.properties.PropertiesProvider;
+import com.dart.common.service.property.PropertiesProvider;
 import com.google.common.net.MediaType;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,8 +27,11 @@ public class RecaptchaTokenVerificationServiceTest {
         when(mockWebClient.post(anyString(), any(MediaType.class), any(byte[].class),
                                 eq(Collections.<String, Object>emptyMap()))).thenReturn(
                 new ByteArrayInputStream(("{\"success\":true,\"error-codes\":[]}").getBytes()));
-        when(mockProperties.getRecaptchaSecret()).thenReturn("recaptcha_secret");
-        when(mockProperties.getRecaptchaEndpoint()).thenReturn("http://www.derp");
+
+        PropertiesProvider.ThirdPartyApi mockRecaptcha = mock(PropertiesProvider.ThirdPartyApi.class);
+        when(mockProperties.getRecaptcha()).thenReturn(mockRecaptcha);
+        when(mockRecaptcha.getSecret()).thenReturn("recaptcha_secret");
+        when(mockRecaptcha.getEndpoint()).thenReturn("http://www.derp");
     }
 
     @Test

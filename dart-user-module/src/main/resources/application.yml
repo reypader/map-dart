@@ -1,0 +1,23 @@
+app:
+    name: Travler
+    appId:
+    serviceAccount:
+    cloudStorageURL: https://localhost:8080/_ah/gcs
+    cloudStorageBucket: travler
+    signupEmailTemplate: emailVerification.html
+    userWebsiteURL: https://www.travler.com
+    gplus:
+        appId: 
+        secret:
+        endpoint:
+    facebook:
+        appId:
+        secret:
+        endpoint: https://graph.facebook.com
+    recaptcha:
+        appId:
+        secret:
+        endpoint: https://www.google.com/recaptcha/api/siteverify
+
+security:
+  sessions: NEVER
