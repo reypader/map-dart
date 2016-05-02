@@ -7,9 +7,9 @@
 **/bower_components/
 **/node_modules/
 *.*~
-/ui-web/sandbox/dist/
-/ui-web/sandbox/app/require.js
-/ui-web/sandbox/app/styles/compiled-bootstrap/
-/ui-web/sandbox/app/fonts/*.*
-/ui-web/sandbox/app/styles/*.*
-/ui-web/sandbox/.tmp/
+/dart-ui/sandbox/dist/
+/dart-ui/sandbox/app/require.js
+/dart-ui/sandbox/app/styles/compiled-bootstrap/
+/dart-ui/sandbox/app/fonts/*.*
+/dart-ui/sandbox/app/styles/*.*
+/dart-ui/sandbox/.tmp/
