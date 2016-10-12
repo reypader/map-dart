@@ -7,6 +7,10 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <prerequisites>
+        <maven>3.3.0</maven>
+    </prerequisites>
+
     <modules>
         <module>dart-common-service</module>
         <module>dart-common-test</module>
@@ -19,6 +23,7 @@
     </modules>
 
     <properties>
+        <app.id>dart-maps</app.id>
         <app.version>1</app.version>
         <appengine.version>1.9.25</appengine.version>
         <jersey.version>1.19</jersey.version>
